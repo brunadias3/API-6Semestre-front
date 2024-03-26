@@ -8,5 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    TabelaRegistro: typeof import('./src/components/TabelaRegistro.vue')['default']
+    TabelaRegistroRedzone: typeof import('./src/components/TabelaRegistroRedzone.vue')['default']
   }
 }
