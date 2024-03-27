@@ -1,30 +1,47 @@
 <template>
   <v-container>
-    <v-data-table :headers="headers" :items="desserts" item-key="id" :items-per-page="5" density="compact">
-      <template v-slot:item="{ item }">
-        <tr>
-          <td>{{ item.id }}</td>
-          <td v-if="item.redzone">
-            {{ item.redzone }}
-          </td>
-          <td>{{ item.dia }}</td>
-          <td>
-            <v-chip variant="tonal" :color="item.lotacaoAtual > item.lotacaoMaxima ? 'red' : 'green'">
-              {{ item.lotacaoAtual }}
-            </v-chip>
-          </td>
-        </tr>
+    <v-card title="Table de registros" class="text-light-blue-darken-4 mx-auto ml-10" elevation="10">
+      <template v-slot:text>
+        <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi mdi-magnify" variant="outlined" hide-details
+          single-line></v-text-field>
       </template>
-    </v-data-table>
+      <v-data-table  :headers="headers" :items="desserts"  item-key="id" :items-per-page="5" :search="search">
+        <template v-slot:item="{ item }">
+          <tr>
+            <td>{{ item.id }}</td>
+            <td v-if="item.redzone">
+              {{ item.redzone }}
+            </td>
+            <td>{{ formatarData(item.dia) }}</td>
+            <td v-if="item.lotacaoAtual">
+              <v-chip variant="tonal" :color="item.lotacaoAtual > item.lotacaoMaxima ? 'red' : 'green'">
+                {{ item.lotacaoAtual }}
+              </v-chip>
+            </td>
+            <td>
+              <v-chip variant="tonal" :color="item.entrada === 'Saida' ? '#F6893D' : '#3B82F6'">
+                {{ item.entrada }}
+              </v-chip>
+            </td>
+          </tr>
+        </template>
+      </v-data-table>
+    </v-card>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
+import { ref } from 'vue';
 
+const search = ref('')
 const props = defineProps<{
   headers: { title: string; value: string }[];
-  desserts: { id: number; redzone?: string; lotacaoAtual: number; dia: string, lotacaoMaxima: number }[];
+  desserts: { id: number; redzone?: string; lotacaoAtual?: number; dia: string, lotacaoMaxima?: number, entrada: string }[];
 }>();
+function formatarData(data: string): string {
+  const [ano, mes, diaHora] = data.split('-');
+  const [dia, hora] = diaHora.split(' ');
 
+  return `${dia}/${mes}/${ano} ${hora}`;
+}
 </script>
