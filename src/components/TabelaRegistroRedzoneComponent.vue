@@ -1,11 +1,11 @@
 <template>
   <v-container>
-    <v-card title="Table de registros" class="text-light-blue-darken-4 mx-auto ml-10" elevation="10">
+    <v-card title="Tabela de registros" class="text-light-blue-darken-4 mx-auto ml-10" elevation="10">
       <template v-slot:text>
         <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi mdi-magnify" variant="outlined" hide-details
           single-line></v-text-field>
       </template>
-      <v-data-table  :headers="headers" :items="desserts"  item-key="id" :items-per-page="5" :search="search">
+      <v-data-table items-per-page-text="Itens por página" no-data-text="Não possui nenhum registro."  :headers="headers" :items="desserts"  item-key="id" :items-per-page="5" :search="search">
         <template v-slot:item="{ item }">
           <tr>
             <td>{{ item.id }}</td>
