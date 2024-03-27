@@ -7,7 +7,7 @@
 
             </div>
             <div>
-                © {{ new Date().getFullYear() }} — <strong>Altave</strong>
+                © {{ new Date().getFullYear() }} — <strong>Altave | Todos os direitos reservados.</strong>
             </div>
         </div>
 
@@ -24,10 +24,10 @@ const icons = [
     'fa-instagram',
     ]
 const links = [
-    {title: 'Política de Privacidade', route: '/'},
-    {title: 'Notícias', route: '/1'},
-    {title: 'Recursos', route: '/2'},
-    {title: 'Carreira', route: '/3'},
-    {title: 'Contato', route: '/4'}
+    {title: 'Política de Privacidade', route: '/1'},
+    {title: 'Notícias', route: '/2'},
+    {title: 'Recursos', route: '/3'},
+    {title: 'Carreira', route: '/4'},
+    {title: 'Contato', route: '/5'}
 ]
 </script>
