@@ -2,7 +2,8 @@
     <v-app pa-0>
         <v-main>
             <v-container>
-                <TabelaRegistroRedzoneComponent :headers="headers" :desserts="desserts" />
+                <TitleComponent title="Histórico da redzone" />
+                    <TabelaRegistroRedzoneComponent :headers="headers" :desserts="desserts" />
             </v-container>
         </v-main>
 
@@ -10,92 +11,80 @@
 </template>
 
 <script setup lang="ts">
-
 import TabelaRegistroRedzoneComponent from '../components/TabelaRegistroRedzoneComponent.vue';
+import TitleComponent from '../components/TitleComponent.vue';
 
 const headers = [
     { title: 'Id', value: 'id' },
-    { title: 'Redzone', value: 'redzone' },
     { title: 'Dia', value: 'dia' },
-    { title: 'Lotação atual', value: 'lotacaoAtual' },
+    { title: 'Entrada/Saida', value: 'entrada' }
 ]
 const desserts = [
     {
         id: 1,
-        redzone: 'Almoxarifado',
-        lotacaoAtual: 2,
-        dia: 'c. 2580–2560 BC',
-        lotacaoMaxima: 10
+        dia: '2024-02-26 13:36:16',
+        lotacaoMaxima: 10,
+        entrada: 'Entrada',
     },
     {
         id: 2,
-        redzone: 'Almoxarifado',
-        lotacaoAtual: 14,
-        dia: 'c. 2570 BC',
-        lotacaoMaxima: 10
+        dia: '2024-03-27 14:36:16',
+        lotacaoMaxima: 10,
+        entrada: 'Saida',
     },
     {
         id: 3,
-        redzone: 'Almoxarifado',
-        lotacaoAtual: 12,
-        dia: 'c. 2590 BC',
-        lotacaoMaxima: 10
+        dia: '2024-03-28 12:36:16',
+        lotacaoMaxima: 10,
+        entrada: 'Entrada'
     },
     {
         id: 4,
-        redzone: 'Cozinha',
-        lotacaoAtual: 7,
-        dia: 'c. 2600 BC',
-        lotacaoMaxima: 8
+        dia: '2024-03-01 11:36:16',
+        lotacaoMaxima: 8,
+        entrada: 'Saida'
     },
     {
         id: 5,
-        redzone: 'Cozinha',
-        lotacaoAtual: 12,
-        dia: 'c. 200 CE',
-        lotacaoMaxima: 8
+        dia: '2024-03-02 17:36:16',
+        lotacaoMaxima: 8,
+        entrada: 'Entrada'
     },
     {
         id: 6,
-        redzone: 'Cozinha',
-        lotacaoAtual: 19,
-        dia: 'c. 200 CE',
-        lotacaoMaxima: 8
+        dia: '2024-03-13 17:36:16',
+        lotacaoMaxima: 8,
+        entrada: 'Saida'
     },
     {
         id: 7,
-        redzone: 'Caldeira',
-        lotacaoAtual: 5,
-        dia: 'c. 200 CE',
-        lotacaoMaxima: 13
+        dia: '2024-03-15 17:36:16',
+        lotacaoMaxima: 13,
+        entrada: 'Entrada'
     },
     {
         id: 8,
-        redzone: 'Caldeira',
-        lotacaoAtual: 3,
-        dia: 'c. 200 CE',
-        lotacaoMaxima: 13
+        dia: '2024-03-19 17:36:16',
+        lotacaoMaxima: 13,
+        entrada: 'Saida'
     },
     {
-        id: 8,
-        redzone: 'Caldeira',
-        lotacaoAtual: 3,
-        dia: 'c. 200 CE',
-        lotacaoMaxima: 13
+        id: 9,
+        dia: '2024-03-20 17:36:16',
+        lotacaoMaxima: 13,
+        entrada: 'Entrada'
     },
     {
-        id: 8,
-        redzone: 'Caldeira',
-        lotacaoAtual: 3,
-        dia: 'c. 200 CE',
-        lotacaoMaxima: 13
+        id: 10,
+        dia: '2024-03-01 17:36:16',
+        lotacaoMaxima: 13,
+        entrada: 'Saida'
     },
     {
-        id: 8,
-        redzone: 'Caldeira',
-        lotacaoAtual: 3,
-        dia: 'c. 200 CE',
-        lotacaoMaxima: 13
+        id: 11,
+        dia: '2024-03-26 17:36:16',
+        lotacaoMaxima: 13,
+        entrada: 'Entrada'
     },
 ]
 </script>
