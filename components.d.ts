@@ -9,10 +9,9 @@ declare module 'vue' {
   export interface GlobalComponents {
     FooterComponent: typeof import('./src/components/FooterComponent.vue')['default']
     HeaderComponent: typeof import('./src/components/HeaderComponent.vue')['default']
-    NavlinksComponent: typeof import('./src/components/NavlinksComponent.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    TabelaRegistroRedzone: typeof import('./src/components/TabelaRegistroRedzone.vue')['default']
     TabelaRegistroRedzoneComponent: typeof import('./src/components/TabelaRegistroRedzoneComponent.vue')['default']
+    TitleComponent: typeof import('./src/components/TitleComponent.vue')['default']
   }
 }
