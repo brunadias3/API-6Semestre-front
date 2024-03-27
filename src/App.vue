@@ -8,9 +8,9 @@
         <RouterView />
       </div>
     </v-main>
-    <v-footer fixed style="padding: 0 !important;">
+    <div fixed>
       <FooterComponent />
-    </v-footer>
+    </div>
   </v-app>
 </template>
 
