@@ -12,7 +12,7 @@
 
                     <v-card min-width="300">
                         <v-list >
-                            <v-list-item @click="logzada" prepend-avatar="https://cdn.vuetifyjs.com/images/john.jpg"
+                            <v-list-item @click="logzada"
                                 subtitle="Founder of Vuetify" title="John Leider">
                             </v-list-item>
                         </v-list>
