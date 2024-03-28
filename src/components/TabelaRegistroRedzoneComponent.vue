@@ -2,10 +2,10 @@
   <v-container>
     <v-card title="Table de registros" class="text-light-blue-darken-4 mx-auto ml-10" elevation="10">
       <template v-slot:text>
-        <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi mdi-magnify" variant="outlined" hide-details
-          single-line></v-text-field>
+        <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi mdi-magnify" variant="outlined"
+          hide-details single-line></v-text-field>
       </template>
-      <v-data-table  :headers="headers" :items="desserts"  item-key="id" :items-per-page="5" :search="search">
+      <v-data-table :headers="headers" :items="desserts" item-key="id" :items-per-page="5" :search="search">
         <template v-slot:item="{ item }">
           <tr>
             <td>{{ item.id }}</td>
@@ -13,16 +13,22 @@
               {{ item.redzone }}
             </td>
             <td>{{ formatarData(item.dia) }}</td>
-            <td v-if="item.lotacaoAtual">
-              <v-chip variant="tonal" :color="item.lotacaoAtual > item.lotacaoMaxima ? 'red' : 'green'">
+            <td>
+              <v-chip v-if="item.lotacaoMaxima" variant="tonal"
+                :color="item.lotacaoAtual > item.lotacaoMaxima ? 'red' : 'green'">
+                {{ item.lotacaoAtual }}
+              </v-chip>
+              <v-chip v-else>
                 {{ item.lotacaoAtual }}
               </v-chip>
             </td>
-            <td>
+
+            <td v-if="item.entrada">
               <v-chip variant="tonal" :color="item.entrada === 'Saida' ? '#F6893D' : '#3B82F6'">
                 {{ item.entrada }}
               </v-chip>
             </td>
+
           </tr>
         </template>
       </v-data-table>
