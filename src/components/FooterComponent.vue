@@ -1,5 +1,5 @@
 <template>
-    <v-footer no-flex class="bg-light-blue-darken-4 justify-space-between text-center d-flex flex-row">
+    <v-footer no-flex class="bg-light-blue-darken-4 justify-center text-center d-flex flex-row">
         <div class="">
             <v-btn v-for="icon in icons" :key="icon" :icon="icon" variant="text" class="justify-start"></v-btn>
             <div>
@@ -10,11 +10,6 @@
                 © {{ new Date().getFullYear() }} — <strong>Altave | Todos os direitos reservados.</strong>
             </div>
         </div>
-
-        <div class="pt-0">
-            <img src="../assets/logoAltave-removebg-preview.png" alt="logo-altave">
-        </div>
-
     </v-footer>
 </template>
 <script setup lang="ts">
