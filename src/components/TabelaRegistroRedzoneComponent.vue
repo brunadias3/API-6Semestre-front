@@ -12,7 +12,7 @@
             <td v-if="item.redzone">
               {{ item.redzone }}
             </td>
-            <td>{{ formatarData(item.dia) }}</td>
+            <td>{{ formatarData(item.data) }}</td>
             <td>
               <v-chip v-if="item.lotacaoMaxima" variant="tonal"
                 :color="item.lotacaoAtual > item.lotacaoMaxima ? 'red' : 'green'">
@@ -24,7 +24,7 @@
             </td>
 
             <td v-if="item.entrada">
-              <v-chip variant="tonal" :color="item.entrada === 'Saida' ? '#F6893D' : '#3B82F6'">
+              <v-chip variant="tonal" :color="item.entrada === 'saida' ? '#F6893D' : '#3B82F6'">
                 {{ item.entrada }}
               </v-chip>
             </td>
@@ -38,11 +38,19 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+interface Registro {
+  id: number;
+  entrada: string;
+  data: string;
+  lotacaoAtual?: number; 
+  redzone?: string;
+  lotacaoMaxima?: number
+}
 
 const search = ref('')
 const props = defineProps<{
   headers: { title: string; value: string }[];
-  desserts: { id: number; redzone?: string; lotacaoAtual?: number; dia: string, lotacaoMaxima?: number, entrada: string }[];
+  desserts: { registro: Registro[]  }[];
 }>();
 function formatarData(data: string): string {
   const [ano, mes, diaHora] = data.split('-');
