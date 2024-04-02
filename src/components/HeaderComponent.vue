@@ -38,7 +38,7 @@
 
                             <v-list-item @click="logzada">
                                 <div class="d-flex ga-3">
-                                    <v-icon icon="fas fa-exclamation" color="#015280" />
+                                    <v-icon icon="mdi mdi-circle-off-outline" color="#015280" />
                                     <div class="text-overline">Redzone</div>
                                 </div>
                             </v-list-item>
