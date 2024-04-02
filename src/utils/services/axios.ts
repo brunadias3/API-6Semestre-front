@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosPromise } from "axios";
 import IRequestParams from "../../interfaces/IRequestParams";
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080/'
+    baseURL: 'https://api-6sem-back.onrender.com'
 })
 
 
