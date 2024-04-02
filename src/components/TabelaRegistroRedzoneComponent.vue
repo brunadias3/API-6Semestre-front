@@ -24,7 +24,7 @@
             </td>
 
             <td v-if="item.entrada">
-              <v-chip variant="tonal" :color="item.entrada === 'saida' ? '#F6893D' : '#3B82F6'">
+              <v-chip variant="tonal" class="text-capitalize" :color="item.entrada === 'saida' ? '#F6893D' : '#3B82F6'">
                 {{ item.entrada }}
               </v-chip>
             </td>
