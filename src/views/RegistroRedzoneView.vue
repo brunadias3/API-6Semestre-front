@@ -3,7 +3,7 @@
         <v-main>
             <v-container>
                 <TitleComponent title="Histórico da redzone" />
-                    <TabelaRegistroRedzoneComponent :headers="headers" :desserts="registroRedzone.dadosRedzone" />
+                    <TabelaComponent titulo="Registro das redzones" :headers="headers" :desserts="registroRedzone.dadosRedzone" />
             </v-container>
         </v-main>
 
@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import TabelaRegistroRedzoneComponent from '../components/TabelaRegistroRedzoneComponent.vue';
+import TabelaComponent from '../components/TabelaComponent.vue';
 import TitleComponent from '../components/TitleComponent.vue';
 import {registroRedzoneStore} from '../stores/index'
 
@@ -22,7 +22,8 @@ const headers = [
     { title: 'Id', value: 'id' },
     { title: 'Dia', value: 'data' },
     {title: 'Lotação atual', value: 'lotacaoAtual'},
-    { title: 'Entrada/Saida', value: 'entrada' }
+    { title: 'Entrada/Saida', value: 'entrada' },
+    
     
 ]
 

@@ -1,11 +1,17 @@
 <template>
   <v-container>
-    <v-card title="Tabela de registros" class="text-light-blue-darken-4 mx-auto ml-10" elevation="10">
+    <div class="d-flex justify-end">
+      <v-btn @click="$router.push({ name: rota })" v-if="adicionar" color="primary" text class="ma-2">
+        {{ adicionar }}
+      </v-btn>
+    </div>
+    <v-card :title="titulo" class="text-light-blue-darken-4 mx-auto ml-10" elevation="10">
       <template v-slot:text>
         <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi mdi-magnify" variant="outlined"
           hide-details single-line></v-text-field>
       </template>
-      <v-data-table items-per-page-text="Itens por página" no-data-text="Não possui nenhum registro."  :headers="headers" :items="desserts"  item-key="id" :items-per-page="5" :search="search">
+      <v-data-table items-per-page-text="Itens por página" no-data-text="Não possui nenhum registro." :headers="headers"
+        :items="desserts" item-key="id" :items-per-page="5" :search="search">
         <template v-slot:item="{ item }">
           <tr>
             <td>{{ item.id }}</td>
@@ -28,6 +34,16 @@
                 {{ item.entrada }}
               </v-chip>
             </td>
+            <td @click="desativar(item.id)" v-if="headers.some(header => header.value === 'desativar')">
+              <v-icon class="cursor-pointer" color="red" aria-hidden="false">
+                mdi mdi-sync-off
+              </v-icon>
+            </td>
+            <td @click="editar(item.id)" v-if="headers.some(header => header.value === 'editar')">
+              <v-icon class="cursor-pointer" color="#3B82F6" aria-hidden="false">
+                mdi mdi-pen
+              </v-icon>
+            </td>
 
           </tr>
         </template>
@@ -38,11 +54,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
 interface Registro {
   id: number;
   entrada: string;
   data: string;
-  lotacaoAtual?: number; 
+  lotacaoAtual?: number;
   redzone?: string;
   lotacaoMaxima?: number
 }
@@ -50,7 +69,10 @@ interface Registro {
 const search = ref('')
 const props = defineProps<{
   headers: { title: string; value: string }[];
-  desserts: { registro: Registro[]  }[];
+  desserts: { registro: Registro[] }[];
+  adicionar?: string
+  rota?: string
+  titulo: string
 }>();
 function formatarData(data: string): string {
   const [ano, mes, diaHora] = data.split('-');
@@ -58,4 +80,13 @@ function formatarData(data: string): string {
 
   return `${dia}/${mes}/${ano} ${hora}`;
 }
+
+const desativar = (id: number) => {
+  console.log(`desativosapoha ${id}`);
+}
+
+const editar = (id: number) => {
+  console.log(`editandosapoha ${id}`);
+}
+
 </script>
