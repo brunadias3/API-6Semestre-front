@@ -3,7 +3,8 @@
         <v-main>
             <v-container>
                 <TitleComponent title="Histórico da redzone" />
-                    <TabelaComponent titulo="Registro das redzones" :headers="headers" :desserts="registroRedzone.dadosRedzone" />
+                <TabelaComponent :is-loading="isLoading" titulo="Registro das redzones" :headers="headers"
+                    :desserts="registroRedzone.dadosRedzone" />
             </v-container>
         </v-main>
 
@@ -11,27 +12,42 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import TabelaComponent from '../components/TabelaComponent.vue';
 import TitleComponent from '../components/TitleComponent.vue';
-import {registroRedzoneStore} from '../stores/index'
+import { registroRedzoneStore } from '../stores/index'
 
 const registroRedzone = registroRedzoneStore()
+const isLoading = ref(false);
 
 const headers = [
-    { title: 'Id', value: 'id' },
+    { title: 'Id', value: 'id', sortable: true },
     { title: 'Dia', value: 'data' },
-    {title: 'Lotação atual', value: 'lotacaoAtual'},
+    { title: 'Lotação atual', value: 'lotacao' },
     { title: 'Entrada/Saida', value: 'entrada' },
-    
-    
+
+
 ]
 
 const pegarDados = async () => {
-    await registroRedzone.pegarHistoricoRedZone()
+    isLoading.value = true;
+    try {
+        await registroRedzone.pegarHistoricoRedZone()
+    } catch (error) {
+        console.log(error);
+    } finally {
+        isLoading.value = false;
+    }
 }
 
 onMounted(() => {
     pegarDados()
-})
+    const intervalId = setInterval(() => {
+        pegarDados();
+    }, 4000);
+
+    onBeforeUnmount(() => {
+        clearInterval(intervalId);
+    });
+});
 </script>
