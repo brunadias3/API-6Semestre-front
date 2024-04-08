@@ -10,8 +10,9 @@
         <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi mdi-magnify" variant="outlined"
           hide-details single-line></v-text-field>
       </template>
-      <v-data-table items-per-page-text="Itens por página" no-data-text="Não possui nenhum registro." :headers="headers"
-        :items="desserts" item-key="id" :items-per-page="5" :search="search">
+      <v-data-table loading-text="Procurando informações" :loading="isLoading" items-per-page-text="Itens por página"
+        no-data-text="Não possui nenhum registro." :headers="headers" :items="desserts" item-key="id"
+        :items-per-page="25" :search="search">
         <template v-slot:item="{ item }">
           <tr>
             <td>{{ item.id }}</td>
@@ -21,11 +22,11 @@
             <td>{{ formatarData(item.data) }}</td>
             <td>
               <v-chip v-if="item.lotacaoMaxima" variant="tonal"
-                :color="item.lotacaoAtual > item.lotacaoMaxima ? 'red' : 'green'">
-                {{ item.lotacaoAtual }}
+                :color="item.lotacao > item.lotacaoMaxima ? 'red' : 'green'">
+                {{ item.lotacao }}
               </v-chip>
               <v-chip v-else>
-                {{ item.lotacaoAtual }}
+                {{ item.lotacao }}
               </v-chip>
             </td>
 
@@ -61,18 +62,19 @@ interface Registro {
   id: number;
   entrada: string;
   data: string;
-  lotacaoAtual?: number;
+  lotacao?: number;
   redzone?: string;
-  lotacaoMaxima?: number
+  lotacaoMaxima?: number;
 }
 
 const search = ref('')
 const props = defineProps<{
   headers: { title: string; value: string }[];
   desserts: { registro: Registro[] }[];
-  adicionar?: string
-  rota?: string
-  titulo: string
+  adicionar?: string;
+  rota?: string;
+  titulo: string;
+  isLoading: boolean;
 }>();
 function formatarData(data: string): string {
   const [ano, mes, diaHora] = data.split('-');
