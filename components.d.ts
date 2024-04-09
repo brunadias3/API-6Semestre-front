@@ -12,7 +12,6 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TabelaComponent: typeof import('./src/components/TabelaComponent.vue')['default']
-    TabelaRegistroRedzoneComponent: typeof import('./src/components/TabelaRegistroRedzoneComponent.vue')['default']
     TitleComponent: typeof import('./src/components/TitleComponent.vue')['default']
   }
 }
