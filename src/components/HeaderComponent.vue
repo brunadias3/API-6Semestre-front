@@ -4,11 +4,11 @@
             <img src="../assets/logoAltave-removebg-preview.png" alt="logo-altave">
             <div class="text-center">
                 <v-menu v-model="menu" :close-on-content-click="false" location="end">
-                    <template v-slot:activator="{ props }">
+                    <!-- <template v-slot:activator="{ props }">
                         <v-btn color="light-blue-darken-1" v-bind="props">
                             Nome usuário
                         </v-btn>
-                    </template>
+                    </template> -->
 
                     <v-card min-width="300">
                         <v-list >
