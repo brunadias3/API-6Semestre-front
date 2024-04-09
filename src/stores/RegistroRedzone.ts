@@ -8,8 +8,8 @@ const registroRedzoneStore = defineStore('redzone', () => {
     
     const pegarHistoricoRedZone = async () => {
         const response = await getRequest('log')
-
-        dadosRedzone.value = response.data;
+        
+        dadosRedzone.value = response.data.reverse();
     }
 
 
