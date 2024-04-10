@@ -1,8 +1,9 @@
 import axios, { AxiosError, AxiosPromise } from "axios";
 import IRequestParams from "../../interfaces/IRequestParams";
 
+const api_url = process.env.API_URL
 const api = axios.create({
-    baseURL: 'https://api-6sem-back.onrender.com'
+    baseURL: api_url
 })
 
 
