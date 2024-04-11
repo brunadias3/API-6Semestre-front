@@ -6,6 +6,7 @@
  <a href="#-funcionalidades">Funcionalidades</a> •
  <a href="#-layout">Layout</a> •
  <a href="#-tecnologias">Tecnologias</a> •
+ <a href="#-Deploy">Deploy</a> •
  <a href="#-autores">Autores</a> • 
 </p>
 
@@ -62,6 +63,11 @@ As seguintes ferramentas foram usadas na construção do projeto:
 - Protótipo: **[Figma](https://www.figma.com/)** → **[Protótipo (Monitoramento de Fluxo)](https://www.figma.com/file/npSn8yHa7ta2qVyJdPwHPE/API-6%C2%BA?type=design&node-id=0-1&mode=design)**
 - Editor: **[Visual Studio Code](https://code.visualstudio.com/)**
 - Documentação do Vue: **[Vue Documentation](https://vuejs.org/)**
+
+---
+
+## ✅ Deploy
+Atualmente o frontend pode ser consultado online a partir do site: https://api-6semestre-front.onrender.com/
 
 ---
 
