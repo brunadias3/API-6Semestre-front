@@ -6,7 +6,7 @@
  <a href="#-funcionalidades">Funcionalidades</a> •
  <a href="#-layout">Layout</a> •
  <a href="#-tecnologias">Tecnologias</a> •
- <a href="#-Deploy">Deploy</a> •
+
  <a href="#-autores">Autores</a> • 
 </p>
 
@@ -69,7 +69,6 @@ As seguintes ferramentas foram usadas na construção do projeto:
 ## ✅ Deploy
 Atualmente o frontend pode ser consultado online a partir do site: https://api-6semestre-front.onrender.com/
 
----
 
 ## 🦸 Autores
 <div style="display: flex; justify-content: center;align-items: center;">
