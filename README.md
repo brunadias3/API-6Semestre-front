@@ -17,7 +17,10 @@
 
 ## ⚙️ Funcionalidades
 
-- [ ] Exibe o fluxo de pessoas de cada redzone;
+- [X] Exibe o fluxo de pessoas da redzone;
+- [ ] Criação, alteração, exclusão e visualização de departamentos
+- [ ] Criação, alteração, exclusão e visualização de usuários
+- [ ] Criação, alteração, exclusão e visualização de redzones
 - [ ] Possui diferenciação de usuários;
 - [ ] Gráficos Estatísticos
 - [ ] Possibilidade de gerar relatórios;
@@ -64,6 +67,10 @@ As seguintes ferramentas foram usadas na construção do projeto:
 - Documentação do Vue: **[Vue Documentation](https://vuejs.org/)**
 
 ---
+
+## ✅ Deploy
+Atualmente o frontend pode ser consultado online a partir do site: https://api-6semestre-front.onrender.com/
+
 
 ## 🦸 Autores
 <div style="display: flex; justify-content: center;align-items: center;">
