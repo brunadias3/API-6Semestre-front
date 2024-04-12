@@ -19,7 +19,6 @@ import { registroRedzoneStore } from '../stores/index'
 
 const registroRedzone = registroRedzoneStore()
 const isLoading = ref(false);
-console.log(process.env.API_URL)
 
 const headers = [
     { title: 'Id', value: 'id', sortable: true },
