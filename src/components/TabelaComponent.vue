@@ -35,7 +35,7 @@
                 {{ item.entrada }}
               </v-chip>
             </td>
-            <td @click="desativar(item.id)" v-if="headers.some(header => header.value === 'desativar')">
+            <td @click="desativar && desativar(item.id)" v-if="headers.some(header => header.value === 'desativar')">
               <v-icon class="cursor-pointer" color="red" aria-hidden="false">
                 mdi mdi-sync-off
               </v-icon>
@@ -56,7 +56,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-const router = useRouter();
+
+const router = useRouter()
 
 interface Registro {
   id: number;
@@ -73,8 +74,11 @@ const props = defineProps<{
   desserts: { registro: Registro[] }[];
   adicionar?: string;
   rota?: string;
+  rotaEditar?: string;
   titulo: string;
-  isLoading: boolean;
+  isLoading?: boolean;
+  desativar?: (id: number) => void;
+
 }>();
 function formatarData(data: string): string {
   const [ano, mes, diaHora] = data.split('-');
@@ -83,12 +87,13 @@ function formatarData(data: string): string {
   return `${dia}/${mes}/${ano} ${hora}`;
 }
 
-const desativar = (id: number) => {
-  console.log(`desativosapoha ${id}`);
-}
+// const desativar = (id: number) => {
+//   console.log(`desativando ${id}`);
+  
+// }
 
 const editar = (id: number) => {
-  console.log(`editandosapoha ${id}`);
+  router.push({name: props.rotaEditar, params: {id: id} })
 }
 
 </script>
