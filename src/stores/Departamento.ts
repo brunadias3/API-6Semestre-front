@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import INovoDepartamento from "../interfaces/INovoDepartamento";
 import { getRequest, postRequest, putRequest } from "../utils/services/axios";
 import IDepartamento from "../interfaces/IDepartamento";
 
