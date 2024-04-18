@@ -11,7 +11,7 @@
           hide-details single-line></v-text-field>
       </template>
       <v-data-table loading-text="Procurando informações" :loading="isLoading" items-per-page-text="Itens por página"
-        no-data-text="Não possui nenhum registro." :headers="headers" :items="desserts ? desserts : dessertsDepartamento"
+        no-data-text="Não possui nenhum registro." :headers="headers" :items="itensRegistro ? itensRegistro : itensDepartamento"
         item-key="id" :items-per-page="25" :search="search">
         <template v-slot:item="{ item }">
           <tr>
@@ -79,8 +79,8 @@ interface Registro {
 const search = ref('')
 const props = defineProps<{
   headers: { title: string; value: string }[];
-  desserts?: { registro: Registro[] }[];
-  dessertsDepartamento?: IDepartamento[];
+  itensRegistro?: { registro: Registro[] }[];
+  itensDepartamento?: IDepartamento[];
   adicionar?: string;
   rota?: string;
   rotaEditar?: string;
@@ -89,7 +89,7 @@ const props = defineProps<{
   desativar?: (id: number) => void;
 
 }>();
-console.log(props.dessertsDepartamento)
+
 function formatarData(data: string): string {
   const [ano, mes, diaHora] = data.split('-');
   const [dia, hora] = diaHora.split(' ');

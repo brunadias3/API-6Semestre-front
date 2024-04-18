@@ -4,7 +4,7 @@
             <v-container>
                 <TitleComponent title="Histórico da redzone" />
                 <TabelaComponent :is-loading="isLoading" titulo="Registro da redzone" :headers="headers"
-                    :desserts="registroRedzone.dadosRedzone" />
+                    :itensRegistro="registroRedzone.dadosRedzone" />
             </v-container>
         </v-main>
 

@@ -3,7 +3,7 @@
         <v-main>
             <v-container>
                 <TitleComponent title="Gerenciamento de Departamentos" />
-                <TabelaComponent titulo="Departamentos" :headers="headers" :dessertsDepartamento="departamentoStoreDados.departamento"
+                <TabelaComponent titulo="Departamentos" :headers="headers" :itensDepartamento="departamentoStoreDados.departamento"
                     adicionar="Criar departamento" rota="criarDepartamento" rotaEditar="editarDepartamento" />
             </v-container>
         </v-main>
