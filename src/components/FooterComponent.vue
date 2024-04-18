@@ -3,10 +3,6 @@
         <div class="">
             <v-btn v-for="icon in icons" :key="icon" :icon="icon" variant="text" class="justify-start"></v-btn>
             <div>
-                <v-btn v-for="(btn, index) in links" :key="index" variant="text" :to="btn.route" target="_blank">{{ btn.title }}</v-btn>
-
-            </div>
-            <div>
                 © {{ new Date().getFullYear() }} — <strong>Altave | Todos os direitos reservados.</strong>
             </div>
         </div>
