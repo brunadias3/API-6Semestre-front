@@ -7,20 +7,25 @@
     </div>
     <v-card :title="titulo" class="text-light-blue-darken-4 mx-auto ml-10" elevation="10">
       <template v-slot:text>
-        <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi mdi-magnify" variant="outlined"
+        <v-text-field v-model="search" label="Procurar" prepend-inner-icon="mdi mdi-magnify" variant="outlined"
           hide-details single-line></v-text-field>
       </template>
       <v-data-table loading-text="Procurando informações" :loading="isLoading" items-per-page-text="Itens por página"
-        no-data-text="Não possui nenhum registro." :headers="headers" :items="desserts" item-key="id"
-        :items-per-page="25" :search="search">
+        no-data-text="Não possui nenhum registro." :headers="headers" :items="desserts ? desserts : dessertsDepartamento"
+        item-key="id" :items-per-page="25" :search="search">
         <template v-slot:item="{ item }">
           <tr>
-            <td>{{ item.id }}</td>
-            <td v-if="item.redzone">
-              {{ item.redzone }}
-            </td>
-            <td>{{ formatarData(item.data) }}</td>
             <td>
+              {{ item.id ? item.id : (item.id_departamento ? item.id_departamento : 'Nenhum item encontrado') }}
+            </td>
+            <td v-if="item.redzone || item.nome_departamento">
+              {{ item.redzone ? item.redzone : (item.nome_departamento ? item.nome_departamento : 'Nenhum item encontrado')}}
+            </td>
+            <td>{{ item.data ? formatarData(item.data) : formatarData(item.create_at) }}</td>
+            <td v-if="item.responsavel_id?.nome_usuario" class="text-capitalize">
+              {{item.responsavel_id.nome_usuario  }}
+            </td>
+            <td v-show="item.lotacao || item.lotacao === 0">
               <v-chip v-if="item.lotacaoMaxima" variant="tonal"
                 :color="item.lotacao > item.lotacaoMaxima ? 'red' : 'green'">
                 {{ item.lotacao }}
@@ -56,8 +61,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import IDepartamento from "../interfaces/IDepartamento";
+
 
 const router = useRouter()
+
 
 interface Registro {
   id: number;
@@ -71,7 +79,8 @@ interface Registro {
 const search = ref('')
 const props = defineProps<{
   headers: { title: string; value: string }[];
-  desserts: { registro: Registro[] }[];
+  desserts?: { registro: Registro[] }[];
+  dessertsDepartamento?: IDepartamento[];
   adicionar?: string;
   rota?: string;
   rotaEditar?: string;
@@ -80,6 +89,7 @@ const props = defineProps<{
   desativar?: (id: number) => void;
 
 }>();
+console.log(props.dessertsDepartamento)
 function formatarData(data: string): string {
   const [ano, mes, diaHora] = data.split('-');
   const [dia, hora] = diaHora.split(' ');
@@ -89,11 +99,11 @@ function formatarData(data: string): string {
 
 // const desativar = (id: number) => {
 //   console.log(`desativando ${id}`);
-  
+
 // }
 
 const editar = (id: number) => {
-  router.push({name: props.rotaEditar, params: {id: id} })
+  router.push({ name: props.rotaEditar, params: { id: id } })
 }
 
 </script>
