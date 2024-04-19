@@ -1,9 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <div>
         <HeaderComponent />
-      </div>
       <div>
         <RouterView />
       </div>
