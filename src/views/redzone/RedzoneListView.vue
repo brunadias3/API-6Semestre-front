@@ -1,106 +1,128 @@
 <template>
-  <container class="justify-center align-center">
-    <v-data-table :headers="headers" :items="dataMockup" items-per-page-text="Resultados por página"
-      no-data-text="Nenhum resultado encontrado" loading-text="Buscando dados..." :loading="loading" class="py-5 px-16 w-75">
-      <template v-slot:top>
-        <v-toolbar flat color="white">
-          <v-text-field v-model="search" label="Pesquisar" prepend-inner-icon="mdi mdi-magnify" variant="solo-filled" flat
-            hide-details single-line></v-text-field>
-          <v-divider class="mx-4" inset vertical></v-divider>
-          <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ props }">
-              <v-btn class="mb-2" color="primary" dark v-bind="props" size="large" prepend-icon="mdi mdi-plus">
-                Criar Redzone
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title class="d-flex px-5 pt-5 pb-2">
-                <v-icon>mdi mdi mdi-rename-box-outline</v-icon>
-                <h1 class="px-4 text-h5 font-weight-medium">Redzone</h1>
-                <v-spacer></v-spacer>
-                <v-icon @click="dialog = false" class="mt-1" size="x-small">mdi-close</v-icon>
-              </v-card-title>
-            </v-card>
-          </v-dialog>
-        </v-toolbar>
-      </template>
-      <template v-slot:item.actions="{ item }">
-        <v-btn icon flat :loading="loading">
-          <v-icon>mdi mdi-dots-horizontal</v-icon>
-          <v-menu activator="parent" location="bottom end" transition="fade-transition">
-            <v-list density="compact" min-width="250" rounded="lg" slim color="primary">
-              <v-list-item prepend-icon="mdi mdi-pencil" class="text-primary" title="Editar Redzone" link
-                @click="editItem(item)"></v-list-item>
-              <v-divider class="my-2"></v-divider>
-              <v-list-item prepend-icon="mdi mdi-delete" class="text-red" title="Excluir Redzone" link
-                @click="deleteItem(item)"></v-list-item>
-            </v-list>
-          </v-menu>
-        </v-btn>
-      </template>
-    </v-data-table>
-  </container>
+  <v-container>
+    <v-row justify="center">
+      <v-col v-for="redzone in dataMockup" :key="redzone.id" cols="12" sm="6" md="4" lg="3">
+        <v-card class="pa-2" outlined hover>
+          <v-card-title class="text-center" style="color: #3f51b5;">{{ redzone.nome_redzone }}</v-card-title>
+          <v-row class="py-2">
+            <v-divider class="mx-7" />
+          </v-row>
+          <v-row>
+            <v-col class="px-6 pt-1 mb-n5">
+              <v-chip variant="tonal" :color="redzone.ativo ? 'primary' : 'red'">{{ redzone.ativo ? 'Ativo' :
+                'Desativado' }}</v-chip>
+            </v-col>
+          </v-row>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col>
+                  <span class="font-weight-bold">Responsável:</span>
+                  {{ redzone.responsavel_id.nome_redzone_usuario }}
+                </v-col>
+              </v-row>
+              <v-row class="mt-n2">
+                <v-col>
+                  <span class="font-weight-bold">Capacidade Máxima:</span>
+                  {{ redzone.capacidade_maxima }}
+                </v-col>
+              </v-row>
+              <v-row class="mt-n2">
+                <v-col>
+                  <span class="font-weight-bold">Departamento:</span>
+                  {{ redzone.id_departamento.nome_redzone_departamento }}
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <v-card-actions class="text-center">
+            <v-spacer></v-spacer>
+            <v-tooltip location="bottom" text="Editar">
+              <template v-slot:activator="{ props }">
+                <v-icon v-bind="props" @click="editItem(redzone)" color="primary">mdi mdi-pencil</v-icon>
+              </template>
+            </v-tooltip>
+            <v-tooltip location="bottom" :text="redzone.ativo ? 'Desativar' : 'Ativar'">
+              <template v-slot:activator="{ props }">
+                <v-icon v-bind="props" @click="active(redzone)" :color="redzone.ativo ? 'red' : 'green'" v-on="on">
+                  {{ redzone.ativo ? 'mdi mdi-sync-off' : 'mdi mdi-sync' }}
+                </v-icon>
+              </template>
+            </v-tooltip>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { Redzone } from '../../types/IRedzone';
 
-const headers = [
-  { title: 'ID', key: 'ID' },
-  { title: 'Nome', align: 'center', key: 'Nome' },
-  { title: 'Criado em', align: 'center', key: 'Criado em' },
-  { title: 'Ativo', align: 'center', key: 'Ativo' },
-  { title: 'Editar', align: 'end', sortable: false, key: 'actions' },
-]
-const search = ref('');
-const dialog = ref(false);
-const loading = ref(false)
+const dataMockup = ref([
+  {
+    id: 1,
+    nome_redzone: 'Redzone 1',
+    responsavel_id: {
+      id_usuario: 1,
+      nome_redzone_usuario: 'João Silva',
+      email: 'joao.silva@example.com',
+      senha: 'senha123',
+      matricula_empresa: 'ABC123',
+      tipo_usuario: 'Administrador'
+    },
+    camera: 'Câmera 1',
+    capacidade_maxima: 50,
+    id_departamento: {
+      id_departamento: 1,
+      nome_redzone_departamento: 'Departamento de TI',
+      responsavel_id: {
+        id_usuario: 1,
+        nome_redzone_usuario: 'João Silva',
+        email: 'joao.silva@example.com',
+        senha: 'senha123',
+        matricula_empresa: 'ABC123',
+        tipo_usuario: 'Administrador'
+      }
+    },
+    ativo: true,
+  },
+  {
+    id: 2,
+    nome_redzone: 'Redzone 2',
+    responsavel_id: {
+      id_usuario: 2,
+      nome_redzone_usuario: 'Maria Santos',
+      email: 'maria.santos@example.com',
+      senha: 'senha456',
+      matricula_empresa: 'DEF456',
+      tipo_usuario: 'Administrador'
+    },
+    camera: 'Câmera 2',
+    capacidade_maxima: 30,
+    id_departamento: {
+      id_departamento: 2,
+      nome_redzone_departamento: 'Departamento de RH',
+      responsavel_id: {
+        id_usuario: 2,
+        nome_redzone_usuario: 'Maria Santos',
+        email: 'maria.santos@example.com',
+        senha: 'senha456',
+        matricula_empresa: 'DEF456',
+        tipo_usuario: 'Administrador'
+      }
+    },
+    ativo: false
+  },
+])
 
-const editItem = (item: any) => {
-  console.log(item)
+const active = (redzone: Redzone) => {
+  redzone.ativo = !redzone.ativo;
+  console.log(`Redzone ${redzone.nome_redzone} ativada/desativada:`, redzone.ativo);
 }
 
-const deleteItem = (item: any) => {
-  console.log(item)
+const editItem = (redzone: Redzone) => {
+  console.log("Edit item:", redzone);
 }
-
-const dataMockup = [
-  {
-    'ID': 1,
-    'Nome': 'Produto A',
-    'Criado em': '2024-04-18',
-    'Atualizado em': '2024-04-18',
-    'Ativo': true,
-  },
-  {
-    'ID': 2,
-    'Nome': 'Produto B',
-    'Criado em': '2024-04-17',
-    'Atualizado em': '2024-04-18',
-    'Ativo': false
-  },
-  {
-    'ID': 3,
-    'Nome': 'Produto C',
-    'Criado em': '2024-04-16',
-    'Atualizado em': '2024-04-17',
-    'Ativo': true
-  },
-  {
-    'ID': 4,
-    'Nome': 'Produto D',
-    'Criado em': '2024-04-15',
-    'Atualizado em': '2024-04-16',
-    'Ativo': false
-  },
-  {
-    'ID': 5,
-    'Nome': 'Produto E',
-    'Criado em': '2024-04-14',
-    'Atualizado em': '2024-04-15',
-    'Ativo': true
-  }
-];
-
-
 </script>
