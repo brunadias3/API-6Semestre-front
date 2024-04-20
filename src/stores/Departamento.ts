@@ -13,7 +13,7 @@ const departamentoStore = defineStore('departamento', () => {
         try {
             const response = await getRequest('departamentos')
 
-            departamento.value = response.data
+            departamento.value = response.data.reverse()
         } catch (error) {
             errorCatch.value = error;
         }
@@ -22,7 +22,7 @@ const departamentoStore = defineStore('departamento', () => {
         try {
             const response = await deleteRequest(`departamentos/${id}`)
 
-            return response
+           departamento.value = response.data.reverse()
             
         } catch (error) {
             errorCatch.value = error;
