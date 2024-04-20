@@ -40,15 +40,23 @@
                 {{ item.entrada }}
               </v-chip>
             </td>
-            <td @click="desativar && desativar(item.id)" v-if="headers.some(header => header.value === 'desativar')">
-              <v-icon class="cursor-pointer" color="red" aria-hidden="false">
-                mdi mdi-sync-off
-              </v-icon>
+            <td @click="!item.desativado? desativar && desativar(item.id? item.id : item.id_departamento) : ativar && ativar(item.id? item.id : item.id_departamento)" v-if="headers.some(header => header.value === 'desativar')">
+              <v-tooltip  :text="!item.desativado? 'Desativar': 'Ativar'">
+                <template v-slot:activator="{ props }">
+                  <v-icon v-bind="props" class="cursor-pointer" :color="!item.desativado? 'red' : 'green' " aria-hidden="false">
+                    {{ !item.desativado? "mdi mdi-sync-off": "mdi mdi-sync" }}
+                  </v-icon>
+                </template>
+              </v-tooltip>
             </td>
             <td @click="editar(item.id)" v-if="headers.some(header => header.value === 'editar')">
-              <v-icon class="cursor-pointer" color="#3B82F6" aria-hidden="false">
-                mdi mdi-pen
-              </v-icon>
+              <v-tooltip  text="Editar">
+                <template v-slot:activator="{ props }">
+                  <v-icon v-bind="props" class="cursor-pointer" color="#3B82F6" aria-hidden="false">
+                    mdi mdi-pen
+                  </v-icon>
+               </template>
+              </v-tooltip>
             </td>
 
           </tr>
@@ -87,6 +95,7 @@ const props = defineProps<{
   titulo: string;
   isLoading?: boolean;
   desativar?: (id: number) => void;
+  ativar?: (id: number ) => void;
 
 }>();
 
