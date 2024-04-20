@@ -7,20 +7,25 @@
     </div>
     <v-card :title="titulo" class="text-light-blue-darken-4 mx-auto ml-10" elevation="10">
       <template v-slot:text>
-        <v-text-field v-model="search" label="Search" prepend-inner-icon="mdi mdi-magnify" variant="outlined"
+        <v-text-field v-model="search" label="Procurar" prepend-inner-icon="mdi mdi-magnify" variant="outlined"
           hide-details single-line></v-text-field>
       </template>
       <v-data-table loading-text="Procurando informações" :loading="isLoading" items-per-page-text="Itens por página"
-        no-data-text="Não possui nenhum registro." :headers="headers" :items="desserts" item-key="id"
-        :items-per-page="25" :search="search">
+        no-data-text="Não possui nenhum registro." :headers="headers" :items="itensRegistro ? itensRegistro : itensDepartamento"
+        item-key="id" :items-per-page="25" :search="search">
         <template v-slot:item="{ item }">
           <tr>
-            <td>{{ item.id }}</td>
-            <td v-if="item.redzone">
-              {{ item.redzone }}
-            </td>
-            <td>{{ formatarData(item.data) }}</td>
             <td>
+              {{ item.id ? item.id : (item.id_departamento ? item.id_departamento : 'Nenhum item encontrado') }}
+            </td>
+            <td v-if="item.redzone || item.nome_departamento">
+              {{ item.redzone ? item.redzone : (item.nome_departamento ? item.nome_departamento : 'Nenhum item encontrado')}}
+            </td>
+            <td>{{ item.data ? formatarData(item.data) : formatarData(item.create_at) }}</td>
+            <td v-if="item.responsavel_id?.nome_usuario" class="text-capitalize">
+              {{item.responsavel_id.nome_usuario  }}
+            </td>
+            <td v-show="item.lotacao || item.lotacao === 0">
               <v-chip v-if="item.lotacaoMaxima" variant="tonal"
                 :color="item.lotacao > item.lotacaoMaxima ? 'red' : 'green'">
                 {{ item.lotacao }}
@@ -35,15 +40,23 @@
                 {{ item.entrada }}
               </v-chip>
             </td>
-            <td @click="desativar(item.id)" v-if="headers.some(header => header.value === 'desativar')">
-              <v-icon class="cursor-pointer" color="red" aria-hidden="false">
-                mdi mdi-sync-off
-              </v-icon>
+            <td @click="!item.desativado? desativar && desativar(item.id? item.id : item.id_departamento) : ativar && ativar(item.id? item.id : item.id_departamento)" v-if="headers.some(header => header.value === 'desativar')">
+              <v-tooltip  :text="!item.desativado? 'Desativar': 'Ativar'">
+                <template v-slot:activator="{ props }">
+                  <v-icon v-bind="props" class="cursor-pointer" :color="!item.desativado? 'red' : 'green' " aria-hidden="false">
+                    {{ !item.desativado? "mdi mdi-sync-off": "mdi mdi-sync" }}
+                  </v-icon>
+                </template>
+              </v-tooltip>
             </td>
             <td @click="editar(item.id)" v-if="headers.some(header => header.value === 'editar')">
-              <v-icon class="cursor-pointer" color="#3B82F6" aria-hidden="false">
-                mdi mdi-pen
-              </v-icon>
+              <v-tooltip  text="Editar">
+                <template v-slot:activator="{ props }">
+                  <v-icon v-bind="props" class="cursor-pointer" color="#3B82F6" aria-hidden="false">
+                    mdi mdi-pen
+                  </v-icon>
+               </template>
+              </v-tooltip>
             </td>
 
           </tr>
@@ -56,7 +69,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-const router = useRouter();
+import IDepartamento from "../interfaces/IDepartamento";
+
+
+const router = useRouter()
+
 
 interface Registro {
   id: number;
@@ -70,12 +87,18 @@ interface Registro {
 const search = ref('')
 const props = defineProps<{
   headers: { title: string; value: string }[];
-  desserts: { registro: Registro[] }[];
+  itensRegistro?: { registro: Registro[] }[];
+  itensDepartamento?: IDepartamento[];
   adicionar?: string;
   rota?: string;
+  rotaEditar?: string;
   titulo: string;
-  isLoading: boolean;
+  isLoading?: boolean;
+  desativar?: (id: number) => void;
+  ativar?: (id: number ) => void;
+
 }>();
+
 function formatarData(data: string): string {
   const [ano, mes, diaHora] = data.split('-');
   const [dia, hora] = diaHora.split(' ');
@@ -83,12 +106,13 @@ function formatarData(data: string): string {
   return `${dia}/${mes}/${ano} ${hora}`;
 }
 
-const desativar = (id: number) => {
-  console.log(`desativosapoha ${id}`);
-}
+// const desativar = (id: number) => {
+//   console.log(`desativando ${id}`);
+
+// }
 
 const editar = (id: number) => {
-  console.log(`editandosapoha ${id}`);
+  router.push({ name: props.rotaEditar, params: { id: id } })
 }
 
 </script>

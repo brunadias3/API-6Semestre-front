@@ -66,8 +66,12 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const menu = ref(false);
+const message = ref(true);
+const hints = ref(true)
+
 
 const menuActive = (rota: string) => {
   router.push(`/${rota}`);
 }
+
 </script>
