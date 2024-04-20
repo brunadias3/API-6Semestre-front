@@ -4,7 +4,7 @@
             <v-container>
                 <TitleComponent title="Gerenciamento de Departamentos" />
                 <TabelaComponent titulo="Departamentos" :headers="headers" :itensDepartamento="departamentoStoreDados.departamento"
-                    adicionar="Criar departamento" rota="criarDepartamento" rotaEditar="editarDepartamento" />
+                    adicionar="Criar departamento" rota="criarDepartamento" rotaEditar="editarDepartamento" :desativar="desativar" :ativar="ativar"/>
             </v-container>
         </v-main>
 
@@ -24,21 +24,26 @@ const headers = [
     { title: 'Nome do departamento', value: 'nome_usuario' },
     { title: 'Criado em', value: 'create_at' },
     { title: 'Nome do Responsável', value: 'nome_responsavel' },
-    { title: 'Desativar', value: 'desativar' },
+    { title: 'Ativar/Desativar', value: 'desativar' },
     { title: 'Editar', value: 'editar' }
 
 
 ]
-// const desativar = (id: number) => {
-//     try {
-//         departamentoStoreDados.desativarDepartamento(id)
-//     } catch (error) {
-//         console.log(error);
+const desativar = (id: number) => {
+    // try {
+    //     departamentoStoreDados.desativarDepartamento(id)
+    // } catch (error) {
+    //     console.log(error);
 
-//     }
-//     console.log(id);
+    // }
+    console.log('desativar',id);
 
-// }
+}
+
+const ativar = (id: number) => {
+    console.log('ativar', id);
+    
+}
 const pegarDados = async () => {
     await departamentoStoreDados.getDepartamento();
 }
