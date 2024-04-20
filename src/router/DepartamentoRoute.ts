@@ -2,12 +2,12 @@ import DepartamentoView from '../views/DepartamentoView.vue'
 import TabelaDepartamentoComponent from '../components/departamento/TabelaDepartamentoComponent.vue'
 
 const departamentoRoute = {
-  path: '/departamento',
+  path: '/departamentos',
   component: DepartamentoView,
   children: [
     {
       path: '',
-      name: 'departamento',
+      name: 'departamentos',
       meta: {
         title: 'departamento'
       },
