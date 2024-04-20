@@ -37,13 +37,9 @@ const desativarOuAtivar = async (id: number) => {
     } catch (error) {
         console.log(error);
     } finally {
-        const intervalId = setInterval(() => {
+        setTimeout(() => {
             pegarDados();
         }, 400);
-
-        onBeforeUnmount(() => {
-            clearInterval(intervalId);
-        });
     }
 
 }
