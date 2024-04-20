@@ -1,5 +1,10 @@
 <template>
   <v-container>
+    <v-row>
+      <v-col class="text-right">
+        <v-btn prepend-icon="mdi mdi-plus" rounded variant="tonal" color="blue" @click="router.push(`/redzone/create`);">Criar Redzone</v-btn>
+      </v-col>
+    </v-row>
     <v-row justify="center">
       <v-col v-for="redzone in dataMockup" :key="redzone.id" cols="12" sm="6" md="4" lg="3">
         <v-card class="pa-2" outlined hover>
@@ -58,6 +63,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { Redzone } from '../../types/IRedzone';
 
 const dataMockup = ref([
@@ -116,6 +122,8 @@ const dataMockup = ref([
     ativo: false
   },
 ])
+
+const router = useRouter();
 
 const active = (redzone: Redzone) => {
   redzone.ativo = !redzone.ativo;
