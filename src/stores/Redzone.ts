@@ -1,13 +1,13 @@
 import { defineStore } from "pinia";
-import { getRequest, postRequest } from "../utils/services/axios";
+import { getRequest, postRequest, putRequest } from "../utils/services/axios";
 import { AxiosError } from "axios";
 import { Redzone } from "../types/IRedzone";
 
 const RedzoneStore = defineStore('redzone', () => {
-
+  const endpoint = '/redzones'
   async function getAll() {
     try {
-      const res = await getRequest('redzones');
+      const res = await getRequest(endpoint);
       return { data: res.data, error: null };
     } catch (error: unknown) {
       throw new Error((error instanceof AxiosError ? error.response?.data.error : null) || error);
@@ -16,7 +16,27 @@ const RedzoneStore = defineStore('redzone', () => {
 
   async function create(redzone: Redzone) {
     try {
-      const res = await postRequest('redzones', redzone);
+      const res = await postRequest(endpoint, redzone);
+      return { data: res.data, error: null };
+    } catch (error: unknown) {
+      throw new Error((error instanceof AxiosError ? error.response?.data.error : null) || error);
+    }
+  }
+
+  async function getOne(redzoneId: string) {
+    const url = endpoint + `/${redzoneId}`
+    try {
+      const res = await getRequest(url);
+      return { data: res.data, error: null };
+    } catch (error: unknown) {
+      throw new Error((error instanceof AxiosError ? error.response?.data.error : null) || error);
+    }
+  }
+
+  async function update(redzone: Redzone) {
+    const url = endpoint + `/${redzone.id_redzone}`
+    try {
+      const res = await putRequest(url, redzone);
       return { data: res.data, error: null };
     } catch (error: unknown) {
       throw new Error((error instanceof AxiosError ? error.response?.data.error : null) || error);
@@ -25,7 +45,9 @@ const RedzoneStore = defineStore('redzone', () => {
 
   return {
     getAll,
-    create
+    create,
+    getOne,
+    update,
   };
 });
 
