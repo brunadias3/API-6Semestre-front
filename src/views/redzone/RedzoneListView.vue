@@ -39,6 +39,12 @@
                   {{ redzone.id_departamento.nome_departamento }}
                 </v-col>
               </v-row>
+              <v-row class="mt-n2">
+                <v-col>
+                  <span class="font-weight-bold">URL Câmera:</span>
+                  {{ redzone.camera }}
+                </v-col>
+              </v-row>
             </v-container>
           </v-card-text>
           <v-card-actions class="text-center">
