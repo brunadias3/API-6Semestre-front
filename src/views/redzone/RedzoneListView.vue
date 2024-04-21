@@ -15,7 +15,7 @@
           </v-row>
           <v-row>
             <v-col class="px-6 pt-1 mb-n5">
-              <v-chip variant="tonal" :color="redzone.status ? 'primary' : 'red'">{{ redzone.status ? 'status' :
+              <v-chip variant="tonal" :color="redzone.status ? 'primary' : 'red'">{{ redzone.status ? 'Ativo' :
                 'Desativado' }}</v-chip>
             </v-col>
           </v-row>
