@@ -44,7 +44,7 @@
               </v-col>
             </v-row>
             <v-row justify="center" class="pb-2">
-              <v-btn color="red-darken-1" variant="outlined" rounded @click="cancelar">Cancelar</v-btn>
+              <v-btn color="red-darken-1" variant="outlined" rounded @click="router.push(`/redzone`)">Cancelar</v-btn>
               <v-btn class="mx-4" color="blue" :loading="loading" rounded @click="validateAndCreate">Criar</v-btn>
             </v-row>
           </v-form>
@@ -64,6 +64,15 @@ import { Departamento } from '../../types/IDepartamento';
 import { RedzoneStore } from '../../stores';
 import { useRouter } from 'vue-router';
 
+const notificator = useNotification();
+const redzoneService = RedzoneStore();
+const router = useRouter();
+const loading = ref(false)
+const userService = UsuarioStore();
+const departamentoService = DepartamentoStore();
+const responsaveis = ref<Usuario[]>([]);
+const departamentos = ref<Departamento[]>([]);
+
 const form = ref({
   nome: '',
   lotacao: '',
@@ -71,13 +80,6 @@ const form = ref({
   departamento: null,
   responsavel: null,
 });
-
-const cancelar = () => { };
-
-const userService = UsuarioStore();
-const departamentoService = DepartamentoStore();
-const responsaveis = ref<Usuario[]>([]);
-const departamentos = ref<Departamento[]>([]);
 
 const getUsers = async () => {
   try {
@@ -96,11 +98,6 @@ const getDepartamentos = async () => {
     console.log(error);
   }
 };
-
-const notificator = useNotification();
-const redzoneService = RedzoneStore();
-const router = useRouter();
-const loading = ref(false)
 
 const validateAndCreate = async () => {
   if (!form.value.nome || !form.value.lotacao || !form.value.urlCamera || !form.value.departamento || !form.value.responsavel) {

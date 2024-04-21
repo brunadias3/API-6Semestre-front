@@ -45,7 +45,7 @@
             <v-spacer></v-spacer>
             <v-tooltip location="bottom" text="Editar">
               <template v-slot:activator="{ props }">
-                <v-icon v-bind="props" @click="editItem(redzone)" color="primary">mdi mdi-pencil</v-icon>
+                <v-icon v-bind="props" @click="router.push(`/redzone/update/${redzone.id_redzone}`)" color="primary">mdi mdi-pencil</v-icon>
               </template>
             </v-tooltip>
             <v-tooltip location="bottom" :text="redzone.status ? 'Desativar' : 'Ativar'">
@@ -69,19 +69,13 @@ import { Redzone } from '../../types/IRedzone';
 import RedzoneStore from '../../stores/Redzone';
 
 const router = useRouter();
-
-const active = (redzone: Redzone) => {
-  redzone.status = !redzone.status;
-  console.log(`Redzone ${redzone.nome_redzone} ativada/desativada:`, redzone.status);
-}
-
-const editItem = (redzone: Redzone) => {
-  console.log("Edit item:", redzone);
-}
-
 const service = RedzoneStore();
 const loading = ref(false);
 const redzones = ref<Redzone[]>([]);
+
+const active = (redzone: Redzone) => {
+  redzone.status = !redzone.status;
+}
 
 const getAll = async () => {
   loading.value = true;
