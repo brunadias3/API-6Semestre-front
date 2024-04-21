@@ -4,7 +4,7 @@
       <v-card elevation="7" min-width="800">
         <v-card-title class="text-center" style="color: #3F51B5;">Criar Redzone</v-card-title>
         <v-card-text>
-          <v-form @click="salvar()">
+          <v-form @prevent.submit="validateAndCreate()">
             <v-row>
               <v-col cols="6">
                 <v-col cols="12">
@@ -17,7 +17,7 @@
                   <h1 class="text-subtitle-1" style="color: #3F51B5;">Lotação:</h1>
                 </v-col>
                 <v-col cols="12" class="mt-n5">
-                  <v-text-field variant="outlined" rounded v-model="form.lotacao"></v-text-field>
+                  <v-text-field type="number" variant="outlined" rounded v-model="form.lotacao"></v-text-field>
                 </v-col>
                 <v-col cols="12">
                   <h1 class="text-subtitle-1" style="color: #3F51B5;">URL da Câmera:</h1>
@@ -31,19 +31,21 @@
                   <h1 class="text-subtitle-1" style="color: #3F51B5;">Departamento:</h1>
                 </v-col>
                 <v-col cols="12" class="mt-n5">
-                  <v-select v-model="form.departamento" :items="departamentos" variant="outlined" rounded></v-select>
+                  <v-select v-model="form.departamento" :items="departamentos" item-title="nome_departamento"
+                    item-value="id_departamento" variant="outlined" rounded></v-select>
                 </v-col>
                 <v-col cols="12">
                   <h1 class="text-subtitle-1" style="color: #3F51B5;">Responsável:</h1>
                 </v-col>
                 <v-col cols="12" class="mt-n5">
-                  <v-select v-model="form.responsavel" :items="responsaveis" variant="outlined" rounded></v-select>
+                  <v-select v-model="form.responsavel" :items="responsaveis" item-title="email" item-value="id_usuario"
+                    variant="outlined" rounded></v-select>
                 </v-col>
               </v-col>
             </v-row>
             <v-row justify="center" class="pb-2">
               <v-btn color="red-darken-1" variant="outlined" rounded @click="cancelar">Cancelar</v-btn>
-              <v-btn class="mx-4" color="blue" rounded @click="salvar">Salvar</v-btn>
+              <v-btn class="mx-4" color="blue" :loading="loading" rounded @click="validateAndCreate">Criar</v-btn>
             </v-row>
           </v-form>
         </v-card-text>
@@ -53,8 +55,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import useNotification from '../../stores/notification';
+import UsuarioStore from '../../stores/Usuario';
+import DepartamentoStore from '../../stores/Departamento';
+import { Usuario } from '../../types/IUsuario';
+import { Departamento } from '../../types/IDepartamento';
+import { RedzoneStore } from '../../stores';
+import { useRouter } from 'vue-router';
 
 const form = ref({
   nome: '',
@@ -64,24 +72,69 @@ const form = ref({
   responsavel: null,
 });
 
-const departamentos = [
-  'Departamento 1',
-  'Departamento 2',
-  'Departamento 3',
-];
+const cancelar = () => { };
 
-const responsaveis = [
-  'Responsável 1',
-  'Responsável 2',
-  'Responsável 3',
-];
+const userService = UsuarioStore();
+const departamentoService = DepartamentoStore();
+const responsaveis = ref<Usuario[]>([]);
+const departamentos = ref<Departamento[]>([]);
 
-const cancelar = () => {
-
+const getUsers = async () => {
+  try {
+    const response = await userService.getAll();
+    responsaveis.value = response.data
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const notificator = useNotification()
-const salvar = () => {
-  notificator.notifySuccess('Sucesso ao cadastrar redzone')
+const getDepartamentos = async () => {
+  try {
+    const response = await departamentoService.getAll();
+    departamentos.value = response.data
+  } catch (error) {
+    console.log(error);
+  }
 };
+
+const notificator = useNotification();
+const redzoneService = RedzoneStore();
+const router = useRouter();
+const loading = ref(false)
+
+const validateAndCreate = async () => {
+  if (!form.value.nome || !form.value.lotacao || !form.value.urlCamera || !form.value.departamento || !form.value.responsavel) {
+    notificator.notifyWarning('Por favor, preencha todos os campos.');
+    return;
+  }
+
+  try {
+    loading.value = true
+    const redzoneEnviada = {
+      nome_redzone: form.value.nome,
+      responsavel_id: {
+        id_usuario: form.value.responsavel
+      },
+      camera: form.value.urlCamera,
+      capacidade_maxima: Number(form.value.lotacao),
+      id_departamento: {
+        id_departamento: form.value.departamento
+      },
+      status: true
+    }
+    await redzoneService.create(redzoneEnviada)
+    notificator.notifySuccess('Sucesso ao criar redzone!')
+  } catch (error) {
+    console.log(error)
+    notificator.notifyError('Erro criar redzone')
+  } finally {
+    loading.value = false
+    router.push(`/redzone`);
+  }
+};
+
+onMounted(async () => {
+  await getUsers();
+  await getDepartamentos();
+});
 </script>

@@ -15,7 +15,7 @@
           </v-row>
           <v-row>
             <v-col class="px-6 pt-1 mb-n5">
-              <v-chip variant="tonal" :color="redzone.ativo ? 'primary' : 'red'">{{ redzone.ativo ? 'Ativo' :
+              <v-chip variant="tonal" :color="redzone.status ? 'primary' : 'red'">{{ redzone.status ? 'status' :
                 'Desativado' }}</v-chip>
             </v-col>
           </v-row>
@@ -48,10 +48,10 @@
                 <v-icon v-bind="props" @click="editItem(redzone)" color="primary">mdi mdi-pencil</v-icon>
               </template>
             </v-tooltip>
-            <v-tooltip location="bottom" :text="redzone.ativo ? 'Desativar' : 'Ativar'">
+            <v-tooltip location="bottom" :text="redzone.status ? 'Desativar' : 'Ativar'">
               <template v-slot:activator="{ props }">
-                <v-icon v-bind="props" @click="active(redzone)" :color="redzone.ativo ? 'red' : 'green'" v-on="on">
-                  {{ redzone.ativo ? 'mdi mdi-sync-off' : 'mdi mdi-sync' }}
+                <v-icon v-bind="props" @click="active(redzone)" :color="redzone.status ? 'red' : 'green'" v-on="on">
+                  {{ redzone.status ? 'mdi mdi-sync-off' : 'mdi mdi-sync' }}
                 </v-icon>
               </template>
             </v-tooltip>
@@ -71,8 +71,8 @@ import RedzoneStore from '../../stores/Redzone';
 const router = useRouter();
 
 const active = (redzone: Redzone) => {
-  redzone.ativo = !redzone.ativo;
-  console.log(`Redzone ${redzone.nome_redzone} ativada/desativada:`, redzone.ativo);
+  redzone.status = !redzone.status;
+  console.log(`Redzone ${redzone.nome_redzone} ativada/desativada:`, redzone.status);
 }
 
 const editItem = (redzone: Redzone) => {
