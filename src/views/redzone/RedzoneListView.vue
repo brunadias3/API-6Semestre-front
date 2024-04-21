@@ -2,11 +2,12 @@
   <v-container>
     <v-row>
       <v-col class="text-right">
-        <v-btn prepend-icon="mdi mdi-plus" rounded variant="tonal" color="blue" @click="router.push(`/redzone/create`);">Criar Redzone</v-btn>
+        <v-btn prepend-icon="mdi mdi-plus" rounded variant="tonal" color="blue"
+          @click="router.push(`/redzone/create`);">Criar Redzone</v-btn>
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col v-for="redzone in dataMockup" :key="redzone.id" cols="12" sm="6" md="4" lg="3">
+      <v-col v-for="redzone in redzones" :key="redzone.id_redzone" cols="12" sm="6" md="4" lg="3">
         <v-card class="pa-2" outlined hover>
           <v-card-title class="text-center" style="color: #3f51b5;">{{ redzone.nome_redzone }}</v-card-title>
           <v-row class="py-2">
@@ -23,7 +24,7 @@
               <v-row>
                 <v-col>
                   <span class="font-weight-bold">Responsável:</span>
-                  {{ redzone.responsavel_id.nome_redzone_usuario }}
+                  {{ redzone.responsavel_id.nome_usuario }}
                 </v-col>
               </v-row>
               <v-row class="mt-n2">
@@ -35,7 +36,7 @@
               <v-row class="mt-n2">
                 <v-col>
                   <span class="font-weight-bold">Departamento:</span>
-                  {{ redzone.id_departamento.nome_redzone_departamento }}
+                  {{ redzone.id_departamento.nome_departamento }}
                 </v-col>
               </v-row>
             </v-container>
@@ -62,66 +63,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { Redzone } from '../../types/IRedzone';
-
-const dataMockup = ref([
-  {
-    id: 1,
-    nome_redzone: 'Redzone 1',
-    responsavel_id: {
-      id_usuario: 1,
-      nome_redzone_usuario: 'João Silva',
-      email: 'joao.silva@example.com',
-      senha: 'senha123',
-      matricula_empresa: 'ABC123',
-      tipo_usuario: 'Administrador'
-    },
-    camera: 'Câmera 1',
-    capacidade_maxima: 50,
-    id_departamento: {
-      id_departamento: 1,
-      nome_redzone_departamento: 'Departamento de TI',
-      responsavel_id: {
-        id_usuario: 1,
-        nome_redzone_usuario: 'João Silva',
-        email: 'joao.silva@example.com',
-        senha: 'senha123',
-        matricula_empresa: 'ABC123',
-        tipo_usuario: 'Administrador'
-      }
-    },
-    ativo: true,
-  },
-  {
-    id: 2,
-    nome_redzone: 'Redzone 2',
-    responsavel_id: {
-      id_usuario: 2,
-      nome_redzone_usuario: 'Maria Santos',
-      email: 'maria.santos@example.com',
-      senha: 'senha456',
-      matricula_empresa: 'DEF456',
-      tipo_usuario: 'Administrador'
-    },
-    camera: 'Câmera 2',
-    capacidade_maxima: 30,
-    id_departamento: {
-      id_departamento: 2,
-      nome_redzone_departamento: 'Departamento de RH',
-      responsavel_id: {
-        id_usuario: 2,
-        nome_redzone_usuario: 'Maria Santos',
-        email: 'maria.santos@example.com',
-        senha: 'senha456',
-        matricula_empresa: 'DEF456',
-        tipo_usuario: 'Administrador'
-      }
-    },
-    ativo: false
-  },
-])
+import RedzoneStore from '../../stores/Redzone';
 
 const router = useRouter();
 
@@ -133,4 +78,24 @@ const active = (redzone: Redzone) => {
 const editItem = (redzone: Redzone) => {
   console.log("Edit item:", redzone);
 }
+
+const service = RedzoneStore();
+const loading = ref(false);
+const redzones = ref<Redzone[]>([]);
+
+const getAll = async () => {
+  loading.value = true;
+  try {
+    const response = await service.getAll();
+    redzones.value = response.data
+  } catch (error) {
+    console.log(error);
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(async () => {
+  await getAll();
+});
 </script>
