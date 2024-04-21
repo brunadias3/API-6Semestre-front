@@ -41,6 +41,9 @@
                   <v-select v-model="form.responsavel" :items="responsaveis" item-title="email" item-value="id_usuario"
                     variant="outlined" rounded></v-select>
                 </v-col>
+                <v-col cols="12" class="mt-n5">
+                 <v-switch v-model="form.status" :label="form.status ? 'Ativo' : 'Desativado'" color="green-accent-4" hide-details inset />
+                </v-col>
               </v-col>
             </v-row>
             <v-row justify="center" class="pb-2">
@@ -78,6 +81,7 @@ const form = ref({
   urlCamera: '',
   departamento: null,
   responsavel: null,
+  status: true
 });
 
 const userService = UsuarioStore();
@@ -118,9 +122,8 @@ const validateAndCreate = async () => {
       camera: form.value.urlCamera,
       capacidade_maxima: Number(form.value.lotacao),
       id_departamento: form.value.departamento,
-      status: true
+      status: form.value.status
     }
-    console.log(redzoneEnviada)
     await redzoneService.update(redzoneEnviada)
     notificator.notifySuccess('Sucesso ao atualizar redzone!')
   } catch (error) {
@@ -140,6 +143,7 @@ async function getRedzone() {
     form.value.lotacao = response.data.capacidade_maxima
     form.value.urlCamera = response.data.camera
     form.value.departamento = response.data.id_departamento
+    form.value.status = response.data.status
     notificator.notifySuccess('Sucesso ao buscar informações da redzone!')
   } catch (error) {
     notificator.notifyError('Erro ao buscar informações da redzone.')
