@@ -13,6 +13,7 @@ import { departamentoStore } from '../../stores';
 import TitleComponent from '../TitleComponent.vue';
 import { useRouter } from 'vue-router';
 import CardDepartamento from './cardDepartamento.vue';
+import { onMounted } from 'vue';
 
 const departamentoStoreDados = departamentoStore();
 const router = useRouter()
@@ -49,5 +50,8 @@ const pegarResponsavel = (item: string) => {
 }
 
 
+onMounted(()=> {
+    departamentoStoreDados.novoDepartamento = { ...defaultDepartamento };
 
+})
 </script>
