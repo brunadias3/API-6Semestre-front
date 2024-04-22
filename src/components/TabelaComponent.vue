@@ -70,11 +70,10 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import IDepartamento from "../interfaces/IDepartamento";
+import { departamentoStore } from '../stores';
 
-
+const departamentoStoreDados = departamentoStore();
 const router = useRouter()
-
-
 
 interface Registro {
   id: number;
@@ -107,15 +106,21 @@ function formatarData(data: string): string {
   return `${dia}/${mes}/${ano} ${hora}`;
 }
 
-// const desativar = (id: number) => {
-//   console.log(`desativando ${id}`);
+const getDepartamento = async (id: string) => {
+    await departamentoStoreDados.getDepartamentoById(id)
+}
 
-// }
-
-const editar = (id: number) => {
-  console.log(id);
+const editar = async (id: number) => {
+  try {
+    await getDepartamento(id.toString());
+    if (departamentoStoreDados.editarDepartamento.responsavel_id.id_usuario){
+      router.push({ name: props.rotaEditar, params: { id: id } })
+    }
+    } catch (error) {
+    console.log(error);
+    
+  }
   
-  router.push({ name: props.rotaEditar, params: { id: id } })
 }
 
 </script>
