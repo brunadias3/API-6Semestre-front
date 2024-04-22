@@ -8,7 +8,7 @@
                         label="Nome do departamento" @input="enviarNomeDepartamento" />
 
                     <v-select v-model="nomeResponsavelModel" variant="outlined" label="Selecione um responsável"
-                        :items="responsaveis" item-title="nomeResponsavel" item-value="idResponsavel">
+                        :items="responsaveis" item-title="nome_usuario" item-value="id_usuario">
                     </v-select>
 
                     <div class="d-flex justify-space-between pb-4">
@@ -24,10 +24,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-
+import { onMounted, ref, watch } from 'vue';
+import { UsuarioStore } from '../../stores/index';
 const emit = defineEmits(['nomeDepartamento', 'nomeResponsavel']);
-
+const usuarioStoreData = UsuarioStore();
 
 
 const props = defineProps<{
@@ -39,22 +39,29 @@ const props = defineProps<{
     nomeResponsavelModel?: string | null;
 
 }>();
-const responsaveis = ref([
-    { nomeResponsavel: 'Responsável 1', idResponsavel: 5 },
-    { nomeResponsavel: 'Responsável 2', idResponsavel: '2' },
-    { nomeResponsavel: 'Responsável 3', idResponsavel: '3 '},
-]);
+const responsaveis = ref([]);
 const nomeDepartamento = ref(props.nomeDepartamento);
 const nomeResponsavelModel = ref(props.nomeResponsavelModel);
+
+const pegarUsuario = async () => {
+    try {
+        const response = await usuarioStoreData.getAll();
+        responsaveis.value = response.data
+        
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 const enviarNomeDepartamento = () => {
     emit('nomeDepartamento', nomeDepartamento.value);
 };
 
-
 watch(nomeResponsavelModel, (newValue, oldValue) => {
     emit('nomeResponsavel', newValue);
 });
 
-
+onMounted(()=> {
+    pegarUsuario();
+})
 </script>
