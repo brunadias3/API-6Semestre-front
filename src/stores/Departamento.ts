@@ -9,6 +9,7 @@ const departamentoStore = defineStore('departamento', () => {
     const departamento = ref<IDepartamento[]>([])
     const errorCatch = ref<unknown>(undefined);
     const novoDepartamento = ref<INovoDepartamento>({} as INovoDepartamento)
+    const editarDepartamento = ref<INovoDepartamento>({} as INovoDepartamento)
 
 
     const criarDepartamento = async (departamento: INovoDepartamento) => {
@@ -36,6 +37,17 @@ const departamentoStore = defineStore('departamento', () => {
             errorCatch.value = error;
         }
     }
+
+    const getDepartamentoById = async (id: string) => {
+        try {
+            const response = await getRequest(`departamentos/${id}`)
+
+            editarDepartamento.value = response.data
+        } catch (error) {
+            errorCatch.value = error;
+        }
+    }
+
     const desativarOuAtivarDepartamento = async (id: string) => {
         try {
             const response = await deleteRequest(`departamentos/${id}`)
@@ -50,9 +62,11 @@ const departamentoStore = defineStore('departamento', () => {
     return {
         novoDepartamento,
         departamento,
+        editarDepartamento,
         getDepartamento,
         criarDepartamento,
-        desativarOuAtivarDepartamento
+        desativarOuAtivarDepartamento,
+        getDepartamentoById
     }
 })
 
