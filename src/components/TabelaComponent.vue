@@ -49,7 +49,7 @@
                 </template>
               </v-tooltip>
             </td>
-            <td @click="editar(item.id)" v-if="headers.some(header => header.value === 'editar')">
+            <td @click="editar(item.id? item.id : item.id_departamento)" v-if="headers.some(header => header.value === 'editar')">
               <v-tooltip  text="Editar">
                 <template v-slot:activator="{ props }">
                   <v-icon v-bind="props" class="cursor-pointer" color="#3B82F6" aria-hidden="false">
@@ -70,10 +70,10 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import IDepartamento from "../interfaces/IDepartamento";
+import { departamentoStore } from '../stores';
 
-
+const departamentoStoreDados = departamentoStore();
 const router = useRouter()
-
 
 interface Registro {
   id: number;
@@ -106,13 +106,21 @@ function formatarData(data: string): string {
   return `${dia}/${mes}/${ano} ${hora}`;
 }
 
-// const desativar = (id: number) => {
-//   console.log(`desativando ${id}`);
+const getDepartamento = async (id: string) => {
+    await departamentoStoreDados.getDepartamentoById(id)
+}
 
-// }
-
-const editar = (id: number) => {
-  router.push({ name: props.rotaEditar, params: { id: id } })
+const editar = async (id: number) => {
+  try {
+    await getDepartamento(id.toString());
+    if (departamentoStoreDados.editarDepartamento.responsavel_id.id_usuario){
+      router.push({ name: props.rotaEditar, params: { id: id } })
+    }
+    } catch (error) {
+    console.log(error);
+    
+  }
+  
 }
 
 </script>

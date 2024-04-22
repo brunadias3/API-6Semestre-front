@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import TabelaComponent from '../TabelaComponent.vue';
 import TitleComponent from '../TitleComponent.vue';
 import { departamentoStore } from '../../stores';
