@@ -3,9 +3,10 @@
         <TitleComponent title="Gerenciamento de Departamentos" />
 
         <CardDepartamento :editar="true" :valorDefault="defaultDepartamento" rota="departamento"
-            :funcao="editarDepartamento" :funcaoVoltar="voltar" :nome-departamento="departamentoStoreDados.editarDepartamento.nome_departamento"
-            :nome-responsavel-model="departamentoStoreDados.editarDepartamento.responsavel_id?.id_usuario" @nomeDepartamento="pegarDepartamento"
-            @nomeResponsavel="pegarResponsavel" />
+            :funcao="editarDepartamento" :funcaoVoltar="voltar"
+            :nome-departamento="departamentoStoreDados.editarDepartamento.nome_departamento"
+            :nome-responsavel-model="departamentoStoreDados.editarDepartamento.responsavel_id?.id_usuario"
+            @nomeDepartamento="pegarDepartamento" @nomeResponsavel="pegarResponsavel" />
     </v-container>
 </template>
 
@@ -14,7 +15,6 @@ import { departamentoStore } from '../../stores';
 import TitleComponent from '../TitleComponent.vue';
 import { useRouter, useRoute } from 'vue-router';
 import CardDepartamento from './cardDepartamento.vue';
-import { onMounted } from 'vue';
 
 const departamentoStoreDados = departamentoStore();
 const router = useRouter()
@@ -24,24 +24,28 @@ const id = route.params.id
 
 
 const defaultDepartamento = {
+    nome_departamento: departamentoStoreDados.editarDepartamento.nome_departamento,
+    responsavel_id: { id_usuario: departamentoStoreDados.editarDepartamento.responsavel_id.id_usuario }
+}
+const defaultDepartamentoVoltar = {
     nome_departamento: '',
-    responsavel_id: {id_usuario: null}
+    responsavel_id: { id_usuario: null }
 }
 
 const voltar = () => {
     router.push({ name: 'departamentos' });
-    departamentoStoreDados.editarDepartamento = { ...defaultDepartamento };
+    departamentoStoreDados.editarDepartamento = { ...defaultDepartamentoVoltar };
 
 };
 
 const editarDepartamento = async () => {
-    // await departamentoStoreDados.editarDepartamento(id)
-}
-const getDepartamento = async (id: string) => {
     try {
-        await departamentoStoreDados.getDepartamentoById(id)
+        await departamentoStoreDados.alterarDepartamento(id , { id_departamento: id as string ,nome_departamento: departamentoStoreDados.editarDepartamento.nome_departamento, responsavel_id: { id_usuario: departamentoStoreDados.editarDepartamento.responsavel_id.id_usuario } })
     } catch (error) {
-        
+        console.log(error);
+    } finally {
+        router.push({ name: 'departamentos' });
+        departamentoStoreDados.editarDepartamento = { ...defaultDepartamentoVoltar };
     }
 }
 
@@ -53,7 +57,4 @@ const pegarResponsavel = (item: string) => {
 }
 
 
-onMounted(()=> {
-    getDepartamento(id as string);
-})
 </script>
