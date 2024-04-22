@@ -49,7 +49,7 @@
                 </template>
               </v-tooltip>
             </td>
-            <td @click="editar(item.id)" v-if="headers.some(header => header.value === 'editar')">
+            <td @click="editar(item.id? item.id : item.id_departamento)" v-if="headers.some(header => header.value === 'editar')">
               <v-tooltip  text="Editar">
                 <template v-slot:activator="{ props }">
                   <v-icon v-bind="props" class="cursor-pointer" color="#3B82F6" aria-hidden="false">
@@ -73,6 +73,7 @@ import IDepartamento from "../interfaces/IDepartamento";
 
 
 const router = useRouter()
+
 
 
 interface Registro {
@@ -112,6 +113,8 @@ function formatarData(data: string): string {
 // }
 
 const editar = (id: number) => {
+  console.log(id);
+  
   router.push({ name: props.rotaEditar, params: { id: id } })
 }
 
