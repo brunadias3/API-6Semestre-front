@@ -5,7 +5,7 @@
                 <TitleComponent title="Gerenciamento de Departamentos" />
                 <TabelaComponent titulo="Departamentos" :headers="headers"
                     :itensDepartamento="departamentoStoreDados.departamento" adicionar="Criar departamento"
-                    rota="criarDepartamento" rotaEditar="editarDepartamento" :desativar="desativarOuAtivar" />
+                    rota="criarDepartamento" rotaEditar="editarDepartamento" :desativar="desativarOuAtivar" :isLoading="isLoading"/>
             </v-container>
         </v-main>
 
@@ -32,14 +32,16 @@ const headers = [
 
 ]
 const desativarOuAtivar = async (id: number) => {
+    isLoading.value = true
     try {
         departamentoStoreDados.desativarOuAtivarDepartamento(id.toString());
     } catch (error) {
         console.log(error);
     } finally {
         setTimeout(() => {
+            isLoading.value = false
             pegarDados();
-        }, 400);
+        }, 900);
     }
 
 }
