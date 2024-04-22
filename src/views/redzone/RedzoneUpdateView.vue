@@ -42,7 +42,8 @@
                     variant="outlined" rounded></v-select>
                 </v-col>
                 <v-col cols="12" class="mt-n5">
-                 <v-switch v-model="form.status" :label="form.status ? 'Ativo' : 'Desativado'" color="green-accent-4" hide-details inset />
+                  <v-switch v-model="form.status" :label="form.status ? 'Ativo' : 'Desativado'" color="green-accent-4"
+                    hide-details inset />
                 </v-col>
               </v-col>
             </v-row>
@@ -64,9 +65,9 @@ import UsuarioStore from '../../stores/Usuario';
 import DepartamentoStore from '../../stores/Departamento';
 import { Usuario } from '../../types/IUsuario';
 import { Departamento } from '../../types/IDepartamento';
-import { RedzoneStore } from '../../stores';
+import RedzoneStore from '../../stores/Redzone';
 import { useRoute, useRouter } from 'vue-router';
-
+import { obterDataFormatada } from '../../utils/formatters';
 
 const notificator = useNotification();
 const redzoneService = RedzoneStore();
@@ -81,7 +82,7 @@ const form = ref({
   urlCamera: '',
   departamento: null,
   responsavel: null,
-  status: true
+  status: null
 });
 
 const userService = UsuarioStore();
@@ -115,6 +116,7 @@ const validateAndCreate = async () => {
 
   try {
     loading.value = true
+    const dataAtualFormatada = obterDataFormatada();
     const redzoneEnviada = {
       id_redzone: Number(redzoneId),
       nome_redzone: form.value.nome,
@@ -122,7 +124,7 @@ const validateAndCreate = async () => {
       camera: form.value.urlCamera,
       capacidade_maxima: Number(form.value.lotacao),
       id_departamento: form.value.departamento,
-      status: form.value.status
+      delete_at: form.value.status === true ? dataAtualFormatada : ''
     }
     await redzoneService.update(redzoneEnviada)
     notificator.notifySuccess('Sucesso ao atualizar redzone!')

@@ -61,7 +61,7 @@ import UsuarioStore from '../../stores/Usuario';
 import DepartamentoStore from '../../stores/Departamento';
 import { Usuario } from '../../types/IUsuario';
 import { Departamento } from '../../types/IDepartamento';
-import { RedzoneStore } from '../../stores';
+import RedzoneStore from '../../stores/Redzone';
 import { useRouter } from 'vue-router';
 
 const notificator = useNotification();
@@ -116,8 +116,7 @@ const validateAndCreate = async () => {
       capacidade_maxima: Number(form.value.lotacao),
       id_departamento: {
         id_departamento: form.value.departamento
-      },
-      status: true
+      }
     }
     await redzoneService.create(redzoneEnviada)
     notificator.notifySuccess('Sucesso ao criar redzone!')
