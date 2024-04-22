@@ -2,7 +2,7 @@ import RedzoneListView from '../views/redzone/RedzoneListView.vue'
 import RedzoneCreateView from '../views/redzone/RedzoneCreateView.vue'
 import RedzoneUpdateView from '../views/redzone/RedzoneUpdateView.vue';
 
-const redzoneRoutes = [
+const RedzoneRoutes = [
   {
     path: '/redzone',
     children: [
@@ -13,4 +13,4 @@ const redzoneRoutes = [
   }
 ];
 
-export default redzoneRoutes
+export default RedzoneRoutes

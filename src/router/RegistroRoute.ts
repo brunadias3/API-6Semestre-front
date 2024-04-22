@@ -1,13 +1,13 @@
 import RegistroRedzoneView from '../views/RegistroRedzoneView.vue'
 
-const loginRoute = {
-  path: '/',
+const RegistroRoute = {
+  path: '/registro',
   name: 'registro',
   meta: {
     title: 'registro'
   },
-  component: RegistroRedzoneView 
+  component: RegistroRedzoneView
 
 };
 
-export default loginRoute;
+export default RegistroRoute;
