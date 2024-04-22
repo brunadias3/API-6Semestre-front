@@ -1,5 +1,5 @@
 interface IdResponsavel {
-    id_usuario: string | null
+    id_usuario: string | null | undefined
 }
 
 export default interface INovoDepartamento {
