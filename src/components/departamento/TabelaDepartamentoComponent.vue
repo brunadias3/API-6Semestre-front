@@ -3,8 +3,9 @@
         <v-main>
             <v-container>
                 <TitleComponent title="Gerenciamento de Departamentos" />
-                <TabelaComponent titulo="Departamentos" :headers="headers" :itensDepartamento="departamentoStoreDados.departamento"
-                    adicionar="Criar departamento" rota="criarDepartamento" rotaEditar="editarDepartamento" :desativar="desativar" :ativar="ativar"/>
+                <TabelaComponent titulo="Departamentos" :headers="headers"
+                    :itensDepartamento="departamentoStoreDados.departamento" adicionar="Criar departamento"
+                    rota="criarDepartamento" rotaEditar="editarDepartamento" :desativar="desativarOuAtivar" :isLoading="isLoading"/>
             </v-container>
         </v-main>
 
@@ -12,12 +13,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import TabelaComponent from '../TabelaComponent.vue';
 import TitleComponent from '../TitleComponent.vue';
 import { departamentoStore } from '../../stores';
 
 const departamentoStoreDados = departamentoStore();
+const isLoading = ref(false);
 
 const headers = [
     { title: 'Id do departamento', value: 'id_departamento' },
@@ -29,21 +31,21 @@ const headers = [
 
 
 ]
-const desativar = (id: number) => {
-    // try {
-    //     departamentoStoreDados.desativarDepartamento(id)
-    // } catch (error) {
-    //     console.log(error);
-
-    // }
-    console.log('desativar',id);
+const desativarOuAtivar = async (id: number) => {
+    isLoading.value = true
+    try {
+        departamentoStoreDados.desativarOuAtivarDepartamento(id.toString());
+    } catch (error) {
+        console.log(error);
+    } finally {
+        setTimeout(() => {
+            isLoading.value = false
+            pegarDados();
+        }, 900);
+    }
 
 }
 
-const ativar = (id: number) => {
-    console.log('ativar', id);
-    
-}
 const pegarDados = async () => {
     await departamentoStoreDados.getDepartamento();
 }

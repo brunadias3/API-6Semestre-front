@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { getRequest, postRequest, putRequest } from "../utils/services/axios";
+import { deleteRequest, getRequest, postRequest } from "../utils/services/axios";
 import IDepartamento from "../interfaces/IDepartamento";
 import INovoDepartamento from "../interfaces/INovoDepartamento";
 
@@ -31,19 +31,28 @@ const departamentoStore = defineStore('departamento', () => {
         try {
             const response = await getRequest('departamentos')
 
-            departamento.value = response.data
+            departamento.value = response.data.reverse()
+        } catch (error) {
+            errorCatch.value = error;
+        }
+    }
+    const desativarOuAtivarDepartamento = async (id: string) => {
+        try {
+            const response = await deleteRequest(`departamentos/${id}`)
+
+           departamento.value = response.data.reverse()
+            
         } catch (error) {
             errorCatch.value = error;
         }
     }
 
-
     return {
         novoDepartamento,
         departamento,
         getDepartamento,
-        criarDepartamento
-       
+        criarDepartamento,
+        desativarOuAtivarDepartamento
     }
 })
 

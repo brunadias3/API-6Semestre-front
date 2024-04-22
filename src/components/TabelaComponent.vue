@@ -40,11 +40,11 @@
                 {{ item.entrada }}
               </v-chip>
             </td>
-            <td @click="!item.desativado? desativar && desativar(item.id? item.id : item.id_departamento) : ativar && ativar(item.id? item.id : item.id_departamento)" v-if="headers.some(header => header.value === 'desativar')">
-              <v-tooltip  :text="!item.desativado? 'Desativar': 'Ativar'">
+            <td @click="desativar && desativar(item.id? item.id : item.id_departamento)" v-if="headers.some(header => header.value === 'desativar')">
+              <v-tooltip  :text="!item.status? 'Desativar': 'Ativar'">
                 <template v-slot:activator="{ props }">
-                  <v-icon v-bind="props" class="cursor-pointer" :color="!item.desativado? 'red' : 'green' " aria-hidden="false">
-                    {{ !item.desativado? "mdi mdi-sync-off": "mdi mdi-sync" }}
+                  <v-icon v-bind="props" class="cursor-pointer" :color="!item.status? 'red' : 'green' " aria-hidden="false">
+                    {{ !item.status? "mdi mdi-sync-off": "mdi mdi-sync" }}
                   </v-icon>
                 </template>
               </v-tooltip>
