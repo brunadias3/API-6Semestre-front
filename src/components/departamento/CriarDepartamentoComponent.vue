@@ -20,7 +20,7 @@ const router = useRouter()
 
 const defaultDepartamento = {
     nome_departamento: '',
-    responsavel_id: null
+    responsavel_id: {id_usuario: null}
 }
 
 const voltar = () => {
@@ -45,7 +45,7 @@ const pegarDepartamento = (item: string) => {
     departamentoStoreDados.novoDepartamento.nome_departamento = item
 }
 const pegarResponsavel = (item: string) => {
-    departamentoStoreDados.novoDepartamento.responsavel_id = item
+    departamentoStoreDados.novoDepartamento.responsavel_id.id_usuario = item
 }
 
 
