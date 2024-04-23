@@ -64,10 +64,10 @@ import useNotification from '../../stores/notification';
 import UsuarioStore from '../../stores/Usuario';
 import DepartamentoStore from '../../stores/Departamento';
 import { Usuario } from '../../types/IUsuario';
-import { Departamento } from '../../types/IDepartamento';
 import RedzoneStore from '../../stores/Redzone';
 import { useRoute, useRouter } from 'vue-router';
 import { obterDataFormatada } from '../../utils/formatters';
+import { Departamento } from '../../types/IDepartamento';
 
 const notificator = useNotification();
 const redzoneService = RedzoneStore();
@@ -88,21 +88,12 @@ const form = ref({
 const userService = UsuarioStore();
 const departamentoService = DepartamentoStore();
 const responsaveis = ref<Usuario[]>([]);
-const departamentos = ref<Departamento[]>([]);
+const departamentos = ref<Departamento[]>([])
 
 const getUsers = async () => {
   try {
     const response = await userService.getAll();
     responsaveis.value = response.data
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const getDepartamentos = async () => {
-  try {
-    const response = await departamentoService.getAll();
-    departamentos.value = response.data
   } catch (error) {
     console.log(error);
   }
@@ -120,12 +111,13 @@ const validateAndCreate = async () => {
     const redzoneEnviada = {
       id_redzone: Number(redzoneId),
       nome_redzone: form.value.nome,
-      responsavel_id: form.value.responsavel,
+      responsavel_id: { id_usuario: form.value.responsavel },
       camera: form.value.urlCamera,
       capacidade_maxima: Number(form.value.lotacao),
-      id_departamento: form.value.departamento,
-      delete_at: form.value.status === true ? dataAtualFormatada : ''
+      id_departamento: { id_departamento: form.value.departamento },
+      delete_at: form.value.status === true ? '' : dataAtualFormatada
     }
+    console.log(redzoneEnviada)
     await redzoneService.update(redzoneEnviada)
     notificator.notifySuccess('Sucesso ao atualizar redzone!')
   } catch (error) {
@@ -155,8 +147,9 @@ async function getRedzone() {
 }
 
 onMounted(async () => {
+  await departamentoService.getDepartamento();
+  departamentos.value = departamentoService.departamento
   await getRedzone()
-  await getDepartamentos()
   await getUsers()
 });
 </script>

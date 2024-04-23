@@ -167,6 +167,5 @@ watchEffect(() => {
 
 onMounted(async () => {
   await getAll();
-  console.log(redzones.value)
 });
 </script>

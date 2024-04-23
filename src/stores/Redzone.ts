@@ -33,7 +33,7 @@ const RedzoneStore = defineStore('redzone', () => {
     }
   }
 
-  async function update(redzone: Redzone) {
+  async function update(redzone: any) {
     const url = endpoint + `/${redzone.id_redzone}`
     try {
       const res = await putRequest(url, redzone);

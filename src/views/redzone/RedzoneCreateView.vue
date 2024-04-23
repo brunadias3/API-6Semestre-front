@@ -31,7 +31,7 @@
                   <h1 class="text-subtitle-1" style="color: #3F51B5;">Departamento:</h1>
                 </v-col>
                 <v-col cols="12" class="mt-n5">
-                  <v-select v-model="form.departamento" :items="departamentos" item-title="nome_departamento"
+                  <v-select v-model="form.departamento" :items="departamentoService.departamento" item-title="nome_departamento"
                     item-value="id_departamento" variant="outlined" rounded></v-select>
                 </v-col>
                 <v-col cols="12">
@@ -63,13 +63,14 @@ import { Usuario } from '../../types/IUsuario';
 import { Departamento } from '../../types/IDepartamento';
 import RedzoneStore from '../../stores/Redzone';
 import { useRouter } from 'vue-router';
+import departamentoStore from '../../stores/Departamento';
 
 const notificator = useNotification();
 const redzoneService = RedzoneStore();
 const router = useRouter();
 const loading = ref(false)
 const userService = UsuarioStore();
-const departamentoService = DepartamentoStore();
+const departamentoService = departamentoStore();
 const responsaveis = ref<Usuario[]>([]);
 const departamentos = ref<Departamento[]>([]);
 
@@ -91,12 +92,7 @@ const getUsers = async () => {
 };
 
 const getDepartamentos = async () => {
-  try {
-    const response = await departamentoService.getAll();
-    departamentos.value = response.data
-  } catch (error) {
-    console.log(error);
-  }
+  await departamentoService.getDepartamento()
 };
 
 const validateAndCreate = async () => {
