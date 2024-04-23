@@ -108,16 +108,29 @@ const validateAndCreate = async () => {
   try {
     loading.value = true
     const dataAtualFormatada = obterDataFormatada();
+    let usuario = ''
+    let departamento = ''
+    if (!isNaN(form.value.responsavel)) {
+      usuario = form.value.responsavel
+    } else {
+      usuario = form.value.responsavel.id_usuario
+    }
+
+    if (!isNaN(form.value.departamento)) {
+      departamento = form.value.departamento
+    } else {
+      departamento = form.value.departamento.id_departamento
+    }
+
     const redzoneEnviada = {
       id_redzone: Number(redzoneId),
       nome_redzone: form.value.nome,
-      responsavel_id: { id_usuario: form.value.responsavel },
+      responsavel_id: { id_usuario: usuario },
       camera: form.value.urlCamera,
       capacidade_maxima: Number(form.value.lotacao),
-      id_departamento: { id_departamento: form.value.departamento },
+      id_departamento: { id_departamento: departamento },
       delete_at: form.value.status === true ? '' : dataAtualFormatada
     }
-    console.log(redzoneEnviada)
     await redzoneService.update(redzoneEnviada)
     notificator.notifySuccess('Sucesso ao atualizar redzone!')
   } catch (error) {
