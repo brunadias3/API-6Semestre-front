@@ -7,13 +7,12 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     RegistroRoute,
+    ...RedzoneRoute,
     departamentoRoute,
-    RedzoneRoute,
   ],
   scrollBehavior() {
-    return { top:0 };
+    return { top: 0 };
   }
 });
-
 
 export default router;

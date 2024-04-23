@@ -12,7 +12,7 @@ interface IUsuario {
     deleted: boolean,
     desativado: boolean
 }
-interface IRegistroDepartamento {
+export default interface IDepartamento {
     nome_departamento?: string;
     id_departamento?: number;
     delete_at: null,
@@ -21,8 +21,4 @@ interface IRegistroDepartamento {
     deleted: boolean,
     desativado: boolean
     responsavel_id: IUsuario
-}
-
-export default interface IDepartamento {
-    registro: IRegistroDepartamento[]
 }

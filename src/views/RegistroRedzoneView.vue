@@ -15,7 +15,7 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import TabelaComponent from '../components/TabelaComponent.vue';
 import TitleComponent from '../components/TitleComponent.vue';
-import { registroRedzoneStore } from '../stores/index'
+import { registroRedzoneStore } from '../stores';
 
 const registroRedzone = registroRedzoneStore()
 const isLoading = ref(false);
