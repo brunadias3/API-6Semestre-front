@@ -4,7 +4,8 @@
             <v-container>
                 <TitleComponent title="Gerenciamento de Usuários" />
                 <TabelaComponent titulo="Usuários" :headers="headers"
-                    :itensDepartamento="usuarios"/>
+                    :itensDepartamento="usuarios" adicionar="Criar usuário"
+                    rota="criarUsuarios" :desativar="desativarOuAtivar" :isLoading="isLoading"/>
             </v-container>
         </v-main>
 

@@ -8,7 +8,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     RegistroRoute,
-    UsuarioRoute, 
+    ...UsuarioRoute, 
     ...RedzoneRoute,
     departamentoRoute,
   ],
