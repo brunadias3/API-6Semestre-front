@@ -129,4 +129,5 @@ onMounted(async () => {
   await getUsers();
   await getDepartamentos();
 });
+
 </script>
