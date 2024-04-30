@@ -61,6 +61,12 @@
             </v-container>
           </v-card-text>
           <v-card-actions class="text-center">
+            <v-tooltip location="bottom" text="Visualizar Registros">
+              <template v-slot:activator="{ props }">
+                <v-icon v-bind="props" @click="router.push(`/redzone/logs/${redzone.id_redzone}`)" color="grey-darken-1">mdi
+                  mdi-eye</v-icon>
+              </template>
+            </v-tooltip>
             <v-spacer></v-spacer>
             <v-tooltip location="bottom" text="Editar">
               <template v-slot:activator="{ props }">

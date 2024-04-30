@@ -1,4 +1,4 @@
-import RegistroRedzoneView from '../views/RegistroRedzoneView.vue'
+import RegistroRedzoneView from '../views/logs/RegistroRedzoneView.vue'
 
 const RegistroRoute = {
   path: '/registro',

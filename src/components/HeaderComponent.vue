@@ -7,19 +7,19 @@
         </v-col>
         <v-col cols="2">
           <div>
-            <v-menu v-model="menu" :close-on-content-click="false" location="end">
+            <v-menu v-model="menu" :close-on-content-click="false" >
               <template v-slot:activator="{ props }">
                 <v-btn v-bind="props" variant="plain">
-                  Nome usuário
+                  MASTER
                 </v-btn>
               </template>
               <v-card min-width="300">
-                <v-list>
-                  <v-list-item @click="menuActive" subtitle="Founder of Vuetify" title="John Leider">
+                <!-- <v-list>
+                  <v-list-item @click="menuActive" subtitle="Usuário" title="Everton Ribeiro">
                   </v-list-item>
                 </v-list>
 
-                <v-divider></v-divider>
+                <v-divider></v-divider> -->
 
                 <v-list>
                   <v-list-item @click="menuActive('usuarios')">
@@ -44,13 +44,20 @@
                       <div class="text-overline">Redzones</div>
                     </div>
                   </v-list-item>
+                  <v-divider></v-divider>
+                  <v-list-item @click="menuActive('redzone/filtragem')">
+                    <div class="d-flex ga-3">
+                      <v-icon icon="mdi mdi-filter" color="#015280" />
+                      <div class="text-overline">Filtragem Redzones</div>
+                    </div>
+                  </v-list-item>
                 </v-list>
-                <v-card-actions>
+                <!-- <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn variant="text" @click="menu = false">
                     Logout
                   </v-btn>
-                </v-card-actions>
+                </v-card-actions> -->
               </v-card>
             </v-menu>
           </div>
