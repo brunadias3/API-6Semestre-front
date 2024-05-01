@@ -26,9 +26,11 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 import { UsuarioStore } from '../../stores/index';
+import useNotification from '../../stores/notification';
+
+const notificator = useNotification();
 const emit = defineEmits(['nomeDepartamento', 'nomeResponsavel']);
 const usuarioStoreData = UsuarioStore();
-
 
 const props = defineProps<{
     rota: string;
@@ -37,19 +39,20 @@ const props = defineProps<{
     editar: boolean
     nomeDepartamento?: string;
     nomeResponsavelModel?: string | null;
-
+    
 }>();
+
 const responsaveis = ref([]);
 const nomeDepartamento = ref(props.nomeDepartamento);
 const nomeResponsavelModel = ref(props.nomeResponsavelModel);
-
 const pegarUsuario = async () => {
     try {
         const response = await usuarioStoreData.getAll();
         responsaveis.value = response.data
-        
+        notificator.notifySuccess("Sucesso ao carregar informações!");
     } catch (error) {
         console.log(error);
+        notificator.notifyError("Erro ao carregar informações!");
     }
 }
 

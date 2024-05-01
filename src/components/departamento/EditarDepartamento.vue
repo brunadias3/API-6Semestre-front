@@ -15,7 +15,9 @@ import { departamentoStore } from '../../stores';
 import TitleComponent from '../TitleComponent.vue';
 import { useRouter, useRoute } from 'vue-router';
 import CardDepartamento from './cardDepartamento.vue';
+import useNotification from '../../stores/notification';
 
+const notificator = useNotification();
 const departamentoStoreDados = departamentoStore();
 const router = useRouter()
 const route = useRoute()
@@ -41,8 +43,10 @@ const voltar = () => {
 const editarDepartamento = async () => {
     try {
         await departamentoStoreDados.alterarDepartamento(id , { id_departamento: id as string ,nome_departamento: departamentoStoreDados.editarDepartamento.nome_departamento, responsavel_id: { id_usuario: departamentoStoreDados.editarDepartamento.responsavel_id.id_usuario } })
+        notificator.notifySuccess("Sucesso ao editar departamento!");
     } catch (error) {
         console.log(error);
+        notificator.notifyError("Erro ao editar departamento!");
     } finally {
         router.push({ name: 'departamentos' });
         departamentoStoreDados.editarDepartamento = { ...defaultDepartamentoVoltar };
