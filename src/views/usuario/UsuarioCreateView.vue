@@ -1,4 +1,7 @@
 <template>
+  <v-overlay :model-value="loading" class="align-center justify-center">
+    <v-progress-circular v-model="loading" color="primary" size="64" width="5" indeterminate />
+  </v-overlay>
   <v-row justify="center" align="center" class="fill-height">
     <v-col cols="12" sm="8" md="6">
       <v-card title="Criar usuário" class="text-light-blue-darken-4" elevation="10">
@@ -12,14 +15,14 @@
             label="Matrícula" />
 
           <!-- <v-text-field
-            class="mb-4"
-            v-model="form.senhaUsuario"
-            variant="outlined"
-            type="password"
-            hide-details="auto"
-            label="Senha"
-           
-          /> -->
+           class="mb-4"
+           v-model="form.senhaUsuario"
+           variant="outlined"
+           type="password"
+           hide-details="auto"
+           label="Senha"
+          
+         /> -->
 
           <v-select v-model="form.tipoUsuario" variant="outlined" label="Selecione a função" :items="funcoes">
           </v-select>
