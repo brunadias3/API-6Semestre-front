@@ -43,11 +43,22 @@ const RedzoneStore = defineStore('redzone', () => {
     }
   }
 
+  async function getRedzoneDates(redzoneId: string, startDate: string, endDate: string) {
+    const url = `/log/redzone/${redzoneId}/dates?startDate=${startDate}&endDate=${endDate}`;
+    try {
+      const res = await getRequest(url);
+      return { data: res.data, error: null };
+    } catch (error: unknown) {
+      throw new Error((error instanceof AxiosError ? error.response?.data.error : null) || error);
+    }
+  }
+
   return {
     getAll,
     create,
     getOne,
     update,
+    getRedzoneDates,
   };
 });
 
