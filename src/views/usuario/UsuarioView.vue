@@ -1,18 +1,13 @@
 <template>
+  <v-overlay :model-value="isLoading" class="align-center justify-center">
+    <v-progress-circular v-model="isLoading" color="primary" size="64" width="5" indeterminate />
+  </v-overlay>
   <v-app>
     <v-main>
       <v-container>
         <TitleComponent title="Gerenciamento de Usuários" />
-        <TabelaComponent
-          titulo="Usuários"
-          :headers="headers"
-          :itensDepartamento="usuarios"
-          adicionar="Criar usuário"
-          rota="criarUsuarios"
-          :editar="editarUsuario"
-          :desativar="desativarOuAtivar"
-          :isLoading="isLoading"
-        />
+        <TabelaComponent titulo="Usuários" :headers="headers" :intensUsuario="usuarios" adicionar="Criar usuário"
+          rota="criarUsuarios" :editar="editarUsuario" :desativar="desativarOuAtivar" :isLoading="isLoading" />
       </v-container>
     </v-main>
   </v-app>
@@ -62,7 +57,14 @@ const desativarOuAtivar = async (id: number) => {
 };
 
 const getUsuario = async (id: number) => {
-  await usuarioService.getUsuarioById(id);
+  isLoading.value = true
+  try {
+    await usuarioService.getUsuarioById(id);
+  } catch (error) {
+    notificator.notifySuccess("Erro ao buscar usuário!")
+  } finally {
+    isLoading.value = true
+  }
 };
 
 const editarUsuario = async (id: number) => {
@@ -77,12 +79,16 @@ const editarUsuario = async (id: number) => {
 };
 
 const pegarDados = async () => {
+  isLoading.value = true
+
   try {
     const response = await usuarioService.getAll();
     usuarios.value = response.data;
     notificator.notifySuccess("Sucesso ao listar usuários!")
   } catch (error) {
     notificator.notifySuccess("Erro ao listar usuários!")
+  } finally {
+    isLoading.value = false
   }
 };
 

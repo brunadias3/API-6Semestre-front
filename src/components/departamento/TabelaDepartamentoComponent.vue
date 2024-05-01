@@ -1,11 +1,14 @@
 <template>
+    <v-overlay :model-value="isLoading" class="align-center justify-center">
+        <v-progress-circular v-model="isLoading" color="primary" size="64" width="5" indeterminate />
+    </v-overlay>
     <v-app>
         <v-main>
             <v-container>
                 <TitleComponent title="Gerenciamento de Departamentos" />
                 <TabelaComponent titulo="Departamentos" :headers="headers"
                     :itensDepartamento="departamentoStoreDados.departamento" adicionar="Criar departamento"
-                    rota="criarDepartamento" :editar="editar" :desativar="desativarOuAtivar" :isLoading="isLoading"/>
+                    rota="criarDepartamento" :editar="editar" :desativar="desativarOuAtivar" :isLoading="isLoading" />
             </v-container>
         </v-main>
 
@@ -52,26 +55,32 @@ const desativarOuAtivar = async (id: number) => {
 
 }
 const getDepartamento = async (id: string) => {
-  await departamentoStoreDados.getDepartamentoById(id);
+    await departamentoStoreDados.getDepartamentoById(id);
 };
 
 
 const editar = async (id: number) => {
-  try {
-    await getDepartamento(id.toString());    
-      if (departamentoStoreDados.editarDepartamento.responsavel_id.id_usuario) {
-        router.push({ name: 'editarDepartamento', params: { id: id } });      
+    isLoading.value = true
+    try {
+        await getDepartamento(id.toString());
+        if (departamentoStoreDados.editarDepartamento.responsavel_id.id_usuario) {
+            router.push({ name: 'editarDepartamento', params: { id: id } });
+        }
+    } catch (error) {
+        notificator.notifySuccess("Erro na tentativa de edição do departamento!");
+    } finally {
+        isLoading.value = false
     }
-  } catch (error) {
-    console.log(error);
-  }
 };
 const pegarDados = async () => {
+    isLoading.value = true
     try {
         await departamentoStoreDados.getDepartamento();
         notificator.notifySuccess("Sucesso ao listar departamentos!");
     } catch (error) {
         notificator.notifyError("Erro ao listar departamentos!");
+    } finally {
+        isLoading.value = false
     }
 }
 
