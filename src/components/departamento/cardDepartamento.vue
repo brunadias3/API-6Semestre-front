@@ -7,14 +7,14 @@
                     <v-text-field class="mb-4" v-model="nomeDepartamento" variant="outlined" hide-details="auto"
                         label="Nome do departamento" @input="enviarNomeDepartamento" />
 
-                    <v-select v-model="nomeResponsavelModel" variant="outlined" label="Selecione um responsável"
+                    <v-select v-model="idResponsavelModel" variant="outlined" label="Selecione um responsável"
                         :items="responsaveis" item-title="nome_usuario" item-value="id_usuario">
                     </v-select>
 
                     <div class="d-flex justify-space-between pb-4">
                         <v-btn color="#299FFF" rounded variant="outlined" class="w-25"
                             @click="props.funcaoVoltar">voltar</v-btn>
-                        <v-btn @click="props.funcao" :disabled="!nomeDepartamento || !nomeResponsavelModel"
+                        <v-btn @click="props.funcao" :disabled="!nomeDepartamento || !idResponsavelModel"
                             type="submit" color="#299FFF" rounded class="w-25">{{ editar ? 'Salvar' : 'Criar' }}</v-btn>
                     </div>
                 </div>
@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, watchEffect } from 'vue';
 import { UsuarioStore } from '../../stores/index';
 import useNotification from '../../stores/notification';
 
@@ -36,35 +36,47 @@ const props = defineProps<{
     rota: string;
     funcao: () => {};
     funcaoVoltar: () => void;
-    editar: boolean
+    editar: boolean;
     nomeDepartamento?: string;
-    nomeResponsavelModel?: string | null;
-    
+    idResponsavel?: string | null;
 }>();
 
 const responsaveis = ref([]);
-const nomeDepartamento = ref(props.nomeDepartamento);
-const nomeResponsavelModel = ref(props.nomeResponsavelModel);
+const nomeDepartamento = ref('');
+const idResponsavelModel = ref('');
+
 const pegarUsuario = async () => {
     try {
         const response = await usuarioStoreData.getAll();
-        responsaveis.value = response.data
+        responsaveis.value = response.data;
         notificator.notifySuccess("Sucesso ao carregar informações!");
     } catch (error) {
         console.log(error);
         notificator.notifyError("Erro ao carregar informações!");
     }
-}
+};
+
+onMounted(() => {
+    pegarUsuario();
+
+    if (props.nomeDepartamento) {
+        nomeDepartamento.value = props.nomeDepartamento;
+    }
+    if (props.idResponsavel) {
+        idResponsavelModel.value = props.idResponsavel;
+    }
+});
+
+watchEffect(() => {
+    nomeDepartamento.value = props.nomeDepartamento || '';
+    idResponsavelModel.value = props.idResponsavel || '';
+});
 
 const enviarNomeDepartamento = () => {
     emit('nomeDepartamento', nomeDepartamento.value);
 };
 
-watch(nomeResponsavelModel, (newValue, oldValue) => {
+watch(idResponsavelModel, (newValue, oldValue) => {
     emit('nomeResponsavel', newValue);
 });
-
-onMounted(()=> {
-    pegarUsuario();
-})
 </script>
