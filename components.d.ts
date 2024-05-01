@@ -8,10 +8,10 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     CardDepartamento: typeof import('./src/components/departamento/cardDepartamento.vue')['default']
-    CardUsuario: typeof import('./src/components/usuario/CardUsuario.vue')['default']
     CriarDepartamentoComponent: typeof import('./src/components/departamento/CriarDepartamentoComponent.vue')['default']
-    CriarUsuario: typeof import('./src/components/usuario/CriarUsuario.vue')['default']
+    DatePicker: typeof import('./src/components/DatePicker.vue')['default']
     EditarDepartamento: typeof import('./src/components/departamento/EditarDepartamento.vue')['default']
+    ExportableDataTable: typeof import('./src/components/ExportableDataTable.vue')['default']
     FooterComponent: typeof import('./src/components/FooterComponent.vue')['default']
     HeaderComponent: typeof import('./src/components/HeaderComponent.vue')['default']
     MainNotification: typeof import('./src/components/MainNotification.vue')['default']

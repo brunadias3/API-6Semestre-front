@@ -13,12 +13,13 @@
 
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import TabelaComponent from '../components/TabelaComponent.vue';
-import TitleComponent from '../components/TitleComponent.vue';
-import { registroRedzoneStore } from '../stores';
+import { useRoute } from 'vue-router';
+import registroRedzoneStore from '../../stores/RegistroRedzone';
 
 const registroRedzone = registroRedzoneStore()
 const isLoading = ref(false);
+const route = useRoute();
+const redzoneId = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
 
 const headers = [
     { title: 'Id', value: 'id', sortable: true },
@@ -32,7 +33,7 @@ const headers = [
 const pegarDados = async () => {
     isLoading.value = true;
     try {
-        await registroRedzone.pegarHistoricoRedZone()
+      await registroRedzone.pegarHistoricoRedZone(redzoneId)
     } catch (error) {
         console.log(error);
     } finally {
