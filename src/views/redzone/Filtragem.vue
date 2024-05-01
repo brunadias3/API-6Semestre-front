@@ -50,6 +50,10 @@
               <v-chip :color="item.entradaAsString === 'Saida' ? '#3B82F6' : '#F6893D'"
                 class="text-uppercase" size="small" label :text="item.entradaAsString === 'Saida' ? 'Saída' : 'Entrada'" />
             </template>
+            <template v-slot:item.data="{ item }">
+              <span>{{converterComEspaco(item.data)}}</span>
+            </template>
+
           </v-data-table>
         </v-col>
       </v-row>
@@ -61,6 +65,7 @@
 import { onMounted, ref, computed } from 'vue';
 import { RedzoneStore } from '../../stores';
 import { Redzone } from '../../types/IRedzone';
+import { converterComEspaco } from '../../utils/formatters';
 import useNotification from '../../stores/notification';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
