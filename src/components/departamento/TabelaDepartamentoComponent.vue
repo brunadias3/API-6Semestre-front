@@ -18,7 +18,9 @@ import TabelaComponent from '../TabelaComponent.vue';
 import TitleComponent from '../TitleComponent.vue';
 import { departamentoStore } from '../../stores';
 import { useRouter } from 'vue-router';
+import useNotification from '../../stores/notification';
 
+const notificator = useNotification();
 const departamentoStoreDados = departamentoStore();
 const isLoading = ref(false);
 const router = useRouter();
@@ -37,8 +39,10 @@ const desativarOuAtivar = async (id: number) => {
     isLoading.value = true
     try {
         departamentoStoreDados.desativarOuAtivarDepartamento(id.toString());
+        notificator.notifySuccess("Sucesso ao desativar/ativar departamento!");
     } catch (error) {
         console.log(error);
+        notificator.notifySuccess("Erro ao desativar/ativar departamento!");
     } finally {
         setTimeout(() => {
             isLoading.value = false
@@ -56,15 +60,19 @@ const editar = async (id: number) => {
   try {
     await getDepartamento(id.toString());    
       if (departamentoStoreDados.editarDepartamento.responsavel_id.id_usuario) {
-        router.push({ name: 'editarDepartamento', params: { id: id } });
-      
+        router.push({ name: 'editarDepartamento', params: { id: id } });      
     }
   } catch (error) {
     console.log(error);
   }
 };
 const pegarDados = async () => {
-    await departamentoStoreDados.getDepartamento();
+    try {
+        await departamentoStoreDados.getDepartamento();
+        notificator.notifySuccess("Sucesso ao listar departamentos!");
+    } catch (error) {
+        notificator.notifyError("Erro ao listar departamentos!");
+    }
 }
 
 onMounted(() => {

@@ -14,7 +14,9 @@ import TitleComponent from '../TitleComponent.vue';
 import { useRouter } from 'vue-router';
 import CardDepartamento from './cardDepartamento.vue';
 import { onMounted } from 'vue';
+import useNotification from '../../stores/notification';
 
+const notificator = useNotification();
 const departamentoStoreDados = departamentoStore();
 const router = useRouter()
 
@@ -32,9 +34,10 @@ const voltar = () => {
 const criarDepartamento = async () => {
     try {
         await departamentoStoreDados.criarDepartamento(departamentoStoreDados.novoDepartamento)
+        notificator.notifySuccess("Sucesso ao criar departamento!");
     } catch (error) {
         console.log(error);
-
+        notificator.notifyError("Erro ao criar departamento!");
     } finally {
         router.push({ name: 'departamentos' });
     }

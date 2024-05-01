@@ -48,7 +48,15 @@
             :items="funcoes"
           >
           </v-select>
-
+          <v-col cols="12" class="mt-n5">
+            <v-switch
+              v-model="form.status"
+              :label="form.status ? 'Ativo' : 'Desativado'"
+              color="green-accent-4"
+              hide-details
+              inset
+            />
+          </v-col>
           <div class="d-flex justify-space-between pb-4">
             <v-btn
               color="#299FFF"
@@ -89,10 +97,10 @@ const userService = UsuarioStore();
 const funcoes = ["Administrador", "Guarda", "Gerente de área"];
 
 const form = ref({
-  nomeUsuario:'',
-  emailUsuario:'',
-  matriculaUsuario: '',
-  tipoUsuario: '',
+  nomeUsuario: "",
+  emailUsuario: "",
+  matriculaUsuario: "",
+  tipoUsuario: "",
 });
 
 const editarUsuario = async () => {
@@ -102,6 +110,7 @@ const editarUsuario = async () => {
     email: form.value.emailUsuario,
     matricula_empresa: form.value.matriculaUsuario,
     tipo_usuario: form.value.tipoUsuario,
+   
   };
   const idNumber = Number(id);
   try {
@@ -134,11 +143,12 @@ async function getUser() {
   try {
     const idNumber = Number(id);
     await userService.getUsuarioById(idNumber);
-    
-    form.value.nomeUsuario = userService.usuario.nome_usuario,
-    form.value.emailUsuario = userService.usuario.email,
-    form.value.matriculaUsuario = userService.usuario.matricula_empresa,
+
+    form.value.nomeUsuario = userService.usuario.nome_usuario
+    form.value.emailUsuario = userService.usuario.email
+    form.value.matriculaUsuario = userService.usuario.matricula_empresa
     form.value.tipoUsuario = userService.usuario.tipo_usuario
+   
 
     notificator.notifySuccess("Sucesso ao buscar informações do usuário!");
   } catch (error) {
