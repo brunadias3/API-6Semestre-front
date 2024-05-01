@@ -1,10 +1,14 @@
-interface Iregistro {
+interface IRegistro {
     id: number,
     entrada: string,
     data: string,
     lotacaoAtual: number
 }
 
-export interface IregistroRedzone {
-    registro: Iregistro[]
+interface IRegistroRedzone {
+  id: number,
+  entradaAsString: string,
+  data: string,
+  lotacao: number
+  redzoneNome: string;
 }
