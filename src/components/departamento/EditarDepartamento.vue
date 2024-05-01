@@ -42,13 +42,10 @@ const editarDepartamento = async () => {
     try {
         await departamentoStoreDados.alterarDepartamento(id , { id_departamento: id as string ,nome_departamento: departamentoStoreDados.editarDepartamento.nome_departamento, responsavel_id: { id_usuario: departamentoStoreDados.editarDepartamento.responsavel_id.id_usuario } })
         notificator.notifySuccess("Sucesso ao editar departamento!");
-    } catch (error) {
-        console.log(error);
-        notificator.notifyError("Erro ao editar departamento!");
-    } finally {
-        router.push({ name: 'departamentos' });
+        router.push("/departamentos");
         departamentoStoreDados.editarDepartamento = { ...defaultDepartamentoVoltar };
-
+    } catch (error) {
+        notificator.notifyError("Erro ao editar departamento!");
     }
 }
 
