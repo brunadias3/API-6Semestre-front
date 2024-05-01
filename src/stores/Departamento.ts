@@ -53,7 +53,6 @@ const departamentoStore = defineStore('departamento', () => {
                 id_departamento: id,
                 nome_departamento: departamento.nome_departamento,
                 responsavel_id: departamento.responsavel_id
-
             }
             const response = await putRequest(`departamentos/${id}`, body)
 

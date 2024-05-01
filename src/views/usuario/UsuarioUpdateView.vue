@@ -2,7 +2,7 @@
   <v-row justify="center" align="center" class="fill-height">
     <v-col cols="12" sm="8" md="6">
       <v-card
-        :title="editar ? 'Editar usuário' : 'Criar usuário'"
+        :title="editar ? 'Criar usuário' : 'Editar usuário'"
         class="text-light-blue-darken-4"
         elevation="10"
       >
@@ -33,14 +33,13 @@
           />
 
           <!-- <v-text-field
-            class="mb-4"
-            v-model="form.senhaUsuario"
-            variant="outlined"
-            type="password"
-            hide-details="auto"
-            label="Senha"
-           
-          /> -->
+              class="mb-4"
+              v-model="form.senhaUsuario"
+              variant="outlined"
+              type="password"
+              hide-details="auto"
+              label="Senha"             
+            /> -->
 
           <v-select
             v-model="form.tipoUsuario"
@@ -60,12 +59,12 @@
               >voltar</v-btn
             >
             <v-btn
-              @click="criarUsuario()"
+              @click="editarUsuario()"
               type="submit"
               color="#299FFF"
               rounded
               class="w-25"
-              >{{ "Criar" }}</v-btn
+              >{{ "Editar" }}</v-btn
             >
           </div>
         </div>
@@ -75,28 +74,36 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { UsuarioStore } from "../../stores";
 import useNotification from "../../stores/notification";
-import validator from 'validator';
+import validator from "validator";
 
 const router = useRouter();
+const route = useRoute();
+const id = route.params.id;
 const loading = ref(false);
-const funcoes = ["Administrador", "Guarda", "Gerente de área"];
 const notificator = useNotification();
 const userService = UsuarioStore();
+const funcoes = ["Administrador", "Guarda", "Gerente de área"];
 
 const form = ref({
-  nomeUsuario: "",
-  emailUsuario: "",
-  matriculaUsuario: "",
-  tipoUsuario: "",
+  nomeUsuario:'',
+  emailUsuario:'',
+  matriculaUsuario: '',
+  tipoUsuario: '',
 });
 
-
-
-async function criarUsuario() {
+const editarUsuario = async () => {
+  loading.value = true;
+  const usuarioJSON = {
+    nome_usuario: form.value.nomeUsuario,
+    email: form.value.emailUsuario,
+    matricula_empresa: form.value.matriculaUsuario,
+    tipo_usuario: form.value.tipoUsuario,
+  };
+  const idNumber = Number(id);
   try {
     if (
       !form.value.emailUsuario ||
@@ -108,25 +115,39 @@ async function criarUsuario() {
       return;
     }
 
-    if(!validator.isEmail(form.value.emailUsuario)){
-    notificator.notifyWarning("E-mail inválido!");
+    if (!validator.isEmail(form.value.emailUsuario)) {
+      notificator.notifyWarning("E-mail inválido!");
       return;
     }
-
-    loading.value = true;
-    await userService.create({
-      nome_usuario: form.value.nomeUsuario,
-      email: form.value.emailUsuario,
-      matricula_empresa: form.value.matriculaUsuario,
-      tipo_usuario: form.value.tipoUsuario,
-    });
-
-    notificator.notifySuccess("Usuário criado com sucesso!");
-    router.push("/usuarios");
+    await userService.update(idNumber, usuarioJSON);
+    notificator.notifySuccess("Sucesso ao atualizar usuário!");
+    router.push(`/usuarios`);
   } catch (error) {
-    notificator.notifyError("Erro ao criar usuário!");
+    console.log(error);
+    notificator.notifyError("Erro atualizar usuário");
   } finally {
     loading.value = false;
   }
+};
+
+async function getUser() {
+  try {
+    const idNumber = Number(id);
+    await userService.getUsuarioById(idNumber);
+    
+    form.value.nomeUsuario = userService.usuario.nome_usuario,
+    form.value.emailUsuario = userService.usuario.email,
+    form.value.matriculaUsuario = userService.usuario.matricula_empresa,
+    form.value.tipoUsuario = userService.usuario.tipo_usuario
+
+    notificator.notifySuccess("Sucesso ao buscar informações do usuário!");
+  } catch (error) {
+    notificator.notifyError("Erro ao buscar informações do usuário.");
+    console.log(error);
+  }
 }
+
+onMounted(() => {
+  getUser();
+});
 </script>
