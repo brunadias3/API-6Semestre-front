@@ -5,7 +5,7 @@
                 <TitleComponent title="Gerenciamento de Departamentos" />
                 <TabelaComponent titulo="Departamentos" :headers="headers"
                     :itensDepartamento="departamentoStoreDados.departamento" adicionar="Criar departamento"
-                    rota="criarDepartamento" rotaEditar="editarDepartamento" :desativar="desativarOuAtivar" :isLoading="isLoading"/>
+                    rota="criarDepartamento" :editar="editar" :desativar="desativarOuAtivar" :isLoading="isLoading"/>
             </v-container>
         </v-main>
 
@@ -17,9 +17,11 @@ import { onMounted, ref } from 'vue';
 import TabelaComponent from '../TabelaComponent.vue';
 import TitleComponent from '../TitleComponent.vue';
 import { departamentoStore } from '../../stores';
+import { useRouter } from 'vue-router';
 
 const departamentoStoreDados = departamentoStore();
 const isLoading = ref(false);
+const router = useRouter();
 
 const headers = [
     { title: 'Id do departamento', value: 'id_departamento' },
@@ -29,8 +31,8 @@ const headers = [
     { title: 'Ativar/Desativar', value: 'desativar' },
     { title: 'Editar', value: 'editar' }
 
-
 ]
+
 const desativarOuAtivar = async (id: number) => {
     isLoading.value = true
     try {
@@ -45,7 +47,22 @@ const desativarOuAtivar = async (id: number) => {
     }
 
 }
+const getDepartamento = async (id: string) => {
+  await departamentoStoreDados.getDepartamentoById(id);
+};
 
+
+const editar = async (id: number) => {
+  try {
+    await getDepartamento(id.toString());    
+      if (departamentoStoreDados.editarDepartamento.responsavel_id.id_usuario) {
+        router.push({ name: 'editarDepartamento', params: { id: id } });
+      
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 const pegarDados = async () => {
     await departamentoStoreDados.getDepartamento();
 }

@@ -1,5 +1,5 @@
 export default interface IUsuario {
-  id_usuario?: number,
+  id_usuario: number,
   nome_usuario: string,
   email: string,
   matricula_empresa: string,
