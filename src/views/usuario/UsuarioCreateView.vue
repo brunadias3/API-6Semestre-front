@@ -1,36 +1,15 @@
 <template>
   <v-row justify="center" align="center" class="fill-height">
     <v-col cols="12" sm="8" md="6">
-      <v-card
-        :title="editar ? 'Editar usuário' : 'Criar usuário'"
-        class="text-light-blue-darken-4"
-        elevation="10"
-      >
+      <v-card title="Criar usuário" class="text-light-blue-darken-4" elevation="10">
         <div class="w-75 mx-auto">
-          <v-text-field
-            class="mb-4"
-            v-model="form.nomeUsuario"
-            variant="outlined"
-            hide-details="auto"
-            label="Nome"
-          />
+          <v-text-field class="mb-4" v-model="form.nomeUsuario" variant="outlined" hide-details="auto" label="Nome" />
 
-          <v-text-field
-            class="mb-4"
-            v-model="form.emailUsuario"
-            variant="outlined"
-            type="email"
-            hide-details="auto"
-            label="E-mail"
-          />
+          <v-text-field class="mb-4" v-model="form.emailUsuario" variant="outlined" type="email" hide-details="auto"
+            label="E-mail" />
 
-          <v-text-field
-            class="mb-4"
-            v-model="form.matriculaUsuario"
-            variant="outlined"
-            hide-details="auto"
-            label="Matrícula"
-          />
+          <v-text-field class="mb-4" v-model="form.matriculaUsuario" variant="outlined" hide-details="auto"
+            label="Matrícula" />
 
           <!-- <v-text-field
             class="mb-4"
@@ -42,31 +21,13 @@
            
           /> -->
 
-          <v-select
-            v-model="form.tipoUsuario"
-            variant="outlined"
-            label="Selecione a função"
-            :items="funcoes"
-          >
+          <v-select v-model="form.tipoUsuario" variant="outlined" label="Selecione a função" :items="funcoes">
           </v-select>
 
           <div class="d-flex justify-space-between pb-4">
-            <v-btn
-              color="#299FFF"
-              rounded
-              variant="outlined"
-              class="w-25"
-              @click="router.push('/usuarios')"
-              >voltar</v-btn
-            >
-            <v-btn
-              @click="criarUsuario()"
-              type="submit"
-              color="#299FFF"
-              rounded
-              class="w-25"
-              >{{ "Criar" }}</v-btn
-            >
+            <v-btn color="#299FFF" rounded variant="outlined" class="w-25"
+              @click="router.push('/usuarios')">voltar</v-btn>
+            <v-btn @click="criarUsuario()" type="submit" color="#299FFF" rounded class="w-25">{{ "Criar" }}</v-btn>
           </div>
         </div>
       </v-card>
@@ -108,8 +69,8 @@ async function criarUsuario() {
       return;
     }
 
-    if(!validator.isEmail(form.value.emailUsuario)){
-    notificator.notifyWarning("E-mail inválido!");
+    if (!validator.isEmail(form.value.emailUsuario)) {
+      notificator.notifyWarning("E-mail inválido!");
       return;
     }
 

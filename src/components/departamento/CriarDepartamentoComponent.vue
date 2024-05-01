@@ -35,11 +35,9 @@ const criarDepartamento = async () => {
     try {
         await departamentoStoreDados.criarDepartamento(departamentoStoreDados.novoDepartamento)
         notificator.notifySuccess("Sucesso ao criar departamento!");
+        router.push("/departamentos");
     } catch (error) {
-        console.log(error);
         notificator.notifyError("Erro ao criar departamento!");
-    } finally {
-        router.push({ name: 'departamentos' });
     }
 
 
@@ -53,7 +51,7 @@ const pegarResponsavel = (item: string) => {
 }
 
 
-onMounted(()=> {
+onMounted(() => {
     departamentoStoreDados.novoDepartamento = { ...defaultDepartamento };
 
 })

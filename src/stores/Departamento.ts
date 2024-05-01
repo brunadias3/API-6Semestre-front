@@ -4,6 +4,7 @@ import { deleteRequest, getRequest, postRequest, putRequest } from "../utils/ser
 import IDepartamento from "../interfaces/IDepartamento";
 import INovoDepartamento from "../interfaces/INovoDepartamento";
 import IEditarDepartamento from "../interfaces/IEditarDepartamento";
+import { AxiosError } from "axios";
 
 
 const departamentoStore = defineStore('departamento', () => {
@@ -23,7 +24,10 @@ const departamentoStore = defineStore('departamento', () => {
 
             return response.data;
         } catch (error) {
-            errorCatch.value = error;
+            throw new Error(
+                (error instanceof AxiosError ? error.response?.data.error : null) ||
+                  error
+              );
         }
     }
 
@@ -58,7 +62,10 @@ const departamentoStore = defineStore('departamento', () => {
 
             return response;
         } catch (error) {
-            errorCatch.value = error;
+            throw new Error(
+                (error instanceof AxiosError ? error.response?.data.error : null) ||
+                  error
+              );
         }
     }
 
