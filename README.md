@@ -18,9 +18,9 @@
 ## ⚙️ Funcionalidades
 
 - [X] Exibe o fluxo de pessoas da redzone;
-- [ ] Criação, alteração, exclusão e visualização de departamentos
-- [ ] Criação, alteração, exclusão e visualização de usuários
-- [ ] Criação, alteração, exclusão e visualização de redzones
+- [X] Criação, alteração, exclusão e visualização de departamentos
+- [X] Criação, alteração, exclusão e visualização de usuários
+- [X] Criação, alteração, exclusão e visualização de redzones
 - [ ] Possui diferenciação de usuários;
 - [ ] Gráficos Estatísticos
 - [ ] Possibilidade de gerar relatórios;
