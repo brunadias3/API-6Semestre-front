@@ -1,4 +1,7 @@
 <template>
+  <v-overlay :model-value="loading" class="align-center justify-center">
+    <v-progress-circular v-model="loading" color="primary" size="64" width="5" indeterminate />
+  </v-overlay>
   <v-container>
     <v-row justify="center" class="pb-5">
       <v-card elevation="7" min-width="800">
@@ -31,8 +34,8 @@
                   <h1 class="text-subtitle-1" style="color: #3F51B5;">Departamento:</h1>
                 </v-col>
                 <v-col cols="12" class="mt-n5">
-                  <v-select v-model="form.departamento" :items="departamentoService.departamento" item-title="nome_departamento"
-                    item-value="id_departamento" variant="outlined" rounded></v-select>
+                  <v-select v-model="form.departamento" :items="departamentoService.departamento"
+                    item-title="nome_departamento" item-value="id_departamento" variant="outlined" rounded></v-select>
                 </v-col>
                 <v-col cols="12">
                   <h1 class="text-subtitle-1" style="color: #3F51B5;">Responsável:</h1>
@@ -58,9 +61,7 @@
 import { ref, onMounted } from 'vue';
 import useNotification from '../../stores/notification';
 import UsuarioStore from '../../stores/Usuario';
-import DepartamentoStore from '../../stores/Departamento';
 import { Usuario } from '../../types/IUsuario';
-import { Departamento } from '../../types/IDepartamento';
 import RedzoneStore from '../../stores/Redzone';
 import { useRouter } from 'vue-router';
 import departamentoStore from '../../stores/Departamento';
@@ -72,7 +73,6 @@ const loading = ref(false)
 const userService = UsuarioStore();
 const departamentoService = departamentoStore();
 const responsaveis = ref<Usuario[]>([]);
-const departamentos = ref<Departamento[]>([]);
 
 const form = ref({
   nome: '',

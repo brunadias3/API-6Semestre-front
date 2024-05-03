@@ -1,13 +1,13 @@
 <template>
-    <v-overlay :model-value="isLoading" class="align-center justify-center">
-   <v-progress-circular v-model="isLoading" color="primary" size="64" width="5" indeterminate />
- </v-overlay>
+   <v-overlay :model-value="isLoading" class="align-center justify-center">
+      <v-progress-circular v-model="isLoading" color="primary" size="64" width="5" indeterminate />
+   </v-overlay>
    <v-container fluid fill-height>
-       <TitleComponent title="Gerenciamento de Departamentos" />
+      <TitleComponent title="Gerenciamento de Departamentos" />
 
-       <CardDepartamento :editar="false" :valorDefault="defaultDepartamento" rota="departamentos"
-           :funcao="criarDepartamento" :funcaoVoltar="voltar" @nomeDepartamento="pegarDepartamento"
-           @nomeResponsavel="pegarResponsavel" />
+      <CardDepartamento :editar="false" :valorDefault="defaultDepartamento" rota="departamentos"
+         :funcao="criarDepartamento" :funcaoVoltar="voltar" @nomeDepartamento="pegarDepartamento"
+         @nomeResponsavel="pegarResponsavel" />
    </v-container>
 </template>
 
@@ -37,13 +37,13 @@ const voltar = () => {
 const criarDepartamento = async () => {
    isLoading.value = true
    try {
-       await departamentoStoreDados.criarDepartamento(departamentoStoreDados.novoDepartamento)
-       notificator.notifySuccess("Sucesso ao criar departamento!");
-       router.push("/departamentos");
+      await departamentoStoreDados.criarDepartamento(departamentoStoreDados.novoDepartamento)
+      notificator.notifySuccess("Sucesso ao criar departamento!");
+      router.push("/departamentos");
    } catch (error) {
-       notificator.notifyError("Erro ao criar departamento!");
+      notificator.notifyError("Erro ao criar departamento!");
    } finally {
-       isLoading.value = false
+      isLoading.value = false
    }
 
 

@@ -113,7 +113,6 @@ const searchLogs = async () => {
       notificator.notifyError('Por favor, selecione um intervalo de datas válido.');
     }
   } catch (error) {
-    console.error(error);
     notificator.notifyError('Erro ao buscar logs');
   } finally {
     loading.value = false;
@@ -126,7 +125,6 @@ const getAll = async () => {
     const response = await redzoneService.getAll();
     redzones.value = response.data;
   } catch (error) {
-    console.error(error);
     notificator.notifyError('Erro ao carregar redzones');
   } finally {
     loading.value = false;

@@ -45,7 +45,7 @@ const desativarOuAtivar = async (id: number) => {
         notificator.notifySuccess("Sucesso ao desativar/ativar departamento!");
     } catch (error) {
         console.log(error);
-        notificator.notifySuccess("Erro ao desativar/ativar departamento!");
+        notificator.notifyError("Erro ao desativar/ativar departamento!");
     } finally {
         setTimeout(() => {
             isLoading.value = false
@@ -67,7 +67,7 @@ const editar = async (id: number) => {
             router.push({ name: 'editarDepartamento', params: { id: id } });
         }
     } catch (error) {
-        notificator.notifySuccess("Erro na tentativa de edição do departamento!");
+        notificator.notifyError("Erro na tentativa de edição do departamento!");
     } finally {
         isLoading.value = false
     }
@@ -78,6 +78,7 @@ const pegarDados = async () => {
         await departamentoStoreDados.getDepartamento();
         notificator.notifySuccess("Sucesso ao listar departamentos!");
     } catch (error) {
+        console.log(error);
         notificator.notifyError("Erro ao listar departamentos!");
     } finally {
         isLoading.value = false

@@ -47,7 +47,7 @@ const desativarOuAtivar = async (id: number) => {
     notificator.notifySuccess("Sucesso ao desativar/ativar usuário!");
   } catch (error) {
     console.log(error);
-    notificator.notifyError("Erro ao desativar/ativar usuário redzone");
+    notificator.notifyError("Erro ao desativar/ativar usuário!");
   } finally {
     setTimeout(() => {
       isLoading.value = false;
@@ -60,8 +60,9 @@ const getUsuario = async (id: number) => {
   isLoading.value = true
   try {
     await usuarioService.getUsuarioById(id);
+    notificator.notifySuccess("Sucesso ao buscar usuários!");
   } catch (error) {
-    notificator.notifySuccess("Erro ao buscar usuário!")
+    notificator.notifyError("Erro ao buscar usuário!")
   } finally {
     isLoading.value = true
   }
@@ -86,7 +87,7 @@ const pegarDados = async () => {
     usuarios.value = response.data;
     notificator.notifySuccess("Sucesso ao listar usuários!")
   } catch (error) {
-    notificator.notifySuccess("Erro ao listar usuários!")
+    notificator.notifyError("Erro ao listar usuários!")
   } finally {
     isLoading.value = false
   }

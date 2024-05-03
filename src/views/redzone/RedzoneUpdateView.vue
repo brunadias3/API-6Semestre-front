@@ -1,4 +1,7 @@
 <template>
+  <v-overlay :model-value="loading" class="align-center justify-center">
+    <v-progress-circular v-model="loading" color="primary" size="64" width="5" indeterminate />
+  </v-overlay>
   <v-container>
     <v-row justify="center" class="pb-5">
       <v-card elevation="7" min-width="800">
@@ -143,6 +146,7 @@ const validateAndCreate = async () => {
 };
 
 async function getRedzone() {
+  loading.value = true
   try {
     const response = await redzoneService.getOne(redzoneId);
     form.value.nome = response.data.nome_redzone
@@ -155,6 +159,9 @@ async function getRedzone() {
   } catch (error) {
     notificator.notifyError('Erro ao buscar informações da redzone.')
     console.log(error);
+  }
+  finally {
+    loading.value = false
   }
 
 }

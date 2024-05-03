@@ -37,7 +37,10 @@ const departamentoStore = defineStore('departamento', () => {
 
             departamento.value = response.data
         } catch (error) {
-            errorCatch.value = error;
+            throw new Error(
+                (error instanceof AxiosError ? error.response?.data.error : null) ||
+                  error
+              );
         }
     }
 
@@ -47,7 +50,10 @@ const departamentoStore = defineStore('departamento', () => {
 
             editarDepartamento.value = response.data
         } catch (error) {
-            errorCatch.value = error;
+            throw new Error(
+                (error instanceof AxiosError ? error.response?.data.error : null) ||
+                  error
+              );
         }
     }
 
@@ -77,7 +83,10 @@ const departamentoStore = defineStore('departamento', () => {
             departamento.value = response.data.reverse()
 
         } catch (error) {
-            errorCatch.value = error;
+            throw new Error(
+                (error instanceof AxiosError ? error.response?.data.error : null) ||
+                  error
+              );
         }
     }
 

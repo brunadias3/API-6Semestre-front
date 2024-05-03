@@ -1,4 +1,7 @@
 <template>
+  <v-overlay :model-value="loading" class="align-center justify-center">
+    <v-progress-circular v-model="loading" color="primary" size="64" width="5" indeterminate />
+  </v-overlay>
   <v-container>
     <v-row>
       <v-col cols="9">
@@ -29,7 +32,7 @@
           <v-row>
             <v-col class="px-6 pt-1 mb-n5">
               <v-chip variant="tonal" :color="redzone.status ? 'success' : 'red'" :text="redzone.status ? 'Ativo' :
-                'Desativado'" />
+    'Desativado'" />
             </v-col>
           </v-row>
           <v-card-text>
@@ -63,7 +66,8 @@
           <v-card-actions class="text-center">
             <v-tooltip location="bottom" text="Visualizar Registros">
               <template v-slot:activator="{ props }">
-                <v-icon v-bind="props" @click="router.push(`/redzone/logs/${redzone.id_redzone}`)" color="grey-darken-1">mdi
+                <v-icon v-bind="props" @click="router.push(`/redzone/logs/${redzone.id_redzone}`)"
+                  color="grey-darken-1">mdi
                   mdi-eye</v-icon>
               </template>
             </v-tooltip>
@@ -79,7 +83,7 @@
                 <v-btn variant="text" v-bind="props" v-if="!loading" @click="active(redzone)"
                   :color="redzone.status ? 'red' : 'green'" v-on="on"
                   :icon="redzone.status ? 'mdi mdi-sync-off' : 'mdi mdi-sync'" />
-                  <v-btn variant="plain" v-if="loading" :loading="loading" />
+                <v-btn variant="plain" v-if="loading" :loading="loading" />
               </template>
             </v-tooltip>
           </v-card-actions>

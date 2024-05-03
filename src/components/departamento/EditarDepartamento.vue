@@ -1,15 +1,14 @@
 <template>
-    <v-overlay :model-value="isLoading" class="align-center justify-center">
-   <v-progress-circular v-model="isLoading" color="primary" size="64" width="5" indeterminate />
- </v-overlay>
+   <v-overlay :model-value="isLoading" class="align-center justify-center">
+      <v-progress-circular v-model="isLoading" color="primary" size="64" width="5" indeterminate />
+   </v-overlay>
    <v-container fluid fill-height>
-       <TitleComponent title="Gerenciamento de Departamentos" />
+      <TitleComponent title="Gerenciamento de Departamentos" />
 
-       <CardDepartamento :editar="true" rota="departamento"
-           :funcao="editarDepartamento" :funcaoVoltar="voltar"
-           :nome-departamento="departamentoStoreDados.editarDepartamento.nome_departamento"
-           :id-responsavel="departamentoStoreDados.editarDepartamento.responsavel_id?.id_usuario"
-           @nomeDepartamento="pegarDepartamento" @nome-responsavel="pegarResponsavel" />
+      <CardDepartamento :editar="true" rota="departamento" :funcao="editarDepartamento" :funcaoVoltar="voltar"
+         :nome-departamento="departamentoStoreDados.editarDepartamento.nome_departamento"
+         :id-responsavel="departamentoStoreDados.editarDepartamento.responsavel_id?.id_usuario"
+         @nomeDepartamento="pegarDepartamento" @nome-responsavel="pegarResponsavel" />
 
    </v-container>
 </template>
@@ -45,14 +44,14 @@ const voltar = () => {
 const editarDepartamento = async () => {
    isLoading.value = true
    try {
-       await departamentoStoreDados.alterarDepartamento(id , { id_departamento: id as string ,nome_departamento: departamentoStoreDados.editarDepartamento.nome_departamento, responsavel_id: { id_usuario: departamentoStoreDados.editarDepartamento.responsavel_id.id_usuario } })
-       notificator.notifySuccess("Sucesso ao editar departamento!");
-       router.push("/departamentos");
-       departamentoStoreDados.editarDepartamento = { ...defaultDepartamentoVoltar };
+      await departamentoStoreDados.alterarDepartamento(id, { id_departamento: id as string, nome_departamento: departamentoStoreDados.editarDepartamento.nome_departamento, responsavel_id: { id_usuario: departamentoStoreDados.editarDepartamento.responsavel_id.id_usuario } })
+      notificator.notifySuccess("Sucesso ao editar departamento!");
+      router.push("/departamentos");
+      departamentoStoreDados.editarDepartamento = { ...defaultDepartamentoVoltar };
    } catch (error) {
-       notificator.notifyError("Erro ao editar departamento!");
+      notificator.notifyError("Erro ao editar departamento!");
    } finally {
-       isLoading.value = false
+      isLoading.value = false
    }
 }
 
@@ -60,7 +59,7 @@ const pegarDepartamento = (item: string) => {
    departamentoStoreDados.editarDepartamento.nome_departamento = item
 }
 const pegarResponsavel = (item: string) => {
-   
+
    departamentoStoreDados.editarDepartamento.responsavel_id.id_usuario = item
 }
 const pegarDepartamentobyID = async () => {
@@ -68,7 +67,7 @@ const pegarDepartamentobyID = async () => {
    await departamentoStoreDados.getDepartamentoById(id as string)
 }
 
-onMounted(()=> {
+onMounted(() => {
    pegarDepartamentobyID()
 })
 </script>
