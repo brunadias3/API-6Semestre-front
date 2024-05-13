@@ -115,7 +115,7 @@
         <v-row>
           <v-col cols="5">
             <v-select v-model="redzoneSelected" :items="departamentoStoreDados.idRedzonesDepartamento"
-              item-title="nome_redzone" item-value="id_redzone" variant="outlined"
+            item-title="nome_redzone" item-value="id_redzone" variant="outlined"
               label="Selecione uma redzone"></v-select>
           </v-col>
           <v-col cols="5">
@@ -195,7 +195,7 @@ const departamentoStoreDados = departamentoStore();
 const registroRedzone = registroRedzoneStore()
 const route = useRoute()
 const id = route.params.id
-const selectedItem = ref(null)
+const selectedItem = ref(1)
 const items = ref([{ texto: 'Relatório geral', value: 1 }, { texto: 'Relatório específicos das redzones', value: 2 }, { texto: 'Relatório por perido', value: 3 }])
 const placeholder = ref('Selecione uma opção')
 const redzoneSelected = ref<string | null>(null);
@@ -330,7 +330,6 @@ onMounted(async () => {
   } finally {
     loading.value = false;
   }
-
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - 15);
   const endDate = new Date();
