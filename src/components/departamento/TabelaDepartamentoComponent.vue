@@ -74,10 +74,7 @@ const editar = async (id: number) => {
     }
 };
 const visualizar = (id: number) => {
-    router.push({ name: 'relatorioDepartamento', params: { id: id } });
-
-    console.log(id);
-    
+    router.push({ name: 'relatorioDepartamento', params: { id: id } });    
 }
 const pegarDados = async () => {
     isLoading.value = true
