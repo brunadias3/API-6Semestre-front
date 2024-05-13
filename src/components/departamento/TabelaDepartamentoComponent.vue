@@ -94,5 +94,7 @@ const pegarDados = async () => {
 
 onMounted(() => {
     pegarDados()
+    departamentoStoreDados.relatoriosDepartamentos = [];
+    departamentoStoreDados.idRedzonesDepartamento = [];
 })
 </script>
