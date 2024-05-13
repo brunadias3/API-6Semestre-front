@@ -5,6 +5,7 @@ import IDepartamento from "../interfaces/IDepartamento";
 import INovoDepartamento from "../interfaces/INovoDepartamento";
 import IEditarDepartamento from "../interfaces/IEditarDepartamento";
 import { AxiosError } from "axios";
+import IRelatorioDepartamento from "../types/IRelatorioDepartamento";
 
 
 const departamentoStore = defineStore('departamento', () => {
@@ -12,7 +13,12 @@ const departamentoStore = defineStore('departamento', () => {
     const errorCatch = ref<unknown>(undefined);
     const novoDepartamento = ref<INovoDepartamento>({} as INovoDepartamento)
     const editarDepartamento = ref<IEditarDepartamento>({} as IEditarDepartamento)
-
+    const relatoriosDepartamentos = ref<IRelatorioDepartamento[]>([])
+    interface idRedzone {
+        id_redzone: number,
+        nome_redzone: string
+      }
+    const idRedzonesDepartamento = ref<idRedzone[]>([])
 
     const criarDepartamento = async (departamento: INovoDepartamento) => {
         try {
@@ -26,8 +32,8 @@ const departamentoStore = defineStore('departamento', () => {
         } catch (error) {
             throw new Error(
                 (error instanceof AxiosError ? error.response?.data.error : null) ||
-                  error
-              );
+                error
+            );
         }
     }
 
@@ -39,8 +45,8 @@ const departamentoStore = defineStore('departamento', () => {
         } catch (error) {
             throw new Error(
                 (error instanceof AxiosError ? error.response?.data.error : null) ||
-                  error
-              );
+                error
+            );
         }
     }
 
@@ -52,8 +58,8 @@ const departamentoStore = defineStore('departamento', () => {
         } catch (error) {
             throw new Error(
                 (error instanceof AxiosError ? error.response?.data.error : null) ||
-                  error
-              );
+                error
+            );
         }
     }
 
@@ -70,8 +76,8 @@ const departamentoStore = defineStore('departamento', () => {
         } catch (error) {
             throw new Error(
                 (error instanceof AxiosError ? error.response?.data.error : null) ||
-                  error
-              );
+                error
+            );
         }
     }
 
@@ -85,20 +91,41 @@ const departamentoStore = defineStore('departamento', () => {
         } catch (error) {
             throw new Error(
                 (error instanceof AxiosError ? error.response?.data.error : null) ||
-                  error
-              );
+                error
+            );
         }
+    }
+
+    const pegarRelatorioDepartamento = async (id: string) => {
+        try {
+            const response = await getRequest(`registroDepartamento/${id}`)
+
+            relatoriosDepartamentos.value = response.data;
+        } catch (error) {
+            throw new Error(
+                (error instanceof AxiosError ? error.response?.data.error : null) ||
+                error
+            );
+        }
+    }
+    const pegarIdRedzonesByDepartamento = async (id: string) => {
+        const response = await getRequest(`registroDepartamento/idredzone/${id}`);
+        idRedzonesDepartamento.value = response.data;
     }
 
     return {
         novoDepartamento,
         departamento,
         editarDepartamento,
+        relatoriosDepartamentos,
+        idRedzonesDepartamento,
         getDepartamento,
         criarDepartamento,
         desativarOuAtivarDepartamento,
         getDepartamentoById,
-        alterarDepartamento
+        alterarDepartamento,
+        pegarRelatorioDepartamento,
+        pegarIdRedzonesByDepartamento
     }
 })
 

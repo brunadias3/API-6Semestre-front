@@ -2,6 +2,7 @@ import DepartamentoView from '../views/DepartamentoView.vue'
 import TabelaDepartamentoComponent from '../components/departamento/TabelaDepartamentoComponent.vue'
 import CriarDepartamentoComponent from '../components/departamento/CriarDepartamentoComponent.vue';
 import EditarDepartamento from '../components/departamento/EditarDepartamento.vue';
+import RelatorioComponent from '../components/departamento/RelatorioComponent.vue';
 
 const departamentoRoute = {
   path: '/departamentos',
@@ -30,7 +31,16 @@ const departamentoRoute = {
         title: 'Editar Departamento'
       },
       component: EditarDepartamento
+    },
+    {
+      path: 'relatorio-departamento/:id',
+      name: 'relatorioDepartamento',
+      meta: {
+        title: 'Relatorio departamento'
+      },
+      component: RelatorioComponent
     }
+
   ]
 
 };
