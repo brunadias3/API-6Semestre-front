@@ -8,7 +8,7 @@
                 <TitleComponent title="Gerenciamento de Departamentos" />
                 <TabelaComponent titulo="Departamentos" :headers="headers"
                     :itensDepartamento="departamentoStoreDados.departamento" adicionar="Criar departamento"
-                    rota="criarDepartamento" :editar="editar" :desativar="desativarOuAtivar" :isLoading="isLoading" />
+                    rota="criarDepartamento" :editar="editar" :desativar="desativarOuAtivar" :isLoading="isLoading" :visualizar="visualizar" />
             </v-container>
         </v-main>
 
@@ -34,7 +34,8 @@ const headers = [
     { title: 'Criado em', value: 'create_at' },
     { title: 'Nome do Responsável', value: 'nome_responsavel' },
     { title: 'Ativar/Desativar', value: 'desativar' },
-    { title: 'Editar', value: 'editar' }
+    { title: 'Editar', value: 'editar' },
+    { title: 'Relatórios', value: 'relatorio' }
 
 ]
 
@@ -72,6 +73,12 @@ const editar = async (id: number) => {
         isLoading.value = false
     }
 };
+const visualizar = (id: number) => {
+    router.push({ name: 'relatorioDepartamento', params: { id: id } });
+
+    console.log(id);
+    
+}
 const pegarDados = async () => {
     isLoading.value = true
     try {
