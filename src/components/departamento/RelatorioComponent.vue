@@ -1,8 +1,11 @@
 <template>
+  <v-overlay :model-value="loading" class="align-center justify-center">
+    <v-progress-circular v-model="loading" color="primary" size="64" width="5" indeterminate />
+  </v-overlay>
   <v-container>
     <TitleComponent title="Relatórios do departamento" />
     <v-select v-model="selectedItem" :items="items" item-title="texto" item-value="value" label="Tipos de relatório"
-      :placeholder="placeholder"></v-select>
+      :placeholder="placeholder" variant="outlined"></v-select>
     <v-card v-if="selectedItem === 1" class="white">
       <v-row>
         <v-col cols="12">
@@ -51,7 +54,7 @@
     <div v-if="selectedItem === 2">
       <v-select v-model="redZonesSelecionadas" :items="[...departamentoStoreDados.idRedzonesDepartamento]"
         item-title="nome_redzone" item-value="id_redzone" label="Selecione as redzones" :placeholder="placeholder"
-        multiple persistent-hint class="w-50"></v-select>
+        multiple persistent-hint class="w-50" variant="outlined"></v-select>
       <v-card v-for="(dado, index) in dados" :key="index" class="white mt-5">
         <v-expansion-panels>
           <v-expansion-panel
@@ -112,7 +115,7 @@
         <v-row>
           <v-col cols="5">
             <v-select v-model="redzoneSelected" :items="departamentoStoreDados.idRedzonesDepartamento"
-              item-title="nome_redzone" item-value="id_redzone" variant="outlined"
+            item-title="nome_redzone" item-value="id_redzone" variant="outlined"
               label="Selecione uma redzone"></v-select>
           </v-col>
           <v-col cols="5">
@@ -192,7 +195,7 @@ const departamentoStoreDados = departamentoStore();
 const registroRedzone = registroRedzoneStore()
 const route = useRoute()
 const id = route.params.id
-const selectedItem = ref(null)
+const selectedItem = ref(1)
 const items = ref([{ texto: 'Relatório geral', value: 1 }, { texto: 'Relatório específicos das redzones', value: 2 }, { texto: 'Relatório por perido', value: 3 }])
 const placeholder = ref('Selecione uma opção')
 const redzoneSelected = ref<string | null>(null);
@@ -314,9 +317,19 @@ const exportToCsvEspecifico = (dado: any) => {
 };
 
 onMounted(async () => {
-  pegarRelatorio()
-  await pegarIdRedzone()
-  await pegarLogs()
+  loading.value = true;
+
+  try {
+    pegarRelatorio()
+    await pegarIdRedzone()
+    await pegarLogs()
+    notificator.notifySuccess("Sucesso na importação dos dados")
+  } catch (error) {
+    notificator.notifyError("Erro na importação dos dados")
+
+  } finally {
+    loading.value = false;
+  }
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - 15);
   const endDate = new Date();
