@@ -55,9 +55,8 @@
               {{ item.matricula_empresa }}
             </td>
             <td v-if="item.tipo_usuario">
-              <v-chip variant="tonal" :color="item.tipo_usuario === 'Administrador' ? 'blue' : item.tipo_usuario === 'Guarda' ? 'green' : 'orange'
-        ">
-                {{ item.tipo_usuario }}
+              <v-chip variant="tonal" :color="item.tipo_usuario === 'ROLE_ADMIN' ? 'blue' : item.tipo_usuario === 'ROLE_GUARD' ? 'green' : 'orange'">  
+                {{ item.tipo_usuario === 'ROLE_ADMIN' ? 'Gerente geral' : item.tipo_usuario === 'ROLE_GUARD' ? 'Guarda' : 'Gerente de area'  }}
               </v-chip>
             </td>
             <td v-show="item.lotacao || item.lotacao === 0">
