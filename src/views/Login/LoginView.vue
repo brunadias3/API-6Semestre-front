@@ -5,7 +5,7 @@
   <v-container>
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="4">
-        <v-card class="mt-16">
+        <v-card elevation="16" class="mt-16">
           <v-card-title class="text-center">LOGIN</v-card-title>
           <v-card-text>
             <v-form @submit.prevent="loginUsuario">
@@ -57,6 +57,9 @@ const loginUsuario = async () => {
 
 onMounted(() => {
   loginService.usuarioLogado = handleLocalStorage.get('usuarioLogado') as IUsuarioLogado
+  if (loginService.usuarioLogado) {
+    router.push({ name: 'usuarios' })
+  }
   loginService.bodyLogin = { email: '', senha: '' }
 })
 </script>
