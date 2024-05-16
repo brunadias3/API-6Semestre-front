@@ -2,7 +2,7 @@
   <v-overlay :model-value="loading" class="align-center justify-center">
     <v-progress-circular v-model="loading" color="primary" size="64" width="5" indeterminate />
   </v-overlay>
-  <v-row justify="center" align="center" class="fill-height">
+  <v-row justify="center" align="center" class="fill-height ">
     <v-col cols="12" sm="8" md="6">
       <v-card title="Criar usuário" class="text-light-blue-darken-4" elevation="10">
         <div class="w-75 mx-auto">
@@ -14,17 +14,13 @@
           <v-text-field class="mb-4" v-model="form.matriculaUsuario" variant="outlined" hide-details="auto"
             label="Matrícula" />
 
-          <!-- <v-text-field
-           class="mb-4"
-           v-model="form.senhaUsuario"
-           variant="outlined"
-           type="password"
-           hide-details="auto"
-           label="Senha"
-          
-         /> -->
+          <v-text-field class="mb-4" v-model="form.senhaUsuario" variant="outlined" type="password" hide-details="auto"
+            label="Senha" />
+          <v-text-field class="mb-4" v-model="form.confirmSenha" variant="outlined" type="password" hide-details="auto"
+            label="Confirma senha" />
 
-          <v-select v-model="form.tipoUsuario" variant="outlined" label="Selecione a função" :items="funcoes">
+          <v-select v-model="form.tipoUsuario" variant="outlined" label="Selecione a função" :items="funcoes"
+            item-title="titulo" item-value="value">
           </v-select>
 
           <div class="d-flex justify-space-between pb-4">
@@ -47,7 +43,7 @@ import validator from 'validator';
 
 const router = useRouter();
 const loading = ref(false);
-const funcoes = ["Administrador", "Guarda", "Gerente de área"];
+const funcoes = [{ titulo: "Gerente Geral", value: "ROLE_ADMIN" }, { titulo: "Gerente de área", value: "ROLE_MANAGER" }, { titulo: "Guarda", value: "ROLE_GUARD" }];
 const notificator = useNotification();
 const userService = UsuarioStore();
 
@@ -56,6 +52,8 @@ const form = ref({
   emailUsuario: "",
   matriculaUsuario: "",
   tipoUsuario: "",
+  senhaUsuario: "",
+  confirmSenha: ""
 });
 
 
@@ -71,7 +69,10 @@ async function criarUsuario() {
       notificator.notifyWarning("Por favor, preencha todos os campos.");
       return;
     }
-
+    if (form.value.senhaUsuario !== form.value.confirmSenha) {
+      notificator.notifyWarning("As senhas tem que ser iguais.");
+      return;
+    }
     if (!validator.isEmail(form.value.emailUsuario)) {
       notificator.notifyWarning("E-mail inválido!");
       return;
@@ -83,6 +84,7 @@ async function criarUsuario() {
       email: form.value.emailUsuario,
       matricula_empresa: form.value.matriculaUsuario,
       tipo_usuario: form.value.tipoUsuario,
+      senha: form.value.senhaUsuario
     });
 
     notificator.notifySuccess("Usuário criado com sucesso!");
