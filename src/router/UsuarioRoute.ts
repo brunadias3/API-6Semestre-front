@@ -4,11 +4,10 @@ import UsuarioView from "../views/usuario/UsuarioView.vue";
 
 const UsuarioRoute = [
   {
-    path: "/",
-    redirect: "/usuarios",
+    path: "/usuarios",
     children: [
       {
-        path: "/usuarios",
+        path: "",
         name: "usuarios",
         meta: {
           title: "Usuarios",
