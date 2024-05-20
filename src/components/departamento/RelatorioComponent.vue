@@ -96,8 +96,8 @@
                       </td>
                     </template>
                     <template v-slot:item.entrada="{ item }">
-                      <v-chip :color="item.entrada === 'Entrada' ? '#3B82F6' : '#F6893D'" class="text-uppercase"
-                        size="small" label :text="item.entrada === 'Saída' ? 'Saída' : 'Entrada'" />
+                      <v-chip :color="item.entrada === 'entrada' ? '#3B82F6' : '#F6893D'" class="text-uppercase"
+                        size="small" label :text="item.entrada === 'saida' ? 'Saída' : 'Entrada'" />
                     </template>
                     <template v-slot:item.data="{ item }">
                       <span>{{ converterComEspaco(item.data) }}</span>
@@ -162,7 +162,7 @@
                   </td>
                 </template>
                 <template v-slot:item.entradaAsString="{ item }">
-                  <v-chip :color="item.entradaAsString === 'Saida' ? '#3B82F6' : '#F6893D'" class="text-uppercase"
+                  <v-chip :color="item.entradaAsString === 'Entrada' ? '#3B82F6' : '#F6893D'" class="text-uppercase"
                     size="small" label :text="item.entradaAsString === 'Saida' ? 'Saída' : 'Entrada'" />
                 </template>
                 <template v-slot:item.data="{ item }">
@@ -195,7 +195,7 @@ const departamentoStoreDados = departamentoStore();
 const registroRedzone = registroRedzoneStore()
 const route = useRoute()
 const id = route.params.id
-const selectedItem = ref(1)
+const selectedItem = ref(1  )
 const items = ref([{ texto: 'Relatório geral', value: 1 }, { texto: 'Relatório específicos das redzones', value: 2 }, { texto: 'Relatório por perido', value: 3 }])
 const placeholder = ref('Selecione uma opção')
 const redzoneSelected = ref<string | null>(null);
@@ -325,7 +325,7 @@ onMounted(async () => {
     await pegarLogs()
     notificator.notifySuccess("Sucesso na importação dos dados")
   } catch (error) {
-    notificator.notifyError("Erro na importação dos dados")
+    notificator.notifyError(error.response.data.message)
 
   } finally {
     loading.value = false;
