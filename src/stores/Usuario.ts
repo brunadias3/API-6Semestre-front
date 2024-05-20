@@ -67,6 +67,17 @@ const UsuarioStore = defineStore("usuario", () => {
       );
     }
   }
+  async function getGuardas() {
+    try {
+      const res = await getRequest(`/tipos/guardas`)
+      return { data: res.data, error: null };
+    } catch (error) {
+      throw new Error(
+        (error instanceof AxiosError ? error.response?.data.error : null) ||
+          error
+      );
+    }
+  }
 
   return {
     usuario,
@@ -75,6 +86,7 @@ const UsuarioStore = defineStore("usuario", () => {
     getUsuarioById,
     desativarOuAtivarUsuario,
     update,
+    getGuardas
   };
 });
 

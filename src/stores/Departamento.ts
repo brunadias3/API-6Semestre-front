@@ -49,7 +49,18 @@ const departamentoStore = defineStore('departamento', () => {
             );
         }
     }
-
+    const getDepartamentoByIdUsuario = async (id: number) => {
+        try {
+            const response = await getRequest(`departamentos/responsavel/${id}`)
+            
+            departamento.value = response.data;
+        } catch (error) {
+            throw new Error(
+                (error instanceof AxiosError ? error.response?.data.error : null) ||
+                error
+            );
+        }
+    }
     const getDepartamentoById = async (id: string) => {
         try {
             const response = await getRequest(`departamentos/${id}`)
@@ -125,7 +136,8 @@ const departamentoStore = defineStore('departamento', () => {
         getDepartamentoById,
         alterarDepartamento,
         pegarRelatorioDepartamento,
-        pegarIdRedzonesByDepartamento
+        pegarIdRedzonesByDepartamento,
+        getDepartamentoByIdUsuario
     }
 })
 

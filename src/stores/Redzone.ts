@@ -53,12 +53,23 @@ const RedzoneStore = defineStore('redzone', () => {
     }
   }
 
+  async function getRedzoneByIdUsuario(id: number){
+    const url = endpoint + `/responsavel/${id}`
+    try {
+      const response = await getRequest(url)
+      return { data: response.data, error: null}
+    } catch (error: unknown) {
+      throw new Error((error instanceof AxiosError ? error.response?.data.error : null) || error);
+    }
+  }
+
   return {
     getAll,
     create,
     getOne,
     update,
     getRedzoneDates,
+    getRedzoneByIdUsuario,
   };
 });
 
