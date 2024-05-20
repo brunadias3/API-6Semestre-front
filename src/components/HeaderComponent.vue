@@ -19,17 +19,17 @@
                   </v-list-item>
                 </v-list>
 
-                <v-divider></v-divider>
+                <v-divider v-if="!loginService.usuarioLogado?.autorizacoes.includes('ROLE_GUARD')"></v-divider>
 
                 <v-list>
-                  <v-list-item @click="menuActive('usuarios')">
+                  <v-list-item v-if="!loginService.usuarioLogado?.autorizacoes.includes('ROLE_GUARD')" @click="menuActive('usuarios')">
                     <div class="d-flex ga-3">
                       <v-icon icon="fa-users" color="#015280" />
                       <div class="text-overline">Meus usuários</div>
                     </div>
                   </v-list-item>
-                  <v-divider></v-divider>
-                  <v-list-item @click="menuActive('departamentos')">
+                  <v-divider v-if="!loginService.usuarioLogado?.autorizacoes.includes('ROLE_GUARD')"></v-divider>
+                  <v-list-item v-if="!loginService.usuarioLogado?.autorizacoes.includes('ROLE_GUARD')" @click="menuActive('departamentos')">
                     <div class="d-flex ga-3">
                       <v-icon icon="fa-book" color="#015280" />
                       <div class="text-overline">Departamentos</div>
