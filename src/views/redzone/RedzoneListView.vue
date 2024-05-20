@@ -8,7 +8,7 @@
         <v-text-field variant="outlined" rounded v-model="searchTerm" label="Buscar Redzone"
           clear-icon="mdi mdi-close-circle" clearable></v-text-field>
       </v-col>
-      <v-col class="text-right">
+      <v-col v-if="!loginService.usuarioLogado?.autorizacoes.includes('ROLE_GUARD')" class="text-right">
         <v-btn prepend-icon="mdi mdi-plus" rounded variant="tonal" color="blue"
           @click="router.push(`/redzone/create`);">Criar Redzone</v-btn>
       </v-col>
@@ -40,7 +40,7 @@
               <v-row>
                 <v-col>
                   <span class="font-weight-bold">Responsável:</span>
-                  {{ redzone.responsavel_id.nome_usuario }}
+                  {{ redzone.responsavel_id?.nome_usuario }}
                 </v-col>
               </v-row>
               <v-row class="mt-n2">
@@ -52,7 +52,7 @@
               <v-row class="mt-n2">
                 <v-col>
                   <span class="font-weight-bold">Departamento:</span>
-                  {{ redzone.id_departamento.nome_departamento }}
+                  {{ redzone.id_departamento?.nome_departamento }}
                 </v-col>
               </v-row>
               <v-row class="mt-n2">
@@ -72,13 +72,13 @@
               </template>
             </v-tooltip>
             <v-spacer></v-spacer>
-            <v-tooltip location="bottom" text="Editar">
+            <v-tooltip v-if="!loginService.usuarioLogado?.autorizacoes.includes('ROLE_GUARD')" location="bottom" text="Editar">
               <template v-slot:activator="{ props }">
                 <v-icon v-bind="props" @click="router.push(`/redzone/update/${redzone.id_redzone}`)" color="primary">mdi
                   mdi-pencil</v-icon>
               </template>
             </v-tooltip>
-            <v-tooltip location="bottom" :text="redzone.status ? 'Desativar' : 'Ativar'">
+            <v-tooltip v-if="!loginService.usuarioLogado?.autorizacoes.includes('ROLE_GUARD')" location="bottom" :text="redzone.status ? 'Desativar' : 'Ativar'">
               <template v-slot:activator="{ props }">
                 <v-btn variant="text" v-bind="props" v-if="!loading" @click="active(redzone)"
                   :color="redzone.status ? 'red' : 'green'" v-on="on"
@@ -100,6 +100,7 @@ import { Redzone } from '../../types/IRedzone';
 import RedzoneStore from '../../stores/Redzone';
 import { obterDataFormatada } from '../../utils/formatters';
 import useNotification from '../../stores/notification';
+import { LoginStore } from '../../stores';
 
 const router = useRouter();
 const redzoneService = RedzoneStore();
@@ -108,6 +109,7 @@ const redzones = ref<Redzone[]>([]);
 const statusFilter = ref<boolean | null>(null);
 const searchTerm = ref('')
 const notificator = useNotification();
+const loginService = LoginStore();
 
 const active = async (redzone: Redzone) => {
   try {
@@ -148,6 +150,22 @@ const getAll = async () => {
   }
 }
 
+const getRedzoneByIdUser = async () => {
+  loading.value = true;
+  try {
+    if (loginService.usuarioLogado){
+      const response = await redzoneService.getRedzoneByIdUsuario(loginService.usuarioLogado.id)
+      redzones.value = response.data
+    }
+
+  } catch (error) {
+    console.log(error);
+  } finally {
+    loading.value = false;
+
+  }
+}
+
 const filteredRedzones = computed(() => {
   let filtered = redzones.value;
   if (searchTerm.value.trim() !== '') {
@@ -176,6 +194,11 @@ watchEffect(() => {
 });
 
 onMounted(async () => {
-  await getAll();
+  if (loginService.usuarioLogado && loginService.usuarioLogado.autorizacoes.includes("ROLE_ADMIN")){
+    await getAll();
+  } else {
+    await getRedzoneByIdUser()
+  }
+  
 });
 </script>

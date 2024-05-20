@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { UsuarioStore, departamentoStore } from "../../stores";
+import { LoginStore, UsuarioStore, departamentoStore } from "../../stores";
 import IUsuario from "../../interfaces/IUsuario";
 import TabelaComponent from "../../components/TabelaComponent.vue";
 import TitleComponent from "../../components/TitleComponent.vue";
@@ -23,11 +23,10 @@ import useNotification from "../../stores/notification";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-
 const isLoading = ref(false);
 const usuarios = ref<IUsuario[]>();
 const notificator = useNotification();
-
+const loginService = LoginStore();
 const usuarioService = UsuarioStore();
 
 const headers = [
@@ -93,7 +92,28 @@ const pegarDados = async () => {
   }
 };
 
+const pegarGuardas = async () => {
+  isLoading.value = true;
+
+  try {
+    const response = await usuarioService.getGuardas();
+    usuarios.value = response.data;
+    notificator.notifySuccess("Sucesso ao listar usuários!")
+
+  } catch (error) {
+    notificator.notifyError("Erro ao listar usuários!")
+  } finally {
+    isLoading.value = false
+  }
+}
+
 onMounted(() => {
-  pegarDados();
+  if(loginService.usuarioLogado?.autorizacoes.includes("ROLE_MANAGER")){
+    pegarGuardas()
+  } else {
+    pegarDados();
+  }
+
+  
 });
 </script>

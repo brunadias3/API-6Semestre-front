@@ -19,7 +19,7 @@
           <v-text-field class="mb-4" v-model="form.confirmSenha" variant="outlined" type="password" hide-details="auto"
             label="Confirma senha" />
 
-          <v-select v-model="form.tipoUsuario" variant="outlined" label="Selecione a função" :items="funcoes"
+          <v-select v-model="form.tipoUsuario" variant="outlined" label="Selecione a função" :items="opcoes"
             item-title="titulo" item-value="value">
           </v-select>
 
@@ -35,18 +35,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { UsuarioStore } from "../../stores";
+import { LoginStore, UsuarioStore } from "../../stores";
 import useNotification from "../../stores/notification";
 import validator from 'validator';
 
 const router = useRouter();
 const loading = ref(false);
 const funcoes = [{ titulo: "Gerente Geral", value: "ROLE_ADMIN" }, { titulo: "Gerente de área", value: "ROLE_MANAGER" }, { titulo: "Guarda", value: "ROLE_GUARD" }];
+const funcoesArea = [{ titulo: "Guarda", value: "ROLE_GUARD" }];
 const notificator = useNotification();
 const userService = UsuarioStore();
-
+const loginService = LoginStore();
+const opcoes = ref()
 const form = ref({
   nomeUsuario: "",
   emailUsuario: "",
@@ -95,4 +97,9 @@ async function criarUsuario() {
     loading.value = false;
   }
 }
+
+onMounted(()=> {
+  opcoes.value = loginService.usuarioLogado?.autorizacoes.includes("ROLE_ADMIN") ? funcoes : funcoesArea
+
+})
 </script>
