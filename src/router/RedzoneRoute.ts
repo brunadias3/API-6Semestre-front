@@ -8,7 +8,7 @@ const RedzoneRoutes = [
   {
     path: '/redzone',
     children: [
-      { path: '/redzone', component: RedzoneListView },
+      { path: '/redzone',name:'redzone', component: RedzoneListView },
       { path: 'create', name: 'create', component: RedzoneCreateView },
       { path: 'update/:id', name: 'update', component: RedzoneUpdateView },
       { path: 'filtragem', name: 'filtragem', component: Filtragem },

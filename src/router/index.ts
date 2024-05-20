@@ -43,7 +43,28 @@ router.beforeEach(async (to) => {
     'editarDepartamento',
     'relatorioDepartamento'
   ];
+  const rotasPermitidasGuarda = [
+    'login',
+    'registro',
+    'redzone',
+    'Logs',
+    'filtragem'
+  ]
 
+  const rotasPermitidasAdmArea = [
+    'login',
+    'registro',
+    'usuarios',
+    'criarUsuarios',
+    'redzone',
+    'editarUsuario',
+    'create',
+    'update',
+    'filtragem',
+    'Logs',
+    'departamentos',
+    'relatorioDepartamento'
+  ]
 
   const usuarioLogado: any = handleLocalStorage.get('usuarioLogado') as any;
   if (!usuarioLogado) {
@@ -54,9 +75,12 @@ router.beforeEach(async (to) => {
     }
   }
 
-  // if (!usuarioLogado && !rotasPermitidas.includes(to.name as string)) {
-  //   return logout()
-  // }
+  if (usuarioLogado && usuarioLogado.autorizacoes && usuarioLogado.autorizacoes.includes("ROLE_GUARD") && ![...rotasPermitidasGuarda].includes(to.name as string)) {
+    return { name: 'redzone'}
+  }
+  if (usuarioLogado && usuarioLogado.autorizacoes && usuarioLogado.autorizacoes.includes("ROLE_MANAGER") && ![...rotasPermitidasAdmArea].includes(to.name as string)) {
+    return { name: 'departamentos'}
+  }
 
 })
 
