@@ -10,18 +10,25 @@
             <v-menu v-model="menu" :close-on-content-click="false" >
               <template v-slot:activator="{ props }">
                 <v-btn v-bind="props" variant="plain">
-                  MASTER
+                  Olá, {{ loginService.usuarioLogado?.nomeUsuario }}
                 </v-btn>
               </template>
               <v-card min-width="300">
-                <v-list>
-                  <v-list-item @click="menuActive" :title="loginService.usuarioLogado?.nomeUsuario">
+                <!-- <v-list>
+                  <v-list-item @click="menuActive('perfil')" title="Perfil">
                   </v-list-item>
-                </v-list>
+                </v-list> -->
 
                 <v-divider v-if="!loginService.usuarioLogado?.autorizacoes.includes('ROLE_GUARD')"></v-divider>
 
                 <v-list>
+                  <v-list-item @click="menuActive('perfil')">
+                    <div class="d-flex ga-3">
+                      <v-icon icon="mdi mdi-account" color="#015280" />
+                      <div class="text-overline">Meu Perfil</div>
+                    </div>
+                  </v-list-item>
+                  <v-divider></v-divider>
                   <v-list-item v-if="!loginService.usuarioLogado?.autorizacoes.includes('ROLE_GUARD')" @click="menuActive('usuarios')">
                     <div class="d-flex ga-3">
                       <v-icon icon="fa-users" color="#015280" />
@@ -59,7 +66,7 @@
                     </div>
                   </v-list-item>
                 </v-list>
-                
+
                 <!-- <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn variant="text" @click="menu = false">
