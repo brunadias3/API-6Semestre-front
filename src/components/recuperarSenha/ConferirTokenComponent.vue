@@ -27,7 +27,7 @@
         <v-row align="center" justify="center">
             <v-col cols="12" sm="8" md="4">
                 <v-card elevation="16" class="mt-16">
-                    <v-card-title class="text-center text-light-blue-darken-4">Conferir Token</v-card-title>
+                    <v-card-title class="text-center text-light-blue-darken-4">Trocar a senha</v-card-title>
                     <v-card-text>
                         <v-form @submit.prevent="trocarSenha">
                             <v-text-field class="mb-4" v-model="recuperarSenhaStore.senhaNova" variant="outlined"
