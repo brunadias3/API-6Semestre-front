@@ -5,6 +5,7 @@ import departamentoRoute from "./DepartamentoRoute";
 import UsuarioRoute from "./UsuarioRoute";
 import LoginRoute from "./LoginRoute";
 import handleLocalStorage from "../utils/handleLocalStorage";
+import RecuperarSenhaRoute from "./RecuperarSenhaRoute";
 
 const logout = () => {
   handleLocalStorage.remove('usuarioLogado');
@@ -21,6 +22,7 @@ const router = createRouter({
     ...UsuarioRoute,
     ...RedzoneRoute,
     departamentoRoute,
+    RecuperarSenhaRoute
   ],
   scrollBehavior() {
     return { top: 0 };
@@ -65,16 +67,17 @@ router.beforeEach(async (to) => {
     'departamentos',
     'relatorioDepartamento'
   ]
+  
+  const rotasPermitidasSemLogin = [
+    'recuperarSenha',
+    'login',
+    'conferirToken'
+  ]
 
   const usuarioLogado: any = handleLocalStorage.get('usuarioLogado') as any;
-  if (!usuarioLogado) {
-    if (!logoutInProgress) {
-      logoutInProgress = true;
-      await logout();
-      logoutInProgress = false;
-    }
+  if (!usuarioLogado && ![...rotasPermitidasSemLogin].includes(to.name as string) ) {
+    return {name: 'login'}
   }
-
   if (usuarioLogado && usuarioLogado.autorizacoes && usuarioLogado.autorizacoes.includes("ROLE_GUARD") && ![...rotasPermitidasGuarda].includes(to.name as string)) {
     return { name: 'redzone'}
   }
