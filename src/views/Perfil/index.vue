@@ -3,7 +3,7 @@
       <v-row justify="center" align="center">
           <v-col cols="10">
               <v-row justify="center" align="center">
-                  <v-icon size="40" class="px-5 mb-4" color="blue">mdi-account</v-icon>
+                  <v-icon size="40" class="px-5 mb-4" color="blue">mdi mdi-account</v-icon>
                   <h1 class="text-h4 pb-3 text-blue">Perfil</h1>
               </v-row>
           </v-col>
@@ -17,6 +17,9 @@
       <v-row>
           <v-col cols="12" md="6">
               <v-text-field v-model="name" label="Nome*" required></v-text-field>
+          </v-col>
+          <v-col cols="12" md="6">
+              <v-text-field v-model="role" label="Cargo" disabled></v-text-field>
           </v-col>
       </v-row>
       <v-row class="pb-3">
@@ -36,7 +39,7 @@
                   label="Nova Senha*"
                   :type="passwordFieldType"
                   required
-                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  :append-icon="showPassword ? 'mdi mdi-eye' : 'mdi mdi-eye-off'"
                   @click:append="togglePasswordVisibility"
               ></v-text-field>
           </v-col>
@@ -68,6 +71,8 @@ import { LoginStore } from '../../stores';
 const userService = UsuarioStore()
 const loginService = LoginStore()
 // const service = useService()
+const user = ref()
+const role = ref('')
 const password = ref('')
 const email = ref('')
 const name = ref('')
@@ -120,21 +125,33 @@ console.log(loginService.usuarioLogado)
 //   }
 // }
 
-// onMounted(async () => {
-//   try {
-//       loading.value = true
-//       if (user.userInfo && user.userInfo?.id !== null) {
-//           const response = await service.private.user.getUserById(user.userInfo.id)
-//           name.value = response.data.name
-//           email.value = response.data.email
-//         }
-//   } catch (error) {
-//       if (error instanceof Error && error.message) {
-//           notification.notifyError(error.message)
-//       }
-//       console.log(error)
-//   } finally {
-//       loading.value = false
-//   }
-// })
+onMounted(async () => {
+  try {
+      loading.value = true
+      user.value = loginService.usuarioLogado
+      name.value = loginService.usuarioLogado?.nomeUsuario ? loginService.usuarioLogado?.nomeUsuario : ''
+      email.value = loginService.usuarioLogado?.email ? loginService.usuarioLogado?.email : ''
+      password.value = loginService.usuarioLogado?.senha ? loginService.usuarioLogado?.senha : ''
+      //role.value = loginService.usuarioLogado?.autorizacoes[0] ? loginService.usuarioLogado?.autorizacoes[0] : ''
+      const autorizacao = loginService.usuarioLogado?.autorizacoes[0] ? loginService.usuarioLogado?.autorizacoes[0] : ''
+      switch (autorizacao) {
+        case "ROLE_ADMIN":
+          role.value = 'Administrador'
+          break;
+        case "ROLE_MANAGER":
+          role.value = 'Gerente de Área'
+          break;
+        case "ROLE_GUARD":
+          role.value = 'Guarda'
+          break;
+      }
+    } catch (error) {
+      if (error instanceof Error && error.message) {
+          notification.notifyError(error.message)
+      }
+      console.log(error)
+  } finally {
+      loading.value = false
+  }
+})
 </script>
