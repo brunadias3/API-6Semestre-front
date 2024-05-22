@@ -61,6 +61,15 @@ export const postRequestLogin = async <T>(route: string, body: T | null = null, 
       throw (error as AxiosError);
     }
   };
+  export const putRequestSemToken = async <T>(route: string, body: T | null = null, apiUse = apiLogin): AxiosPromise => {
+    try {
+      const response = await apiUse.put(`${route}`, body);
+  
+      return response;
+    } catch (error) {
+      throw (error as AxiosError);
+    }
+  };
 
   export const deleteRequest = async (route: string, apiUse = api): AxiosPromise => {
     try {

@@ -6,16 +6,16 @@
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="4">
         <v-card elevation="16" class="mt-16">
-          <v-card-title class="text-center">LOGIN</v-card-title>
+          <v-card-title class="text-center text-light-blue-darken-4">LOGIN</v-card-title>
           <v-card-text>
             <v-form @submit.prevent="loginUsuario">
               <v-text-field v-model="loginService.bodyLogin.email" variant="outlined" label="Email" outlined
                 required></v-text-field>
               <v-text-field v-model="loginService.bodyLogin.senha" variant="outlined" label="Senha" type="password"
                 outlined required></v-text-field>
-              <p class="text-right">
-                <a href="#" class="text--primary text-decoration-underline">Esqueci minha senha</a>
-              </p>
+              <div @click="recuperarSenha" class="text-right font-bold text-light-blue-darken-4 mb-2 cursor-pointer">
+                Esqueci minha senha
+              </div>
               <v-btn type="submit" color="primary" block>Login</v-btn>
             </v-form>
           </v-card-text>
@@ -54,6 +54,10 @@ const loginUsuario = async () => {
     }
   }
 };
+
+const recuperarSenha = () => {
+  return router.push({ name: 'recuperarSenha' })
+}
 
 onMounted(() => {
   loginService.usuarioLogado = handleLocalStorage.get('usuarioLogado') as IUsuarioLogado
