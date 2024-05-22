@@ -5,6 +5,7 @@ import departamentoRoute from "./DepartamentoRoute";
 import UsuarioRoute from "./UsuarioRoute";
 import LoginRoute from "./LoginRoute";
 import handleLocalStorage from "../utils/handleLocalStorage";
+import PerfilRoutes from "./PerfilRoute";
 
 const logout = () => {
   handleLocalStorage.remove('usuarioLogado');
@@ -21,6 +22,7 @@ const router = createRouter({
     ...UsuarioRoute,
     ...RedzoneRoute,
     departamentoRoute,
+    ...PerfilRoutes,
   ],
   scrollBehavior() {
     return { top: 0 };
@@ -30,6 +32,7 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const rotasPermitidas = [
     'login',
+    'perfil',
     'registro',
     'usuarios',
     'criarUsuarios',
@@ -45,6 +48,7 @@ router.beforeEach(async (to) => {
   ];
   const rotasPermitidasGuarda = [
     'login',
+    'perfil',
     'registro',
     'redzone',
     'Logs',
@@ -53,6 +57,7 @@ router.beforeEach(async (to) => {
 
   const rotasPermitidasAdmArea = [
     'login',
+    'perfil',
     'registro',
     'usuarios',
     'criarUsuarios',
