@@ -67,8 +67,8 @@ const enviarToken = async () => {
         await recuperarSenhaStore.enviarToken()
         notificator.notifySuccess("Token correto.")
         validador.value = true;
-    } catch (error) {
-        notificator.notifyError("Token errado.");
+    } catch (error) {        
+        notificator.notifyError("Token inválido.");
         validador.value = false;
     } finally {
         loading.value = false;
