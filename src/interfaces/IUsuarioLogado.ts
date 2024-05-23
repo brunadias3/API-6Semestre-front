@@ -4,5 +4,6 @@ export default interface IUsuarioLogado {
     id: number,
     senha: string,
     token: string,
+    matricula: string
     autorizacoes: []
 }
