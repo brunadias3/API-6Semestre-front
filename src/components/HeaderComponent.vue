@@ -14,11 +14,6 @@
                 </v-btn>
               </template>
               <v-card min-width="300">
-                <!-- <v-list>
-                  <v-list-item @click="menuActive('perfil')" title="Perfil">
-                  </v-list-item>
-                </v-list> -->
-
                 <v-divider v-if="!loginService.usuarioLogado?.autorizacoes.includes('ROLE_GUARD')"></v-divider>
 
                 <v-list>
