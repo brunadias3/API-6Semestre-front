@@ -5,6 +5,7 @@ import departamentoRoute from "./DepartamentoRoute";
 import UsuarioRoute from "./UsuarioRoute";
 import LoginRoute from "./LoginRoute";
 import handleLocalStorage from "../utils/handleLocalStorage";
+import PerfilRoutes from "./PerfilRoute";
 import RecuperarSenhaRoute from "./RecuperarSenhaRoute";
 
 const logout = () => {
@@ -22,7 +23,8 @@ const router = createRouter({
     ...UsuarioRoute,
     ...RedzoneRoute,
     departamentoRoute,
-    RecuperarSenhaRoute
+    RecuperarSenhaRoute,
+    ...PerfilRoutes,
   ],
   scrollBehavior() {
     return { top: 0 };
@@ -32,6 +34,7 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const rotasPermitidas = [
     'login',
+    'perfil',
     'registro',
     'usuarios',
     'criarUsuarios',
@@ -47,6 +50,7 @@ router.beforeEach(async (to) => {
   ];
   const rotasPermitidasGuarda = [
     'login',
+    'perfil',
     'registro',
     'redzone',
     'Logs',
@@ -55,6 +59,7 @@ router.beforeEach(async (to) => {
 
   const rotasPermitidasAdmArea = [
     'login',
+    'perfil',
     'registro',
     'usuarios',
     'criarUsuarios',
@@ -67,7 +72,7 @@ router.beforeEach(async (to) => {
     'departamentos',
     'relatorioDepartamento'
   ]
-  
+
   const rotasPermitidasSemLogin = [
     'recuperarSenha',
     'login',

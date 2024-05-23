@@ -71,6 +71,11 @@ async function criarUsuario() {
       notificator.notifyWarning("Por favor, preencha todos os campos.");
       return;
     }
+    if (!validator.isStrongPassword(form.value.senhaUsuario)) {
+      return notificator.notifyWarning(
+        "A senha deve ter no mínimo 8 caracteres, 1 minúscula, 1 maiúscula, 1 número e 1 símbolo"
+      );
+    }
     if (form.value.senhaUsuario !== form.value.confirmSenha) {
       notificator.notifyWarning("As senhas tem que ser iguais.");
       return;
