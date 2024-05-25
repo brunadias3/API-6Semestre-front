@@ -21,9 +21,10 @@
 - [X] Criação, alteração, exclusão e visualização de departamentos
 - [X] Criação, alteração, exclusão e visualização de usuários
 - [X] Criação, alteração, exclusão e visualização de redzones
-- [ ] Possui diferenciação de usuários;
+- [X] Possui diferenciação de usuários;
 - [ ] Gráficos Estatísticos
-- [ ] Possibilidade de gerar relatórios;
+- [X] Possibilidade de gerar relatórios;
+- [X] Recuperação de senha
 
 ---
 
