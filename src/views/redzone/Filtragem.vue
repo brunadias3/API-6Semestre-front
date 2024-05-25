@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue';
-import { RedzoneStore } from '../../stores';
+import { LoginStore, RedzoneStore } from '../../stores';
 import { Redzone } from '../../types/IRedzone';
 import { converterComEspaco } from '../../utils/formatters';
 import useNotification from '../../stores/notification';
@@ -72,6 +72,7 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import * as XLSX from "xlsx";
 
 const redzoneService = RedzoneStore();
+const loginService = LoginStore();
 const loading = ref(false);
 const mostrarCard = ref(false)
 const redzones = ref<Redzone[]>([]);
@@ -131,6 +132,22 @@ const getAll = async () => {
   }
 }
 
+const getRedzoneByIdUser = async () => {
+  loading.value = true;
+  try {
+    if (loginService.usuarioLogado){
+      const response = await redzoneService.getRedzoneByIdUsuario(loginService.usuarioLogado.id)
+      redzones.value = response.data
+    }
+
+  } catch (error) {
+    console.log(error);
+  } finally {
+    loading.value = false;
+
+  }
+}
+
 const exportToXlsx = () => {
   const jsonData = logs.value.map(log => ({...log}));
   const ws = XLSX.utils.json_to_sheet(jsonData);
@@ -157,7 +174,11 @@ const exportToCsv = () => {
 };
 
 onMounted(async () => {
-  await getAll();
+  if (loginService.usuarioLogado && loginService.usuarioLogado.autorizacoes.includes("ROLE_ADMIN")){
+    await getAll();
+  } else {
+    await getRedzoneByIdUser()
+  }
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - 15);
   const endDate = new Date();

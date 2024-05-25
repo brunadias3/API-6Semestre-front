@@ -6,9 +6,10 @@
         <v-main>
             <v-container>
                 <TitleComponent title="Gerenciamento de Departamentos" />
-                <TabelaComponent titulo="Departamentos" :headers="headers"
-                    :itensDepartamento="departamentoStoreDados.departamento" adicionar="Criar departamento"
-                    rota="criarDepartamento" :editar="editar" :desativar="desativarOuAtivar" :isLoading="isLoading" />
+                <TabelaComponent titulo="Departamentos" :headers="loginService.usuarioLogado?.autorizacoes.includes('ROLE_ADMIN')? headers: headersArea"
+                    :itensDepartamento="departamentoStoreDados.departamento" :adicionar="loginService.usuarioLogado?.autorizacoes.includes('ROLE_ADMIN')? 'Criar departamento' : ''"
+                    rota="criarDepartamento" :editar="editar" :desativar="desativarOuAtivar" :isLoading="isLoading"
+                    :visualizar="visualizar" />
             </v-container>
         </v-main>
 
@@ -16,10 +17,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import TabelaComponent from '../TabelaComponent.vue';
 import TitleComponent from '../TitleComponent.vue';
-import { departamentoStore } from '../../stores';
+import { departamentoStore, LoginStore } from '../../stores';
 import { useRouter } from 'vue-router';
 import useNotification from '../../stores/notification';
 
@@ -27,6 +28,8 @@ const notificator = useNotification();
 const departamentoStoreDados = departamentoStore();
 const isLoading = ref(false);
 const router = useRouter();
+const loginService = LoginStore();
+const opcoes = ref();
 
 const headers = [
     { title: 'Id do departamento', value: 'id_departamento' },
@@ -34,9 +37,17 @@ const headers = [
     { title: 'Criado em', value: 'create_at' },
     { title: 'Nome do Responsável', value: 'nome_responsavel' },
     { title: 'Ativar/Desativar', value: 'desativar' },
-    { title: 'Editar', value: 'editar' }
-
+    { title: 'Editar', value: 'editar' },
+    { title: 'Relatórios', value: 'relatorio' }
 ]
+const headersArea = [
+    { title: 'Id do departamento', value: 'id_departamento' },
+    { title: 'Nome do departamento', value: 'nome_usuario' },
+    { title: 'Criado em', value: 'create_at' },
+    { title: 'Nome do Responsável', value: 'nome_responsavel' },
+    { title: 'Relatórios', value: 'relatorio' }
+]
+
 
 const desativarOuAtivar = async (id: number) => {
     isLoading.value = true
@@ -72,20 +83,42 @@ const editar = async (id: number) => {
         isLoading.value = false
     }
 };
+const visualizar = (id: number) => {
+    router.push({ name: 'relatorioDepartamento', params: { id: id } });
+}
 const pegarDados = async () => {
     isLoading.value = true
-    try {
-        await departamentoStoreDados.getDepartamento();
-        notificator.notifySuccess("Sucesso ao listar departamentos!");
-    } catch (error) {
-        console.log(error);
-        notificator.notifyError("Erro ao listar departamentos!");
-    } finally {
-        isLoading.value = false
+    if (loginService.usuarioLogado && loginService.usuarioLogado.autorizacoes.includes("ROLE_ADMIN")) {
+        try {
+            await departamentoStoreDados.getDepartamento();
+            notificator.notifySuccess("Sucesso ao listar departamentos!");
+        } catch (error) {
+            console.log(error);
+            notificator.notifyError("Erro ao listar departamentos!");
+        } finally {
+            isLoading.value = false
+        }
+    } else {
+        try {
+            if (loginService.usuarioLogado) {
+                await departamentoStoreDados.getDepartamentoByIdUsuario(loginService.usuarioLogado.id);
+                notificator.notifySuccess("Sucesso ao listar departamentos!");
+            }
+        } catch (error) {
+            console.log(error);
+            notificator.notifyError("Erro ao listar departamentos!");
+        } finally {
+            isLoading.value = false
+        }
     }
+
 }
 
 onMounted(() => {
     pegarDados()
+    departamentoStoreDados.relatoriosDepartamentos = [];
+    departamentoStoreDados.idRedzonesDepartamento = [];
+    opcoes.value = loginService.usuarioLogado?.autorizacoes.includes("ROLE_ADMIN") ? headers : headersArea
+
 })
 </script>

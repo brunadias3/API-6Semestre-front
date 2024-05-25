@@ -10,26 +10,28 @@
             <v-menu v-model="menu" :close-on-content-click="false" >
               <template v-slot:activator="{ props }">
                 <v-btn v-bind="props" variant="plain">
-                  MASTER
+                  Olá, {{ loginService.usuarioLogado?.nomeUsuario }}
                 </v-btn>
               </template>
               <v-card min-width="300">
-                <!-- <v-list>
-                  <v-list-item @click="menuActive" subtitle="Usuário" title="Everton Ribeiro">
-                  </v-list-item>
-                </v-list>
-
-                <v-divider></v-divider> -->
+                <v-divider v-if="!loginService.usuarioLogado?.autorizacoes.includes('ROLE_GUARD')"></v-divider>
 
                 <v-list>
-                  <v-list-item @click="menuActive('usuarios')">
+                  <v-list-item @click="menuActive('perfil')">
+                    <div class="d-flex ga-3">
+                      <v-icon icon="mdi mdi-account" color="#015280" />
+                      <div class="text-overline">Meu Perfil</div>
+                    </div>
+                  </v-list-item>
+                  <v-divider></v-divider>
+                  <v-list-item v-if="!loginService.usuarioLogado?.autorizacoes.includes('ROLE_GUARD')" @click="menuActive('usuarios')">
                     <div class="d-flex ga-3">
                       <v-icon icon="fa-users" color="#015280" />
                       <div class="text-overline">Meus usuários</div>
                     </div>
                   </v-list-item>
-                  <v-divider></v-divider>
-                  <v-list-item @click="menuActive('departamentos')">
+                  <v-divider v-if="!loginService.usuarioLogado?.autorizacoes.includes('ROLE_GUARD')"></v-divider>
+                  <v-list-item v-if="!loginService.usuarioLogado?.autorizacoes.includes('ROLE_GUARD')" @click="menuActive('departamentos')">
                     <div class="d-flex ga-3">
                       <v-icon icon="fa-book" color="#015280" />
                       <div class="text-overline">Departamentos</div>
@@ -51,7 +53,15 @@
                       <div class="text-overline">Filtragem Redzones</div>
                     </div>
                   </v-list-item>
+                  <v-divider></v-divider>
+                  <v-list-item @click="logout">
+                    <div class="d-flex ga-3">
+                      <v-icon icon="mdi mdi-logout" color="#015280" />
+                      <div class="text-overline">Logout</div>
+                    </div>
+                  </v-list-item>
                 </v-list>
+
                 <!-- <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn variant="text" @click="menu = false">
@@ -70,15 +80,20 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { LoginStore } from '../stores';
+import handleLocalStorage from '../utils/handleLocalStorage';
 
 const router = useRouter();
 const menu = ref(false);
-const message = ref(true);
-const hints = ref(true)
+const loginService = LoginStore();
 
 
 const menuActive = (rota: string) => {
   router.push(`/${rota}`);
 }
 
+const logout = () => {
+  handleLocalStorage.remove('usuarioLogado');
+  return router.push({ name: 'login' });
+};
 </script>

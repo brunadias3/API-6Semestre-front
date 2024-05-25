@@ -12,10 +12,10 @@
       </template>
       <v-data-table loading-text="Procurando informações" :loading="isLoading" items-per-page-text="Itens por página"
         no-data-text="Não possui nenhum registro." :headers="headers" :items="itensRegistro
-          ? itensRegistro
-          : itensDepartamento
-            ? itensDepartamento
-            : intensUsuario
+        ? itensRegistro
+        : itensDepartamento
+          ? itensDepartamento
+          : intensUsuario
         " item-key="id" :items-per-page="25" :search="search">
         <template v-slot:item="{ item }">
           <tr>
@@ -55,9 +55,8 @@
               {{ item.matricula_empresa }}
             </td>
             <td v-if="item.tipo_usuario">
-              <v-chip variant="tonal" :color="item.tipo_usuario === 'Administrador' ? 'blue' : item.tipo_usuario === 'Guarda'? 'green': 'orange'
-        ">
-                {{ item.tipo_usuario }}
+              <v-chip variant="tonal" :color="item.tipo_usuario === 'ROLE_ADMIN' ? 'blue' : item.tipo_usuario === 'ROLE_GUARD' ? 'green' : 'orange'">  
+                {{ item.tipo_usuario === 'ROLE_ADMIN' ? 'Gerente geral' : item.tipo_usuario === 'ROLE_GUARD' ? 'Guarda' : 'Gerente de area'  }}
               </v-chip>
             </td>
             <td v-show="item.lotacao || item.lotacao === 0">
@@ -111,6 +110,23 @@
                 </template>
               </v-tooltip>
             </td>
+            <td @click="
+        visualizar && visualizar(
+          item.id
+            ? item.id
+            : item.id_departamento
+              ? item.id_departamento
+              : item.id_usuario
+        )
+        " v-if="headers.some((header) => header.value === 'relatorio')">
+              <v-tooltip text="Visualizar Registro geral">
+                <template v-slot:activator="{ props }">
+                  <v-icon v-bind="props" class="cursor-pointer" color="#3B82F6" aria-hidden="false">
+                    mdi mdi-eye
+                  </v-icon>
+                </template>
+              </v-tooltip>
+            </td>
           </tr>
         </template>
       </v-data-table>
@@ -145,6 +161,7 @@ const props = defineProps<{
   desativar?: (id: number) => void;
   ativar?: (id: number) => void;
   editar?: (id: number) => void;
+  visualizar?: (id: number) => void;
 }>();
 
 function formatarData(data: string): string {
