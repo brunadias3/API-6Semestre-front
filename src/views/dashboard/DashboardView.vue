@@ -73,28 +73,29 @@
     </v-row>
     <v-divider class="py-2 mt-5"></v-divider>
     <v-row>
-      <v-col cols="5">
+      <v-col>
         <apexchart
           type="pie"
           :options="chartOptions"
           :series="series"
         ></apexchart>
       </v-col>
-      <v-col cols="5">
+      <v-col>
         <apexchart
           type="bar"
           :options="chartOptionsBar"
           :series="seriesBar"
         ></apexchart>
       </v-col>
-      <v-col cols="5">
+      <v-responsive width="100%"></v-responsive>
+      <v-col>
         <apexchart
           type="bar"
           :options="chartOptionsBar2"
           :series="seriesBar2"
         ></apexchart>
       </v-col>
-      <v-col cols="5">
+      <v-col>
         <apexchart
           type="bar"
           :options="chartOptionsBar3"
