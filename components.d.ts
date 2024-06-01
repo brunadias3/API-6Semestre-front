@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    CardDashboard: typeof import('./src/components/dashboard/cardDashboard.vue')['default']
     CardDepartamento: typeof import('./src/components/departamento/cardDepartamento.vue')['default']
     ConferirTokenComponent: typeof import('./src/components/recuperarSenha/ConferirTokenComponent.vue')['default']
     CriarDepartamentoComponent: typeof import('./src/components/departamento/CriarDepartamentoComponent.vue')['default']
