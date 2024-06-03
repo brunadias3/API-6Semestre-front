@@ -69,7 +69,41 @@ const UsuarioStore = defineStore("usuario", () => {
   }
   async function getGuardas() {
     try {
-      const res = await getRequest(`/tipos/guardas`)
+      const res = await getRequest(`usuarios/tipos/guardas`)
+      return { data: res.data, error: null };
+    } catch (error) {
+      throw new Error(
+        (error instanceof AxiosError ? error.response?.data.error : null) ||
+          error
+      );
+    }
+  }
+
+  async function getTotalUsuarios() {
+    try {
+      const res = await getRequest(`usuarios/total`)
+      return { data: res.data, error: null };
+    } catch (error) {
+      throw new Error(
+        (error instanceof AxiosError ? error.response?.data.error : null) ||
+          error
+      );
+    }
+  }
+  async function getUserMaisRedzones() {
+    try {
+      const res = await getRequest(`usuarios/usuariocommaisredzones`)
+      return { data: res.data, error: null };
+    } catch (error) {
+      throw new Error(
+        (error instanceof AxiosError ? error.response?.data.error : null) ||
+          error
+      );
+    }
+  }
+  async function getUsersByType() {
+    try {
+      const res = await getRequest(`usuarios/contagemportipousuario`)
       return { data: res.data, error: null };
     } catch (error) {
       throw new Error(
@@ -86,7 +120,10 @@ const UsuarioStore = defineStore("usuario", () => {
     getUsuarioById,
     desativarOuAtivarUsuario,
     update,
-    getGuardas
+    getGuardas,
+    getTotalUsuarios,
+    getUserMaisRedzones,
+    getUsersByType,
   };
 });
 
