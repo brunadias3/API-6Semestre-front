@@ -19,12 +19,12 @@
           :date="new Date().toLocaleTimeString('pt-BR')"
         />
       </v-col>
-      <v-col>
+      <v-col v-if="departamentoService.contagemTotal">
         <CardDashboard
           title="Departamentos"
           description="Quantidade total de departamentos"
           icon="fa-book"
-          result="45"
+          :result="departamentoService.contagemTotal"
           :date="new Date().toLocaleTimeString('pt-BR')"
         />
       </v-col>
@@ -59,22 +59,22 @@
           :date="new Date().toLocaleTimeString('pt-BR')"
         />
       </v-col>
-      <v-col>
+      <v-col v-if="userMaisDepartamentos">
         <CardDashboard
           title="Usuário com mais departamentos"
           description="Usuário que mais tem departamentos registrados"
           icon="mdi mdi-account"
-          result="Gabriel"
+          :result="userMaisDepartamentos"
           sizeResult="text-h5"
           :date="new Date().toLocaleTimeString('pt-BR')"
         />
       </v-col>
-      <v-col>
+      <v-col v-if="departamentoService.departamentosMostRedzones">
         <CardDashboard
           title="Departamento com mais redzones"
           description="Departamento que mais tem redzones registradas"
           icon="fa-book"
-          result="Cozinha"
+          :result="departamentoService.departamentosMostRedzones"
           sizeResult="text-h5"
           :date="new Date().toLocaleTimeString('pt-BR')"
         />
@@ -82,14 +82,14 @@
     </v-row>
     <v-divider class="py-2 mt-5"></v-divider>
     <v-row>
-      <v-col v-if="seriesUserType" sm="5">
+      <v-col v-if="seriesUserType">
         <apexchart
           type="pie"
           :options="chartOptionsUserType"
           :series="seriesUserType"
         ></apexchart>
       </v-col>
-      <v-col v-if="seriesBarRedzonesDepartamentos" sm="7">
+      <v-col v-if="seriesBarRedzonesDepartamentos">
         <apexchart
           type="bar"
           :options="chartOptionsBarRedzonesDepartamentos"
@@ -97,18 +97,18 @@
         ></apexchart>
       </v-col>
       <v-responsive width="100%"></v-responsive>
-      <v-col v-if="redzonesUser" sm="6">
+      <v-col v-if="redzonesUser">
         <apexchart
           type="bar"
           :options="chartOptionsBarRedzonesUser"
           :series="seriesBarRedzonesUser"
         ></apexchart>
       </v-col>
-      <v-col sm="6">
+      <v-col v-if="seriesBarDepartamentoUser">
         <apexchart
           type="bar"
-          :options="chartOptionsBarrr"
-          :series="seriesBarrr"
+          :options="chartOptionsBarDepartamentoUser"
+          :series="seriesBarDepartamentoUser"
         ></apexchart>
       </v-col>
     </v-row>
@@ -134,7 +134,12 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
 import CardDashboard from "../../components/dashboard/cardDashboard.vue";
-import { RedzoneStore, registroRedzoneStore, UsuarioStore } from "../../stores";
+import {
+  departamentoStore,
+  RedzoneStore,
+  registroRedzoneStore,
+  UsuarioStore,
+} from "../../stores";
 import useNotification from "../../stores/notification";
 
 const chartOptionsBarRedzonesDepartamentos = reactive({
@@ -224,7 +229,7 @@ const seriesBarRedzonesUser = reactive([
   },
 ]);
 
-const chartOptionsBarrr = reactive({
+const chartOptionsBarDepartamentoUser = reactive({
   chart: {
     type: "bar",
   },
@@ -248,7 +253,7 @@ const chartOptionsBarrr = reactive({
     title: {
       text: "Usuários",
     },
-    categories: ["Marcelo", "Gabriel", "Everton", "Dionísio"],
+    categories: [],
   },
   yaxis: {
     title: {
@@ -261,10 +266,10 @@ const chartOptionsBarrr = reactive({
   colors: "#ef4444",
 });
 
-const seriesBarrr = [
+const seriesBarDepartamentoUser = [
   {
-    name: "Redzones",
-    data: [23, 18, 13, 10],
+    name: "Departamentos",
+    data: [],
   },
 ];
 
@@ -371,6 +376,7 @@ const notificator = useNotification();
 const redzoneService = RedzoneStore();
 const usuarioService = UsuarioStore();
 const logService = registroRedzoneStore();
+const departamentoService = departamentoStore();
 
 const totalRedzones = ref("");
 const totalUsers = ref("");
@@ -378,6 +384,8 @@ const userMaisRedzones = ref({});
 const usersByType = ref();
 const redzonesDepartamento = ref();
 const redzonesUser = ref();
+const userMaisDepartamentos = ref();
+const departamentosByUser = ref();
 const loading = ref(false);
 
 function adaptData(data) {
@@ -444,6 +452,14 @@ onMounted(async () => {
     //
     totalUsers.value = (await usuarioService.getTotalUsuarios()).data;
     //
+    await departamentoService.getTotalDepartamentos();
+    //
+    await departamentoService.getDepartamentosMostRedzones();
+    //
+    userMaisDepartamentos.value = (
+      await usuarioService.getUserMostDepartamentos()
+    ).data.nome_usuario;
+    //
     userMaisRedzones.value = (
       await usuarioService.getUserMaisRedzones()
     ).data[0];
@@ -467,7 +483,17 @@ onMounted(async () => {
       seriesBarRedzonesUser[0].data.push(qtde);
     });
     //
-    logService.getRedzoneMaisLog();
+    departamentosByUser.value = (
+      await usuarioService.getDepartamentosPorUsuario()
+    ).data;
+    departamentosByUser.value.forEach((item) => {
+      const [label, qtde] = item;
+      chartOptionsBarDepartamentoUser.xaxis.categories.push(label);
+      seriesBarDepartamentoUser[0].data.push(qtde);
+    });
+    //
+    console.log(departamentosByUser.value);
+    await logService.getRedzoneMaisLog();
   } catch (error) {
     notificator.notifyError(error.response.data);
   } finally {
