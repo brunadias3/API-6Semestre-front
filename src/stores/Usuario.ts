@@ -112,6 +112,28 @@ const UsuarioStore = defineStore("usuario", () => {
       );
     }
   }
+  async function getUserMostDepartamentos() {
+    try {
+      const res = await getRequest(`usuarios/maisdepartamentos`)
+      return { data: res.data, error: null };
+    } catch (error) {
+      throw new Error(
+        (error instanceof AxiosError ? error.response?.data.error : null) ||
+          error
+      );
+    }
+  }
+  async function getDepartamentosPorUsuario() {
+    try {
+      const res = await getRequest(`usuarios/departamentosporusuario`)
+      return { data: res.data, error: null };
+    } catch (error) {
+      throw new Error(
+        (error instanceof AxiosError ? error.response?.data.error : null) ||
+          error
+      );
+    }
+  }
 
   return {
     usuario,
@@ -124,6 +146,8 @@ const UsuarioStore = defineStore("usuario", () => {
     getTotalUsuarios,
     getUserMaisRedzones,
     getUsersByType,
+    getUserMostDepartamentos,
+    getDepartamentosPorUsuario,
   };
 });
 
