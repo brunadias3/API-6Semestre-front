@@ -113,6 +113,29 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col cols="5">
+        <v-select
+          v-model="redzoneSelected"
+          :items="redzones"
+          item-title="nome_redzone"
+          item-value="id_redzone"
+          variant="outlined"
+          label="Selecione uma redzone"
+        ></v-select>
+      </v-col>
+      <v-col cols="5">
+        <VueDatePicker v-model="date" :range="{ maxRange: 15 }"></VueDatePicker>
+      </v-col>
+      <v-col class="justify-end">
+        <v-btn
+          color="blue"
+          :disabled="!redzoneSelected || !isValidDateRange"
+          @click="searchLogs"
+          >Pesquisar</v-btn
+        >
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col>
         <apexchart
           type="line"
@@ -132,7 +155,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import CardDashboard from "../../components/dashboard/cardDashboard.vue";
 import {
   departamentoStore,
@@ -140,7 +163,10 @@ import {
   registroRedzoneStore,
   UsuarioStore,
 } from "../../stores";
+import { Redzone } from "../../types/IRedzone";
 import useNotification from "../../stores/notification";
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 
 const chartOptionsBarRedzonesDepartamentos = reactive({
   chart: {
@@ -387,6 +413,10 @@ const redzonesUser = ref();
 const userMaisDepartamentos = ref();
 const departamentosByUser = ref();
 const loading = ref(false);
+const redzoneSelected = ref<string | null>(null);
+const date = ref<Date[]>();
+const logs = ref();
+const redzones = ref<Redzone[]>([]);
 
 function adaptData(data) {
   const totals = {
@@ -445,6 +475,62 @@ const chartOptionsUserType = reactive({
 
 const seriesUserType = ref();
 
+const isValidDateRange = computed(() => {
+  return (
+    Array.isArray(date.value) &&
+    date.value.length === 2 &&
+    date.value[0] < date.value[1]
+  );
+});
+
+const searchLogs = async () => {
+  loading.value = true;
+  try {
+    if (isValidDateRange.value) {
+      const startDate = date.value![0].toISOString().split(".")[0];
+      const endDate = date.value![1].toISOString().split(".")[0];
+      const response = await redzoneService.getRedzoneDates(
+        redzoneSelected.value!,
+        startDate,
+        endDate
+      );
+      logs.value = response.data.map((log: any) => ({
+        id: log.id,
+        data: log.data,
+        lotacao: log.lotacao,
+        entradaAsString: log.entrada ? "Entrada" : "Saida",
+        redzoneNome: log.redzoneId.nome_redzone,
+      }));
+      console.log(response.data);
+      // response.data.forEach((log) => {
+      //   chartOptionsLine.xaxis.categories.push(log.data);
+      //   seriesLine[0].data.push(log);
+      // });
+      notificator.notifySuccess("Sucesso ao buscar logs!");
+    } else {
+      notificator.notifyError(
+        "Por favor, selecione um intervalo de datas válido."
+      );
+    }
+  } catch (error) {
+    notificator.notifyError("Erro ao buscar logs");
+  } finally {
+    loading.value = false;
+  }
+};
+
+const getAll = async () => {
+  loading.value = true;
+  try {
+    const response = await redzoneService.getAll();
+    redzones.value = response.data;
+  } catch (error) {
+    notificator.notifyError("Erro ao carregar redzones");
+  } finally {
+    loading.value = false;
+  }
+};
+
 onMounted(async () => {
   loading.value = true;
   try {
@@ -492,8 +578,13 @@ onMounted(async () => {
       seriesBarDepartamentoUser[0].data.push(qtde);
     });
     //
-    console.log(departamentosByUser.value);
     await logService.getRedzoneMaisLog();
+    //
+    await getAll();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 7);
+    const endDate = new Date();
+    date.value = [startDate, endDate];
   } catch (error) {
     notificator.notifyError(error.response.data);
   } finally {
