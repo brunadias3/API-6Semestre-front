@@ -133,7 +133,7 @@ const departamentoStore = defineStore('departamento', () => {
 
   const getDepartamentosMostRedzones = async () => {
     const response = await getRequest(`departamentos/maisredzones`);
-    departamentosMostRedzones.value = response.data.nome_departamento;
+    departamentosMostRedzones.value = response.data[0];
   }
 
   return {

@@ -62,9 +62,9 @@
       <v-col v-if="userMaisDepartamentos">
         <CardDashboard
           title="Usuário com mais departamentos"
-          description="Usuário que mais tem departamentos registrados"
+          :description="userMaisDepartamentos[0][1] + ' departamentos registrados'"
           icon="mdi mdi-account"
-          :result="userMaisDepartamentos"
+          :result="userMaisDepartamentos[0][0].nome_usuario"
           sizeResult="text-h5"
           :date="new Date().toLocaleTimeString('pt-BR')"
         />
@@ -72,9 +72,9 @@
       <v-col v-if="departamentoService.departamentosMostRedzones">
         <CardDashboard
           title="Departamento com mais redzones"
-          description="Departamento que mais tem redzones registradas"
+          :description="departamentoService.departamentosMostRedzones[1] + ' redzones registradas'"
           icon="fa-book"
-          :result="departamentoService.departamentosMostRedzones"
+          :result="departamentoService.departamentosMostRedzones[0].nome_departamento"
           sizeResult="text-h5"
           :date="new Date().toLocaleTimeString('pt-BR')"
         />
@@ -82,14 +82,14 @@
     </v-row>
     <v-divider class="py-2 mt-5"></v-divider>
     <v-row>
-      <v-col v-if="seriesUserType">
+      <v-col v-if="seriesUserType" cols="6">
         <apexchart
           type="pie"
           :options="chartOptionsUserType"
           :series="seriesUserType"
         ></apexchart>
       </v-col>
-      <v-col v-if="seriesBarRedzonesDepartamentos">
+      <v-col v-if="seriesBarRedzonesDepartamentos" cols="6">
         <apexchart
           type="bar"
           :options="chartOptionsBarRedzonesDepartamentos"
@@ -97,14 +97,14 @@
         ></apexchart>
       </v-col>
       <v-responsive width="100%"></v-responsive>
-      <v-col v-if="redzonesUser">
+      <v-col v-if="redzonesUser" cols="6">
         <apexchart
           type="bar"
           :options="chartOptionsBarRedzonesUser"
           :series="seriesBarRedzonesUser"
         ></apexchart>
       </v-col>
-      <v-col v-if="seriesBarDepartamentoUser">
+      <v-col v-if="seriesBarDepartamentoUser" cols="6">
         <apexchart
           type="bar"
           :options="chartOptionsBarDepartamentoUser"
@@ -172,6 +172,20 @@ const chartOptionsBarRedzonesDepartamentos = reactive({
   chart: {
     type: "bar",
   },
+  title: {
+    text: "Quantidade de redzones por departamento",
+    align: "left",
+    margin: 10,
+    offsetX: 0,
+    offsetY: 0,
+    floating: false,
+    style: {
+      fontSize: "14px",
+      fontWeight: "bold",
+      fontFamily: undefined,
+      color: "#263238",
+    },
+  },
   plotOptions: {
     bar: {
       borderRadius: 4,
@@ -196,7 +210,7 @@ const chartOptionsBarRedzonesDepartamentos = reactive({
   },
   yaxis: {
     title: {
-      text: "Quantidade de Redzones",
+      text: "Redzones",
     },
   },
   fill: {
@@ -214,6 +228,20 @@ const seriesBarRedzonesDepartamentos = [
 const chartOptionsBarRedzonesUser = reactive({
   chart: {
     type: "bar",
+  },
+  title: {
+    text: "Quantidade de redzones por usuário",
+    align: "left",
+    margin: 10,
+    offsetX: 0,
+    offsetY: 0,
+    floating: false,
+    style: {
+      fontSize: "14px",
+      fontWeight: "bold",
+      fontFamily: undefined,
+      color: "#263238",
+    },
   },
   plotOptions: {
     bar: {
@@ -239,7 +267,7 @@ const chartOptionsBarRedzonesUser = reactive({
   },
   yaxis: {
     title: {
-      text: "Qtde de Redzones",
+      text: "Redzones",
     },
   },
   fill: {
@@ -259,6 +287,20 @@ const chartOptionsBarDepartamentoUser = reactive({
   chart: {
     type: "bar",
   },
+  title: {
+    text: "Quantidade de departamentos por usuário",
+    align: "left",
+    margin: 10,
+    offsetX: 0,
+    offsetY: 0,
+    floating: false,
+    style: {
+      fontSize: "14px",
+      fontWeight: "bold",
+      fontFamily: undefined,
+      color: "#263238",
+    },
+  },
   plotOptions: {
     bar: {
       borderRadius: 4,
@@ -283,7 +325,7 @@ const chartOptionsBarDepartamentoUser = reactive({
   },
   yaxis: {
     title: {
-      text: "Qtde Departamentos",
+      text: "Departamentos",
     },
   },
   fill: {
@@ -544,7 +586,7 @@ onMounted(async () => {
     //
     userMaisDepartamentos.value = (
       await usuarioService.getUserMostDepartamentos()
-    ).data.nome_usuario;
+    ).data;
     //
     userMaisRedzones.value = (
       await usuarioService.getUserMaisRedzones()
