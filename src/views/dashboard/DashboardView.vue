@@ -153,8 +153,8 @@
       <v-col v-if="logService.logsEntradaSaida && redzoneSelected">
         <apexchart
           type="line"
-          :options="chartOptionsLinee"
-          :series="seriesLinee"
+          :options="chartOptionsEntradaSaida"
+          :series="seriesEntradaSaida"
         ></apexchart>
       </v-col>
     </v-row>
@@ -348,7 +348,7 @@ const seriesBarDepartamentoUser = [
   },
 ];
 
-const seriesLinee = [
+const seriesEntradaSaida = [
   {
     name: "Logs de Entrada",
     data: [],
@@ -359,7 +359,7 @@ const seriesLinee = [
   },
 ];
 
-const chartOptionsLinee = reactive({
+const chartOptionsEntradaSaida = reactive({
   chart: {
     type: "line",
     height: 350,
@@ -559,9 +559,9 @@ const searchLogs = async () => {
       );
 
       logService.logsEntradaSaida.forEach((item) => {
-        chartOptionsLinee.xaxis.categories.push(item.data);
-        seriesLinee[0].data.push(item.entradas);
-        seriesLinee[1].data.push(item.saidas);
+        chartOptionsEntradaSaida.xaxis.categories.push(item.data);
+        seriesEntradaSaida[0].data.push(item.entradas);
+        seriesEntradaSaida[1].data.push(item.saidas);
       });
       notificator.notifySuccess("Sucesso ao buscar logs!");
     } else {
