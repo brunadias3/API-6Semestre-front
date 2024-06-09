@@ -6,6 +6,7 @@ import { IregistroRedzone } from "../interfaces/IRedzoneRegistro";
 const registroRedzoneStore = defineStore('registro', () => {
   const dadosRedzone = ref<IregistroRedzone[]>([])
   const dadosAlternativos = ref()
+  const logsEntradaSaida = ref()
   const logsGrupo = ref()
 
   const pegarHistorico = async () => {
@@ -31,15 +32,22 @@ const registroRedzoneStore = defineStore('registro', () => {
     logsGrupo.value = response.data
   }
 
+  const getLogsPerDateRedzoneEntradaSaida = async (redzoneId: number, startDate: string, endDate: string) => {
+    const response = await getRequest(`log/gra?redzoneId=${redzoneId}&startDate=${startDate}&endDate=${endDate}`)
+    logsEntradaSaida.value = response.data
+  }
+
 
   return {
     dadosRedzone,
     dadosAlternativos,
     logsGrupo,
+    logsEntradaSaida,
     pegarHistorico,
     pegarHistoricoRedZone,
     getRedzoneMaisLog,
-    getLogsPerDateGrupo
+    getLogsPerDateGrupo,
+    getLogsPerDateRedzoneEntradaSaida
   }
 })
 

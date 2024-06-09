@@ -143,14 +143,14 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col v-if="logService.logsGrupo">
+      <v-col v-if="logService.logsGrupo && redzoneSelected">
         <apexchart
           type="line"
-          :options="chartOptionsLine"
-          :series="seriesLine"
+          :options="chartOptionsLogsRedzone"
+          :series="seriesLogsRedzone"
         ></apexchart>
       </v-col>
-      <v-col>
+      <v-col v-if="logService.logsEntradaSaida && redzoneSelected">
         <apexchart
           type="line"
           :options="chartOptionsLinee"
@@ -351,11 +351,11 @@ const seriesBarDepartamentoUser = [
 const seriesLinee = [
   {
     name: "Logs de Entrada",
-    data: [10, 20, 15, 30, 25, 35, 40],
+    data: [],
   },
   {
     name: "Logs de Saída",
-    data: [5, 15, 10, 20, 20, 25, 30],
+    data: [],
   },
 ];
 
@@ -374,7 +374,7 @@ const chartOptionsLinee = reactive({
     curve: "smooth",
   },
   title: {
-    text: "Qtde de Logs de Entrada/Saída de uma Redzone nos Últimos 7 Dias",
+    text: "Qtde de Logs de Entrada/Saída de uma Redzone",
     align: "left",
   },
   grid: {
@@ -384,9 +384,13 @@ const chartOptionsLinee = reactive({
     },
   },
   xaxis: {
-    categories: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+    type: "datetime",
+    categories: [],
     title: {
-      text: "Dias da Semana",
+      text: "Dias",
+    },
+    labels: {
+      format: "dd-MM-yy",
     },
   },
   yaxis: {
@@ -450,9 +454,9 @@ function adaptData(data) {
   return [totals["Adm Geral"], totals["Gerente de área"], totals["Guarda"]];
 }
 
-const seriesLine = reactive([{ name: "Logs", data: [] }]);
+const seriesLogsRedzone = reactive([{ name: "Logs", data: [] }]);
 
-const chartOptionsLine = reactive({
+const chartOptionsLogsRedzone = reactive({
   chart: {
     type: "line",
     height: 350,
@@ -544,8 +548,20 @@ const searchLogs = async () => {
         endDate
       );
       logService.logsGrupo.forEach((item) => {
-        chartOptionsLine.xaxis.categories.push(item[0]);
-        seriesLine[0].data.push(item[1]);
+        chartOptionsLogsRedzone.xaxis.categories.push(item[0]);
+        seriesLogsRedzone[0].data.push(item[1]);
+      });
+
+      await logService.getLogsPerDateRedzoneEntradaSaida(
+        redzoneSelected.value!,
+        startDate,
+        endDate
+      );
+
+      logService.logsEntradaSaida.forEach((item) => {
+        chartOptionsLinee.xaxis.categories.push(item.data);
+        seriesLinee[0].data.push(item.entradas);
+        seriesLinee[1].data.push(item.saidas);
       });
       notificator.notifySuccess("Sucesso ao buscar logs!");
     } else {
