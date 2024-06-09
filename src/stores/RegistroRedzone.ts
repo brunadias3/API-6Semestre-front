@@ -8,6 +8,7 @@ const registroRedzoneStore = defineStore('registro', () => {
   const dadosAlternativos = ref()
   const logsEntradaSaida = ref()
   const logsGrupo = ref()
+  const logsDepartamento = ref()
 
   const pegarHistorico = async () => {
     const response = await getRequest('log')
@@ -37,17 +38,23 @@ const registroRedzoneStore = defineStore('registro', () => {
     logsEntradaSaida.value = response.data
   }
 
+  const getLogsDepartamento = async (departamentoId: number, startDate: string, endDate: string) => {
+    const response = await getRequest(`log/logs?departamentoId=${departamentoId}&startDate=${startDate}&endDate=${endDate}`)
+    logsDepartamento.value = response.data
+  }
 
   return {
     dadosRedzone,
     dadosAlternativos,
     logsGrupo,
     logsEntradaSaida,
+    logsDepartamento,
     pegarHistorico,
     pegarHistoricoRedZone,
     getRedzoneMaisLog,
     getLogsPerDateGrupo,
-    getLogsPerDateRedzoneEntradaSaida
+    getLogsPerDateRedzoneEntradaSaida,
+    getLogsDepartamento
   }
 })
 

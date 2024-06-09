@@ -37,7 +37,7 @@
           :date="new Date().toLocaleTimeString('pt-BR')"
         />
       </v-col>
-      <v-divider class="py-1 mt-2"></v-divider>
+      <v-divider class="py-1 my-2"></v-divider>
       <v-responsive width="100%"></v-responsive>
       <v-col v-if="logService.dadosAlternativos">
         <CardDashboard
@@ -87,7 +87,7 @@
         />
       </v-col>
     </v-row>
-    <v-divider class="py-2 mt-5"></v-divider>
+    <v-divider class="py-2 my-5"></v-divider>
     <v-row>
       <v-col v-if="seriesUserType" cols="6">
         <apexchart
@@ -131,7 +131,7 @@
         ></v-select>
       </v-col>
       <v-col cols="5">
-        <VueDatePicker v-model="date" :range="{ maxRange: 15 }"></VueDatePicker>
+        <VueDatePicker v-model="date" range></VueDatePicker>
       </v-col>
       <v-col class="justify-end">
         <v-btn
@@ -155,6 +155,42 @@
           type="line"
           :options="chartOptionsEntradaSaida"
           :series="seriesEntradaSaida"
+        ></apexchart>
+      </v-col>
+    </v-row>
+    <v-divider class="py-1 my-2"></v-divider>
+    <v-row>
+      <v-col cols="5">
+        <v-select
+          v-model="departamentoSelected"
+          :items="departamentoService.departamento"
+          item-title="nome_departamento"
+          item-value="id_departamento"
+          variant="outlined"
+          label="Selecione um departamento"
+        ></v-select>
+      </v-col>
+      <v-col cols="5">
+        <VueDatePicker v-model="dateDepartamento" range></VueDatePicker>
+      </v-col>
+      <v-col class="justify-end">
+        <v-btn
+          color="blue"
+          :disabled="!departamentoSelected || !isValidDateRangeDepartamento"
+          @click="searchLogsDepartamento"
+          >Pesquisar</v-btn
+        >
+      </v-col>
+    </v-row>
+    <v-row class="justify-center">
+      <v-col
+        cols="7"
+        v-if="logService.logsDepartamento && departamentoSelected"
+      >
+        <apexchart
+          type="line"
+          :options="chartOptionsLogsDepartamento"
+          :series="seriesLogsDepartamento"
         ></apexchart>
       </v-col>
     </v-row>
@@ -406,6 +442,54 @@ const chartOptionsEntradaSaida = reactive({
   },
 });
 
+const chartOptionsLogsDepartamento = reactive({
+  chart: {
+    type: "line",
+    height: 350,
+    zoom: {
+      enabled: true,
+    },
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  stroke: {
+    curve: "smooth",
+  },
+  title: {
+    text: "Qtde de Logs das Redzones do Departamento",
+    align: "left",
+  },
+  grid: {
+    row: {
+      colors: ["#f3f3f3", "transparent"],
+      opacity: 0.5,
+    },
+  },
+  xaxis: {
+    type: "datetime",
+    categories: [],
+    title: {
+      text: "Dias",
+    },
+    labels: {
+      format: "dd-MM-yy",
+    },
+  },
+  yaxis: {
+    title: {
+      text: "Quantidade de Logs",
+    },
+  },
+  tooltip: {
+    y: {
+      formatter: (val: number) => `${val} logs`,
+    },
+  },
+});
+
+let seriesLogsDepartamento = reactive([]);
+
 const notificator = useNotification();
 const redzoneService = RedzoneStore();
 const usuarioService = UsuarioStore();
@@ -423,7 +507,9 @@ const departamentosByUser = ref();
 const loading = ref(false);
 const redzoneSelected = ref<number | null>(null);
 const date = ref<Date[]>();
+const dateDepartamento = ref<Date[]>();
 const redzones = ref<Redzone[]>([]);
+const departamentoSelected = ref<number | null>(null);
 
 function adaptData(data) {
   const totals = {
@@ -534,6 +620,14 @@ const isValidDateRange = computed(() => {
   );
 });
 
+const isValidDateRangeDepartamento = computed(() => {
+  return (
+    Array.isArray(dateDepartamento.value) &&
+    dateDepartamento.value.length === 2 &&
+    dateDepartamento.value[0] < dateDepartamento.value[1]
+  );
+});
+
 const searchLogs = async () => {
   loading.value = true;
   try {
@@ -542,6 +636,14 @@ const searchLogs = async () => {
       startDate = startDate.toLocaleString().substr(0, 10);
       let endDate = date.value![1].toISOString().split(".")[0];
       endDate = endDate.toLocaleString().substr(0, 10);
+
+      chartOptionsLogsRedzone.xaxis.categories = [];
+      seriesLogsRedzone[0].data = [];
+
+      chartOptionsEntradaSaida.xaxis.categories = [];
+      seriesEntradaSaida[0].data = [];
+      seriesEntradaSaida[1].data = [];
+
       await logService.getLogsPerDateGrupo(
         redzoneSelected.value!,
         startDate,
@@ -576,6 +678,76 @@ const searchLogs = async () => {
   }
 };
 
+const searchLogsDepartamento = async () => {
+  loading.value = true;
+  try {
+    if (isValidDateRangeDepartamento.value) {
+      let startDate = dateDepartamento.value![0].toISOString().split(".")[0];
+      startDate = startDate.toLocaleString().substr(0, 10);
+      let endDate = dateDepartamento.value![1].toISOString().split(".")[0];
+      endDate = endDate.toLocaleString().substr(0, 10);
+      chartOptionsLogsDepartamento.xaxis.categories = [];
+      seriesLogsDepartamento = [];
+      await logService.getLogsDepartamento(
+        departamentoSelected.value!,
+        startDate,
+        endDate
+      );
+
+      const logsPorDataERedzone = {};
+      const logsPorRedzone = logService.logsDepartamento;
+      for (const data in logsPorRedzone) {
+        for (const log of logsPorRedzone[data]) {
+          if (!logsPorDataERedzone[log.date]) {
+            logsPorDataERedzone[log.date] = {};
+          }
+          logsPorDataERedzone[log.date][log.redzoneName] = log.logCount;
+        }
+      }
+
+      const sortedDates = Object.keys(logsPorDataERedzone).sort(
+        (a, b) => new Date(a) - new Date(b)
+      );
+
+      const redzoneNames = new Set();
+      sortedDates.forEach((date) => {
+        Object.keys(logsPorDataERedzone[date]).forEach((redzone) => {
+          redzoneNames.add(redzone);
+        });
+      });
+
+      redzoneNames.forEach((name) => {
+        seriesLogsDepartamento.push({
+          name: name,
+          data: [],
+        });
+      });
+
+      sortedDates.forEach((date) => {
+        const timestamp = new Date(date).getTime();
+        chartOptionsLogsDepartamento.xaxis.categories.push(timestamp);
+
+        seriesLogsDepartamento.forEach((series) => {
+          if (logsPorDataERedzone[date][series.name]) {
+            series.data.push(logsPorDataERedzone[date][series.name]);
+          } else {
+            series.data.push(0);
+          }
+        });
+      });
+      notificator.notifySuccess("Sucesso ao buscar logs!");
+    } else {
+      notificator.notifyError(
+        "Por favor, selecione um intervalo de datas válido."
+      );
+    }
+  } catch (error) {
+    notificator.notifyError("Erro ao buscar logs");
+  } finally {
+    loading.value = false;
+  }
+};
+
 const getAll = async () => {
   loading.value = true;
   try {
@@ -583,6 +755,17 @@ const getAll = async () => {
     redzones.value = response.data;
   } catch (error) {
     notificator.notifyError("Erro ao carregar redzones");
+  } finally {
+    loading.value = false;
+  }
+};
+
+const getAllDepartamentos = async () => {
+  loading.value = true;
+  try {
+    await departamentoService.getDepartamento();
+  } catch (error) {
+    notificator.notifyError("Erro ao carregar departamentos");
   } finally {
     loading.value = false;
   }
@@ -638,10 +821,12 @@ onMounted(async () => {
     await logService.getRedzoneMaisLog();
     //
     await getAll();
+    await getAllDepartamentos();
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 30);
     const endDate = new Date();
     date.value = [startDate, endDate];
+    dateDepartamento.value = [startDate, endDate];
   } catch (error) {
     notificator.notifyError(error.response.data);
   } finally {
