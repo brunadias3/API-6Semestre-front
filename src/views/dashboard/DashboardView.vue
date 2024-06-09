@@ -62,7 +62,9 @@
       <v-col v-if="userMaisDepartamentos">
         <CardDashboard
           title="Usuário com mais departamentos"
-          :description="userMaisDepartamentos[0][1] + ' departamentos registrados'"
+          :description="
+            userMaisDepartamentos[0][1] + ' departamentos registrados'
+          "
           icon="mdi mdi-account"
           :result="userMaisDepartamentos[0][0].nome_usuario"
           sizeResult="text-h5"
@@ -72,9 +74,14 @@
       <v-col v-if="departamentoService.departamentosMostRedzones">
         <CardDashboard
           title="Departamento com mais redzones"
-          :description="departamentoService.departamentosMostRedzones[1] + ' redzones registradas'"
+          :description="
+            departamentoService.departamentosMostRedzones[1] +
+            ' redzones registradas'
+          "
           icon="fa-book"
-          :result="departamentoService.departamentosMostRedzones[0].nome_departamento"
+          :result="
+            departamentoService.departamentosMostRedzones[0].nome_departamento
+          "
           sizeResult="text-h5"
           :date="new Date().toLocaleTimeString('pt-BR')"
         />
@@ -136,7 +143,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col>
+      <v-col v-if="logService.logsGrupo">
         <apexchart
           type="line"
           :options="chartOptionsLine"
@@ -341,51 +348,6 @@ const seriesBarDepartamentoUser = [
   },
 ];
 
-const seriesLine = [
-  {
-    name: "Logs",
-    data: [10, 20, 15, 30, 25, 35, 40],
-  },
-];
-
-const chartOptionsLine = reactive({
-  chart: {
-    type: "line",
-    height: 350,
-    zoom: {
-      enabled: false,
-    },
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  stroke: {
-    curve: "smooth",
-  },
-  title: {
-    text: "Quantidade de Logs de uma Redzone nos Últimos 7 Dias",
-    align: "left",
-  },
-  grid: {
-    row: {
-      colors: ["#f3f3f3", "transparent"],
-      opacity: 0.5,
-    },
-  },
-  xaxis: {
-    categories: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
-    title: {
-      text: "Dias da Semana",
-    },
-  },
-  yaxis: {
-    title: {
-      text: "Quantidade de Logs",
-    },
-  },
-  colors: ["#082f49"],
-});
-
 const seriesLinee = [
   {
     name: "Logs de Entrada",
@@ -455,9 +417,8 @@ const redzonesUser = ref();
 const userMaisDepartamentos = ref();
 const departamentosByUser = ref();
 const loading = ref(false);
-const redzoneSelected = ref<string | null>(null);
+const redzoneSelected = ref<number | null>(null);
 const date = ref<Date[]>();
-const logs = ref();
 const redzones = ref<Redzone[]>([]);
 
 function adaptData(data) {
@@ -488,6 +449,50 @@ function adaptData(data) {
 
   return [totals["Adm Geral"], totals["Gerente de área"], totals["Guarda"]];
 }
+
+const seriesLine = reactive([{ name: "Logs", data: [] }]);
+
+const chartOptionsLine = reactive({
+  chart: {
+    type: "line",
+    height: 350,
+    zoom: {
+      enabled: false,
+    },
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  stroke: {
+    curve: "smooth",
+  },
+  title: {
+    text: "Quantidade de Logs de uma Redzone",
+    align: "left",
+  },
+  grid: {
+    row: {
+      colors: ["#f3f3f3", "transparent"],
+      opacity: 0.5,
+    },
+  },
+  xaxis: {
+    type: "datetime",
+    categories: [],
+    title: {
+      text: "Dias",
+    },
+    labels: {
+      format: "dd-MM-yy",
+    },
+  },
+  yaxis: {
+    title: {
+      text: "Quantidade de Logs",
+    },
+  },
+  colors: ["#082f49"],
+});
 
 const chartOptionsUserType = reactive({
   chart: {
@@ -529,25 +534,19 @@ const searchLogs = async () => {
   loading.value = true;
   try {
     if (isValidDateRange.value) {
-      const startDate = date.value![0].toISOString().split(".")[0];
-      const endDate = date.value![1].toISOString().split(".")[0];
-      const response = await redzoneService.getRedzoneDates(
+      let startDate = date.value![0].toISOString().split(".")[0];
+      startDate = startDate.toLocaleString().substr(0, 10);
+      let endDate = date.value![1].toISOString().split(".")[0];
+      endDate = endDate.toLocaleString().substr(0, 10);
+      await logService.getLogsPerDateGrupo(
         redzoneSelected.value!,
         startDate,
         endDate
       );
-      logs.value = response.data.map((log: any) => ({
-        id: log.id,
-        data: log.data,
-        lotacao: log.lotacao,
-        entradaAsString: log.entrada ? "Entrada" : "Saida",
-        redzoneNome: log.redzoneId.nome_redzone,
-      }));
-      console.log(response.data);
-      // response.data.forEach((log) => {
-      //   chartOptionsLine.xaxis.categories.push(log.data);
-      //   seriesLine[0].data.push(log);
-      // });
+      logService.logsGrupo.forEach((item) => {
+        chartOptionsLine.xaxis.categories.push(item[0]);
+        seriesLine[0].data.push(item[1]);
+      });
       notificator.notifySuccess("Sucesso ao buscar logs!");
     } else {
       notificator.notifyError(
@@ -624,7 +623,7 @@ onMounted(async () => {
     //
     await getAll();
     const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 7);
+    startDate.setDate(startDate.getDate() - 30);
     const endDate = new Date();
     date.value = [startDate, endDate];
   } catch (error) {
