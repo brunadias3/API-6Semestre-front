@@ -1,16 +1,21 @@
 <template>
   <v-card class="mx-auto" max-width="368">
-    <v-card-item :title="title">
-      <template v-slot:subtitle>
-        <v-icon
-          class="me-1 pb-1"
-          color="warning"
-          icon="mdi mdi-information"
-          size="18"
-        ></v-icon>
-        {{ description }}
+    <v-tooltip location="bottom" :text="title">
+      <template v-slot:activator="{ props }">
+        <v-card-title v-bind="props" class="text-truncate">
+          {{ truncate(title, 20) }}
+        </v-card-title>
       </template>
-    </v-card-item>
+    </v-tooltip>
+    <v-card-subtitle class="pb-0">
+      <v-icon
+        class="me-1 pb-1"
+        color="warning"
+        icon="mdi mdi-information"
+        size="18"
+      ></v-icon>
+      {{ description }}
+    </v-card-subtitle>
 
     <v-card-text class="py-3">
       <v-row align="center" no-gutters>
@@ -40,4 +45,16 @@ defineProps<{
   date: string;
   sizeResult?: string;
 }>();
+
+const truncate = (text: string, length: number) => {
+  return text.length > length ? text.substring(0, length) + "..." : text;
+};
 </script>
+
+<style scoped>
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>
