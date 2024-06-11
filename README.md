@@ -44,22 +44,22 @@ Para rodar este projeto, é necessário ter o [Node.js](https://nodejs.org/) e o
 
 ##### Clone este repositório
 ```bash
-$ git clone https://github.com/4-Fatech/API-6Semestre-front.git
+git clone https://github.com/4-Fatech/API-6Semestre-front.git
 ```
 
 ##### Acesse a pasta do projeto no seu terminal/cmd
 ```bash
-$ cd API-6Semestre-front
+cd API-6Semestre-front
 ```
 
 ##### Instale as dependências
 ```bash
-$ npm install
+npm install
 ```
 
 ##### Execute a aplicação em modo de desenvolvimento
 ```bash
-$ npm run dev
+npm run dev
 ```
 
 ##### Acesse a aplicação
