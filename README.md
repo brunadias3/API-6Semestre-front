@@ -38,17 +38,27 @@ O layout da aplicação está disponível no Figma:
 
 #### 🧭 Rodando a aplicação web (Modo desenvolvimento)
 
+- Clone este repositório
 ```bash
-# Clone este repositório
-$ git clone https://github.com/4-Fatech/API-6Semestre-front.git
-# Acesse a pasta do projeto no seu terminal/cmd
-$ cd API-6Semestre-front
-# Instale as dependências
-$ npm install
-# Execute a aplicação em modo de desenvolvimento
-$ npm run dev
-# A aplicação será aberta na porta:3000 - acesse http://localhost:3000
+git clone https://github.com/4-Fatech/API-6Semestre-front.git
 ```
+- Acesse a pasta do projeto no seu terminal/cmd
+```bash
+cd API-6Semestre-front
+```
+- Instale as dependências
+```bash
+npm install
+```
+- Execute a aplicação em modo de desenvolvimento
+```bash
+npm run dev
+```
+- A aplicação será aberta na porta:3000 - acesse 
+```bash
+http://localhost:3000
+```
+
 
 ---
 
