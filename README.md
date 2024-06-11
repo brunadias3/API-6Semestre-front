@@ -36,7 +36,9 @@ O layout da aplicação está disponível no Figma:
   <img alt="Link do Figma" src="https://img.shields.io/badge/Acessar%20Layout%20-Figma-%2304D361">
 </a>
 
-#### 🧭 Manual de Instalação Frontend
+---
+
+## 🧭 Manual de Instalação Frontend
 
 Para rodar este projeto, é necessário ter o [Node.js](https://nodejs.org/) e o [Git](https://git-scm.com/) instalados em sua máquina.
 
