@@ -38,27 +38,30 @@ O layout da aplicação está disponível no Figma:
 
 #### 🧭 Manual de Instalação Frontend
 
-- Clone este repositório
+Para rodar este projeto, é necessário ter o [Node.js](https://nodejs.org/) e o [Git](https://git-scm.com/) instalados em sua máquina.
+
+##### Clone este repositório
 ```bash
-git clone https://github.com/4-Fatech/API-6Semestre-front.git
-```
-- Acesse a pasta do projeto no seu terminal/cmd
-```bash
-cd API-6Semestre-front
-```
-- Instale as dependências
-```bash
-npm install
-```
-- Execute a aplicação em modo de desenvolvimento
-```bash
-npm run dev
-```
-- A aplicação será aberta na porta:3000 - acesse 
-```bash
-http://localhost:3000
+$ git clone https://github.com/4-Fatech/API-6Semestre-front.git
 ```
 
+##### Acesse a pasta do projeto no seu terminal/cmd
+```bash
+$ cd API-6Semestre-front
+```
+
+##### Instale as dependências
+```bash
+$ npm install
+```
+
+##### Execute a aplicação em modo de desenvolvimento
+```bash
+$ npm run dev
+```
+
+##### Acesse a aplicação
+A aplicação será aberta na porta:3000 - acesse [http://localhost:3000](http://localhost:3000)
 
 ---
 
