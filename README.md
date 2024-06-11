@@ -36,7 +36,7 @@ O layout da aplicação está disponível no Figma:
   <img alt="Link do Figma" src="https://img.shields.io/badge/Acessar%20Layout%20-Figma-%2304D361">
 </a>
 
-#### 🧭 Rodando a aplicação web (Modo desenvolvimento)
+#### 🧭 Manual de Instalação Frontend
 
 - Clone este repositório
 ```bash
