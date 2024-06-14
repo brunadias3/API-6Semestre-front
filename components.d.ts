@@ -15,6 +15,7 @@ declare module 'vue' {
     FooterComponent: typeof import('./src/components/FooterComponent.vue')['default']
     HeaderComponent: typeof import('./src/components/HeaderComponent.vue')['default']
     MainNotification: typeof import('./src/components/MainNotification.vue')['default']
+    NotFound: typeof import('./src/components/NotFound.vue')['default']
     RecuperarSenhaComponent: typeof import('./src/components/recuperarSenha/RecuperarSenhaComponent.vue')['default']
     RelatorioComponent: typeof import('./src/components/departamento/RelatorioComponent.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
