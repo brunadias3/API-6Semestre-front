@@ -22,7 +22,7 @@
 - [X] Criação, alteração, exclusão e visualização de usuários
 - [X] Criação, alteração, exclusão e visualização de redzones
 - [X] Possui diferenciação de usuários;
-- [ ] Gráficos Estatísticos
+- [X] Gráficos Estatísticos - Dashboard;
 - [X] Possibilidade de gerar relatórios;
 - [X] Recuperação de senha
 
