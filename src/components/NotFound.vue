@@ -2,7 +2,7 @@
   <v-container class="d-flex align-center justify-center fill-height" fluid>
     <v-row class="text-center mt-16">
       <v-col cols="12">
-        <h2 class="subtitle-1 "><v-icon icon="mdi mdi-exclamation"/>Página não encontrada</h2>
+        <h2 class="subtitle-1 ">Página não encontrada!</h2>
         <v-btn color="primary" @click="goHome">Voltar</v-btn>
       </v-col>
     </v-row>
