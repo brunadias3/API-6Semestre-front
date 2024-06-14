@@ -53,11 +53,39 @@ const RedzoneStore = defineStore('redzone', () => {
     }
   }
 
-  async function getRedzoneByIdUsuario(id: number){
+  async function getRedzoneByIdUsuario(id: number) {
     const url = endpoint + `/responsavel/${id}`
     try {
       const response = await getRequest(url)
-      return { data: response.data, error: null}
+      return { data: response.data, error: null }
+    } catch (error: unknown) {
+      throw new Error((error instanceof AxiosError ? error.response?.data.error : null) || error);
+    }
+  }
+
+  async function getTotalRedzones() {
+    const url = endpoint + `/totalcontagem`
+    try {
+      const response = await getRequest(url)
+      return { data: response.data, error: null }
+    } catch (error: unknown) {
+      throw new Error((error instanceof AxiosError ? error.response?.data.error : null) || error);
+    }
+  }
+  async function getRedzonesByDepartamento() {
+    const url = `/departamentos/contagempordepartamento`
+    try {
+      const response = await getRequest(url)
+      return { data: response.data, error: null }
+    } catch (error: unknown) {
+      throw new Error((error instanceof AxiosError ? error.response?.data.error : null) || error);
+    }
+  }
+  async function getRedzonesByUser() {
+    const url = endpoint + `/contagemporusuario`
+    try {
+      const response = await getRequest(url)
+      return { data: response.data, error: null }
     } catch (error: unknown) {
       throw new Error((error instanceof AxiosError ? error.response?.data.error : null) || error);
     }
@@ -70,6 +98,9 @@ const RedzoneStore = defineStore('redzone', () => {
     update,
     getRedzoneDates,
     getRedzoneByIdUsuario,
+    getTotalRedzones,
+    getRedzonesByDepartamento,
+    getRedzonesByUser,
   };
 });
 
