@@ -6,6 +6,7 @@
  <a href="#-funcionalidades">Funcionalidades</a> •
  <a href="#-layout">Layout</a> •
  <a href="#-tecnologias">Tecnologias</a> •
+ <a href="#-manual-do-usuario">Manual do usuário</a> •
  <a href="#-autores">Autores</a> • 
 </p>
 
@@ -87,6 +88,8 @@ As seguintes ferramentas foram usadas na construção do projeto:
 ## ✅ Deploy
 Atualmente o frontend pode ser consultado online a partir do site: https://api-6semestre-front.onrender.com/
 
+## 📕 Manual do usuário
+Para entender todas as funcionalidades do front-end, e de como o projeto está estruturado produzimos um manual do usuário que está localizado em: [Link](https://github.com/4-Fatech/API-6SEM-Docs/blob/main/Manual%20Do%20Usuario/MANUAL%20DO%20USU%C3%81RIO.pdf)
 
 ## 🦸 Autores
 <div style="display: flex; justify-content: center;align-items: center;">
